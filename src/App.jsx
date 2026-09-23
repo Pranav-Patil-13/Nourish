@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Capacitor } from '@capacitor/core';
+import { App as CapApp } from '@capacitor/app';
 import { MobileFrame } from './components/MobileFrame/MobileFrame';
 import { WelcomeScreen } from './components/WelcomeScreen/WelcomeScreen';
 import { MainScreen } from './components/MainScreen/MainScreen';
@@ -52,6 +53,58 @@ export function App() {
     }, 650);
   };
 
+  // Handle hardware / gesture back button navigation
+  const handleGoBack = useCallback(() => {
+    if (currentScreen === 'scanner') {
+      changeScreen('dashboard');
+      return;
+    }
+    if (currentScreen === 'dashboard') {
+      if (!isAndroidMode) {
+        changeScreen('intro');
+      } else {
+        CapApp.exitApp();
+      }
+      return;
+    }
+    if (currentScreen === 'intro') {
+      if (!isAndroidMode) {
+        changeScreen('welcome');
+      } else {
+        CapApp.exitApp();
+      }
+      return;
+    }
+    if (currentScreen === 'welcome') {
+      CapApp.exitApp();
+    }
+  }, [currentScreen, isAndroidMode]);
+
+  // Listen to native Android back button & popstate
+  useEffect(() => {
+    let backListener = null;
+
+    if (Capacitor.isNativePlatform() || Capacitor.getPlatform() === 'android') {
+      CapApp.addListener('backButton', () => {
+        handleGoBack();
+      }).then((handle) => {
+        backListener = handle;
+      });
+    }
+
+    const handlePopState = () => {
+      handleGoBack();
+    };
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      if (backListener && typeof backListener.remove === 'function') {
+        backListener.remove();
+      }
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [handleGoBack]);
+
   // Keyboard shortcuts (1: Welcome, 2: Onboarding, 3: Dashboard, 4: Scanner)
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -60,10 +113,11 @@ export function App() {
       if (e.key === '2') changeScreen('intro');
       if (e.key === '3') changeScreen('dashboard');
       if (e.key === '4') changeScreen('scanner');
+      if (e.key === 'Escape') handleGoBack();
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [handleGoBack]);
 
   // Screen content elements
   const renderScreenContent = () => (
@@ -82,6 +136,7 @@ export function App() {
       {(currentScreen === 'dashboard' || isPushingDashboard) && (
         <DashboardScreen
           key="dashboard-view"
+          animatePushIn={isPushingDashboard}
           onOpenScanner={() => changeScreen('scanner')}
         />
       )}

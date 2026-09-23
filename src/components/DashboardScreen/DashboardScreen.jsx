@@ -11,7 +11,7 @@ import './DashboardScreen.css';
 const PULL_TRIGGER_THRESHOLD = 52;
 const MAX_PULL = 72;
 
-export function DashboardScreen({ onOpenScanner }) {
+export function DashboardScreen({ onOpenScanner, animatePushIn = false }) {
   // 1s (1000ms) initial loading state for dynamic metrics
   const [isLoading, setIsLoading] = useState(true);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -150,7 +150,7 @@ export function DashboardScreen({ onOpenScanner }) {
 
   return (
     <div
-      className="dashboard-screen"
+      className={`dashboard-screen ${animatePushIn ? 'slide-in-push' : ''}`}
       onPointerDown={handlePointerDown}
     >
       {/* Pull-Down-to-Refresh Indicator */}

@@ -11,6 +11,7 @@ export function DateSlider() {
   const trackRef = useRef(null);
   const isProgrammaticScrollRef = useRef(false);
   const scrollTimeoutRef = useRef(null);
+  const snapTimeoutRef = useRef(null);
 
   // Generate real calendar dates centered around today
   const daysList = useMemo(() => {
@@ -66,9 +67,9 @@ export function DateSlider() {
     }, 400);
   };
 
-  // Sync selected index when dragging / scrolling
+  // Sync selected index when dragging / scrolling and auto-snap when stopped
   const handleScroll = () => {
-    if (!trackRef.current || isProgrammaticScrollRef.current) return;
+    if (!trackRef.current) return;
     const { scrollLeft } = trackRef.current;
     const nearestIndex = Math.round(scrollLeft / ITEM_STRIDE);
     const clampedIndex = Math.max(0, Math.min(daysList.length - 1, nearestIndex));
@@ -76,6 +77,22 @@ export function DateSlider() {
     if (clampedIndex !== selectedIndex) {
       setSelectedIndex(clampedIndex);
     }
+
+    if (isProgrammaticScrollRef.current) return;
+
+    // Auto-snap to exact center pill on scroll finish
+    if (snapTimeoutRef.current) clearTimeout(snapTimeoutRef.current);
+    snapTimeoutRef.current = setTimeout(() => {
+      if (trackRef.current && !isProgrammaticScrollRef.current) {
+        const targetScroll = clampedIndex * ITEM_STRIDE;
+        if (Math.abs(trackRef.current.scrollLeft - targetScroll) > 1) {
+          trackRef.current.scrollTo({
+            left: targetScroll,
+            behavior: 'smooth'
+          });
+        }
+      }
+    }, 150);
   };
 
   return (

@@ -9,12 +9,15 @@
   position: absolute;
   inset: 0;
   z-index: 50;
-  animation: dashboardSlideInPush 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   box-shadow: -15px 0 45px rgba(0, 0, 0, 0.28);
   overflow: hidden;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+}
+
+.dashboard-screen.slide-in-push {
+  animation: dashboardSlideInPush 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Pull-Down-to-Refresh Indicator */
