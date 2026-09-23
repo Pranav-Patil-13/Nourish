@@ -308,9 +308,9 @@ export function ScannerScreen({ onBack, onLogMeal }) {
             <button
               type="button"
               className="scanner-shutter-btn"
-              onClick={handleStartScan}
-              aria-label="Capture and scan food"
-              title={scanResult ? "Scan new food" : "Capture food"}
+              onClick={scanResult ? handleResetScan : handleStartScan}
+              aria-label={scanResult ? "Return to scanner modes" : "Capture and scan food"}
+              title={scanResult ? "Return to mode selector" : "Capture food"}
             >
               <Camera size={26} strokeWidth={2} color="#FFFFFF" />
             </button>

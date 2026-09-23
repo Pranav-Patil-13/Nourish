@@ -130,16 +130,22 @@ export function App() {
         </nav>
       )}
 
-      {/* Floating Bottom-Left Android App Button */}
-      <AndroidLauncherBtn
-        isAndroidMode={isAndroidMode}
-        onToggleAndroidMode={toggleAndroidMode}
-      />
+      {/* Floating Bottom-Left Android App Button (Web/Desktop only) */}
+      {!isCapacitorAndroid && (
+        <AndroidLauncherBtn
+          isAndroidMode={isAndroidMode}
+          onToggleAndroidMode={toggleAndroidMode}
+        />
+      )}
 
       {/* When in Android mode: Render directly with NO mobile frame and NO launch stage */}
       {isAndroidMode ? (
         <main className="android-native-viewport">
-          {renderScreenContent()}
+          <div className="android-viewport-inner">
+            {renderScreenContent()}
+          </div>
+          {/* Dedicated white space for the phone's native navigation bar */}
+          <div className="android-safe-area-bottom" />
         </main>
       ) : (
         /* Desktop Mode: Render with realistic MobileFrame */

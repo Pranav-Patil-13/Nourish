@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
+import { Capacitor } from '@capacitor/core';
 import './AndroidLauncherBtn.css';
 
 export function AndroidLauncherBtn({ isAndroidMode, onToggleAndroidMode }) {
   const [isOpen, setIsOpen] = useState(false);
+
+  // If running inside native Android app, hide download button entirely
+  if (Capacitor.isNativePlatform() || Capacitor.getPlatform() === 'android') {
+    return null;
+  }
 
   const handleDownloadApk = () => {
     const link = document.createElement('a');

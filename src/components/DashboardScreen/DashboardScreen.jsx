@@ -22,8 +22,12 @@ export function DashboardScreen({ onOpenScanner }) {
   const [isPulling, setIsPulling] = useState(false);
 
   const scrollRef = useRef(null);
-  const startYRef = useRef(0);
+  const isRefreshingRef = useRef(isRefreshing);
   const currentPullRef = useRef(0);
+
+  useEffect(() => {
+    isRefreshingRef.current = isRefreshing;
+  }, [isRefreshing]);
 
   const triggerRefresh = useCallback(() => {
     setIsRefreshing(true);
@@ -46,47 +50,98 @@ export function DashboardScreen({ onOpenScanner }) {
     return () => clearTimeout(timer);
   }, []);
 
-  // Pointer / Touch Handlers for Pull-Down-to-Refresh
-  const handleTouchStart = (e) => {
-    if (isRefreshing) return;
-    const clientY = e.clientY || (e.touches && e.touches[0].clientY) || 0;
-    const scrollTop = scrollRef.current ? scrollRef.current.scrollTop : 0;
+  // Native non-passive touch listeners for mobile pull-to-refresh
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
 
-    if (scrollTop <= 0) {
-      startYRef.current = clientY;
-      setIsPulling(true);
-      currentPullRef.current = 0;
-    }
-  };
+    let startY = 0;
+    let isTracking = false;
 
-  const handleTouchMove = (e) => {
-    if (!isPulling || isRefreshing) return;
-    const clientY = e.clientY || (e.touches && e.touches[0].clientY) || 0;
-    const scrollTop = scrollRef.current ? scrollRef.current.scrollTop : 0;
+    const onTouchStart = (e) => {
+      if (isRefreshingRef.current) return;
+      if (el.scrollTop <= 0 && e.touches && e.touches.length === 1) {
+        startY = e.touches[0].clientY;
+        isTracking = true;
+      }
+    };
 
-    if (scrollTop <= 0) {
-      const diff = clientY - startYRef.current;
-      if (diff > 0) {
-        // Elastic resistance formula
-        const elasticPull = Math.min(MAX_PULL, Math.pow(diff, 0.82));
-        currentPullRef.current = elasticPull;
-        setPullDistance(elasticPull);
+    const onTouchMove = (e) => {
+      if (!isTracking || isRefreshingRef.current) return;
+      if (el.scrollTop <= 0 && e.touches && e.touches.length === 1) {
+        const currentY = e.touches[0].clientY;
+        const diff = currentY - startY;
+        if (diff > 0) {
+          if (e.cancelable) e.preventDefault();
+          const elasticPull = Math.min(MAX_PULL, Math.pow(diff, 0.82));
+          currentPullRef.current = elasticPull;
+          setIsPulling(true);
+          setPullDistance(elasticPull);
+        } else {
+          setIsPulling(false);
+          setPullDistance(0);
+        }
+      }
+    };
+
+    const onTouchEnd = () => {
+      if (!isTracking || isRefreshingRef.current) return;
+      isTracking = false;
+      setIsPulling(false);
+
+      if (currentPullRef.current >= PULL_TRIGGER_THRESHOLD) {
+        triggerRefresh();
       } else {
         setPullDistance(0);
       }
-    }
-  };
+      currentPullRef.current = 0;
+    };
 
-  const handleTouchEnd = () => {
-    if (!isPulling || isRefreshing) return;
-    setIsPulling(false);
+    el.addEventListener('touchstart', onTouchStart, { passive: true });
+    el.addEventListener('touchmove', onTouchMove, { passive: false });
+    el.addEventListener('touchend', onTouchEnd, { passive: true });
+    el.addEventListener('touchcancel', onTouchEnd, { passive: true });
 
-    if (currentPullRef.current >= PULL_TRIGGER_THRESHOLD) {
-      triggerRefresh();
-    } else {
-      setPullDistance(0);
+    return () => {
+      el.removeEventListener('touchstart', onTouchStart);
+      el.removeEventListener('touchmove', onTouchMove);
+      el.removeEventListener('touchend', onTouchEnd);
+      el.removeEventListener('touchcancel', onTouchEnd);
+    };
+  }, [triggerRefresh]);
+
+  // Desktop Pointer Handlers for testing
+  const handlePointerDown = (e) => {
+    if (isRefreshing || e.pointerType === 'touch') return;
+    const clientY = e.clientY;
+    const scrollTop = scrollRef.current ? scrollRef.current.scrollTop : 0;
+
+    if (scrollTop <= 0) {
+      currentPullRef.current = 0;
+      const onPointerMove = (moveEvt) => {
+        const diff = moveEvt.clientY - clientY;
+        if (diff > 0) {
+          const elasticPull = Math.min(MAX_PULL, Math.pow(diff, 0.82));
+          currentPullRef.current = elasticPull;
+          setIsPulling(true);
+          setPullDistance(elasticPull);
+        }
+      };
+
+      const onPointerUp = () => {
+        setIsPulling(false);
+        if (currentPullRef.current >= PULL_TRIGGER_THRESHOLD) {
+          triggerRefresh();
+        } else {
+          setPullDistance(0);
+        }
+        window.removeEventListener('pointermove', onPointerMove);
+        window.removeEventListener('pointerup', onPointerUp);
+      };
+
+      window.addEventListener('pointermove', onPointerMove);
+      window.addEventListener('pointerup', onPointerUp);
     }
-    currentPullRef.current = 0;
   };
 
   // Rotation percentage for the pull spinner
@@ -96,13 +151,7 @@ export function DashboardScreen({ onOpenScanner }) {
   return (
     <div
       className="dashboard-screen"
-      onPointerDown={handleTouchStart}
-      onPointerMove={handleTouchMove}
-      onPointerUp={handleTouchEnd}
-      onPointerCancel={handleTouchEnd}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
+      onPointerDown={handlePointerDown}
     >
       {/* Pull-Down-to-Refresh Indicator */}
       <div

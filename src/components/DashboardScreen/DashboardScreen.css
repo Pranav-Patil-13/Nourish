@@ -64,6 +64,8 @@
   width: 100%;
   height: 100%;
   overflow-y: auto;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
   padding: 52px 14px 104px;
   box-sizing: border-box;
   display: flex;
