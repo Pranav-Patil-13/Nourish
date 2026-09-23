@@ -141,11 +141,7 @@ export function App() {
       {/* When in Android mode: Render directly with NO mobile frame and NO launch stage */}
       {isAndroidMode ? (
         <main className="android-native-viewport">
-          <div className="android-viewport-inner">
-            {renderScreenContent()}
-          </div>
-          {/* Dedicated white space for the phone's native navigation bar */}
-          <div className="android-safe-area-bottom" />
+          {renderScreenContent()}
         </main>
       ) : (
         /* Desktop Mode: Render with realistic MobileFrame */
