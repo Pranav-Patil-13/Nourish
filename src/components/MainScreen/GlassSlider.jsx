@@ -57,10 +57,15 @@ export function GlassSlider({ onComplete }) {
     };
   }, [isDragging, isCompleted, onComplete]);
 
-  const maxDistance = trackRef.current
-    ? trackRef.current.offsetWidth - 52 - 12
-    : 220;
+  const [trackWidth, setTrackWidth] = useState(280);
 
+  useEffect(() => {
+    if (trackRef.current) {
+      setTrackWidth(trackRef.current.offsetWidth);
+    }
+  }, []);
+
+  const maxDistance = Math.max(100, trackWidth - 52 - 12);
   const currentTranslateX = dragProgress * maxDistance;
 
   return (
