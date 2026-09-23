@@ -4,12 +4,17 @@ import appIconImg from '../../assets/app_icon.png';
 
 export function AndroidLauncherBtn({ isAndroidMode, onToggleAndroidMode }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [downloading, setDownloading] = useState(false);
 
-  const handleCopyCmd = (cmd) => {
-    navigator.clipboard?.writeText(cmd);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleDownloadApk = () => {
+    setDownloading(true);
+    const link = document.createElement('a');
+    link.href = '/downloads/Nourish-v1.0.0.apk';
+    link.download = 'Nourish-v1.0.0.apk';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => setDownloading(false), 2500);
   };
 
   return (
@@ -19,8 +24,8 @@ export function AndroidLauncherBtn({ isAndroidMode, onToggleAndroidMode }) {
         <button
           className={`android-corner-btn ${isAndroidMode ? 'active-android' : ''}`}
           onClick={() => setIsOpen(!isOpen)}
-          title="Nourish Android App Details & Launcher"
-          aria-label="Toggle Android App Controls"
+          title="Download Real Android APK & App Controls"
+          aria-label="Download Real Android APK"
         >
           <div className="android-btn-icon-wrap">
             <svg
@@ -35,8 +40,8 @@ export function AndroidLauncherBtn({ isAndroidMode, onToggleAndroidMode }) {
             <span className="android-pulse-dot" />
           </div>
           <div className="android-btn-text-col">
-            <span className="android-btn-title">Android App</span>
-            <span className="android-btn-badge">{isAndroidMode ? 'Native View' : 'v1.0.0'}</span>
+            <span className="android-btn-title">Download APK</span>
+            <span className="android-btn-badge">Real Android App</span>
           </div>
         </button>
 
@@ -50,7 +55,7 @@ export function AndroidLauncherBtn({ isAndroidMode, onToggleAndroidMode }) {
                   <img src={appIconImg} alt="Nourish Logo" className="android-popover-icon" />
                   <div>
                     <h3 className="android-popover-title">Nourish for Android</h3>
-                    <p className="android-popover-sub">Native Package: com.nourish.app</p>
+                    <p className="android-popover-sub">Package: com.nourish.app</p>
                   </div>
                 </div>
                 <button
@@ -65,20 +70,32 @@ export function AndroidLauncherBtn({ isAndroidMode, onToggleAndroidMode }) {
               <div className="android-popover-body">
                 <div className="android-status-pill-row">
                   <span className="android-status-pill green">
-                    <span className="dot" /> Direct Onboarding Ready
+                    <span className="dot" /> Real APK Ready (21 MB)
                   </span>
                   <span className="android-status-pill cyan">
-                    <span className="dot" /> Frame-Free Viewport
+                    <span className="dot" /> Direct Onboarding
                   </span>
                 </div>
 
                 <p className="android-popover-desc">
-                  Full standalone Android app built with native Capacitor integration. Starts directly from <strong>Onboarding</strong> with edge-to-edge mobile rendering.
+                  Download the authentic native Android APK build. Install directly on any Android device to experience Nourish with native camera & health tracking.
                 </p>
 
-                {/* Switch Mode Action */}
+                {/* Primary Download APK Button */}
                 <button
-                  className={`android-action-btn primary ${isAndroidMode ? 'active-mode' : ''}`}
+                  className="android-action-btn download-apk"
+                  onClick={handleDownloadApk}
+                >
+                  <span className="action-btn-icon">📥</span>
+                  <div className="action-btn-text">
+                    <strong>{downloading ? 'Downloading Nourish APK...' : 'Download Nourish-v1.0.0.apk'}</strong>
+                    <small>Official Android APK • 21 MB • Ready to Install</small>
+                  </div>
+                </button>
+
+                {/* Switch Mode Action for In-Browser Testing */}
+                <button
+                  className={`android-action-btn secondary ${isAndroidMode ? 'active-mode' : ''}`}
                   onClick={() => {
                     onToggleAndroidMode(!isAndroidMode);
                     setIsOpen(false);
@@ -86,21 +103,18 @@ export function AndroidLauncherBtn({ isAndroidMode, onToggleAndroidMode }) {
                 >
                   <span className="action-btn-icon">⚡</span>
                   <div className="action-btn-text">
-                    <strong>{isAndroidMode ? 'Exit Android View (Show Desktop Frame)' : 'Launch Android App View (No Frame)'}</strong>
+                    <strong>{isAndroidMode ? 'Exit Android View (Show Desktop Frame)' : 'Test Android View in Browser (No Frame)'}</strong>
                     <small>{isAndroidMode ? 'Return to desktop presentation' : 'Direct full-screen Onboarding experience'}</small>
                   </div>
                 </button>
 
-                {/* Gradle / APK Command Box */}
-                <div className="android-code-box">
-                  <div className="android-code-label">Build Android APK:</div>
-                  <code>./gradlew assembleDebug</code>
-                  <button
-                    className="android-copy-btn"
-                    onClick={() => handleCopyCmd('cd android && ./gradlew assembleDebug')}
-                  >
-                    {copied ? 'Copied ✓' : 'Copy'}
-                  </button>
+                <div className="android-install-guide">
+                  <div className="guide-title">How to Install on Android:</div>
+                  <ol className="guide-steps">
+                    <li>Download the <code>.apk</code> file to your device.</li>
+                    <li>Open Downloads and tap <code>Nourish-v1.0.0.apk</code>.</li>
+                    <li>Allow "Install from Unknown Sources" if prompted.</li>
+                  </ol>
                 </div>
               </div>
             </div>
@@ -110,3 +124,5 @@ export function AndroidLauncherBtn({ isAndroidMode, onToggleAndroidMode }) {
     </>
   );
 }
+
+export default AndroidLauncherBtn;
