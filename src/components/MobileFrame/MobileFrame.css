@@ -1,0 +1,166 @@
+/* ==========================================================================
+   PHONE SKELETON / BORDER WITH REALISTIC STATUS BAR
+   ========================================================================== */
+
+.phone-wrapper {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 44px 0;
+  box-sizing: border-box;
+}
+
+.phone-border {
+  position: relative;
+  height: min(720px, calc(100vh - 76px));
+  aspect-ratio: 393 / 852;
+  max-width: 375px;
+  background-color: var(--bg-app);
+  border-radius: clamp(28px, 4.4vh, 42px);
+  border: 4px solid var(--border-phone);
+  box-shadow: 
+    0 0 0 1px rgba(0, 0, 0, 0.08),
+    0 20px 40px -12px rgba(0, 0, 0, 0.16),
+    0 4px 12px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Dynamic Island / Notch Pill */
+.phone-notch {
+  position: absolute;
+  top: 9px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 96px;
+  height: 24px;
+  background-color: #000000;
+  border-radius: var(--radius-pill);
+  z-index: 130;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   TOP STATUS BAR (MATCHING REFERENCE)
+   ========================================================================== */
+
+.phone-status-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 120;
+  pointer-events: none;
+  user-select: none;
+  color: #000000;
+  background: hsl(240deg 100% 99% / 50%);
+  backdrop-filter: blur(4px);
+}
+
+/* Status Time (Left) */
+.status-time {
+  font-family: var(--font-family-base);
+  font-size: 0.875rem; /* 14px */
+  font-weight: var(--font-weight-semibold); /* Strict <= 600 */
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+/* Status Icons (Right: Cellular, Wifi, Battery) */
+.status-icons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Cellular Signal 4-Bars */
+.status-cellular {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.5px;
+  height: 10px;
+}
+
+.status-cellular .cell-bar {
+  width: 2.5px;
+  background-color: currentColor;
+  border-radius: 0.5px;
+}
+
+.status-cellular .bar-1 { height: 3px; }
+.status-cellular .bar-2 { height: 5px; }
+.status-cellular .bar-3 { height: 7.5px; }
+.status-cellular .bar-4 { height: 10px; }
+
+/* Wi-Fi Icon */
+.status-wifi {
+  color: currentColor;
+}
+
+/* Battery Icon */
+.status-battery {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.battery-body {
+  width: 19px;
+  height: 10px;
+  border: 1.5px solid currentColor;
+  border-radius: 3px;
+  padding: 1px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.battery-level {
+  width: 100%;
+  height: 100%;
+  background-color: currentColor;
+  border-radius: 1px;
+}
+
+.battery-cap {
+  width: 1.5px;
+  height: 4px;
+  background-color: currentColor;
+  border-radius: 0 1px 1px 0;
+}
+
+/* ==========================================================================
+   PHONE SCREEN & HOME INDICATOR
+   ========================================================================== */
+
+.phone-screen {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  overflow-y: auto;
+  position: relative;
+}
+
+/* Bottom Home Indicator */
+.phone-home-indicator {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110px;
+  height: 4px;
+  background-color: #000000;
+  opacity: 0.85;
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 120;
+}

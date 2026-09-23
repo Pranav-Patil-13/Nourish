@@ -1,0 +1,124 @@
+/* ==========================================================================
+   DATE SLIDER (CENTER-ANCHORED REAL CALENDAR SLIDER)
+   Strict Rules:
+   - Font weight: strictly <= 600
+   - Low border radius: 22px capsule
+   - Center active selector fixed in place
+   - Opacity gradient mask on container edges
+   ========================================================================== */
+
+.date-slider-container {
+  position: relative;
+  width: 100%;
+  height: 66px;
+  margin-top: var(--space-5);
+  user-select: none;
+  box-sizing: border-box;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.22) 0%,
+    rgba(0, 0, 0, 0.65) 18%,
+    rgba(0, 0, 0, 1) 38%,
+    rgba(0, 0, 0, 1) 62%,
+    rgba(0, 0, 0, 0.65) 82%,
+    rgba(0, 0, 0, 0.22) 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.22) 0%,
+    rgba(0, 0, 0, 0.65) 18%,
+    rgba(0, 0, 0, 1) 38%,
+    rgba(0, 0, 0, 1) 62%,
+    rgba(0, 0, 0, 0.65) 82%,
+    rgba(0, 0, 0, 0.22) 100%
+  );
+}
+
+/* Fixed Center Active Selector Capsule */
+.date-center-capsule {
+  position: absolute;
+  left: 50%;
+  top: 1px;
+  transform: translateX(-50%);
+  width: 36px;
+  height: 64px;
+  border-radius: 22px;
+  border: 1px solid #27272A;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  pointer-events: none;
+  z-index: 3;
+  box-sizing: border-box;
+}
+
+/* Scrollable Real Calendar Track */
+.date-slider-track {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  height: 66px;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 calc(50% - 18px);
+  box-sizing: border-box;
+}
+
+.date-slider-track::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Individual Date Item */
+.date-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 36px;
+  height: 64px;
+  border-radius: 22px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+  box-sizing: border-box;
+}
+
+.date-item:hover:not(.date-item-active) {
+  opacity: 0.8;
+  transform: translateY(-1px);
+}
+
+/* Day Label (S, M, T, W, T, F, S) */
+.date-day-label {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 0.8125rem; /* 13px */
+  font-weight: 500;
+  color: #71717A;
+  line-height: 1;
+}
+
+.date-item-active .date-day-label {
+  color: #52525B;
+  font-weight: 600;
+}
+
+/* Date Number (01, 02, ..., 31) */
+.date-number {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 1rem; /* 16px */
+  font-weight: 600;
+  color: #000000;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}

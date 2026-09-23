@@ -1,0 +1,318 @@
+/* ==========================================================================
+   NUTRITION SECTION: HERO CARDS SLIDER + 3 SEPARATE MACRO CARDS GRID
+   Strict Rules:
+   - Font weight: strictly <= 600
+   - Low border radius: max 14px
+   - Clean ghostwhite/white palette with theme accents
+   ========================================================================== */
+
+.nutrition-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+  box-sizing: border-box;
+  user-select: none;
+}
+
+/* ==========================================================================
+   1. SWIPEABLE HERO SLIDER CAROUSEL
+   ========================================================================== */
+
+.hero-slider-wrapper {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-slider-track {
+  width: 100%;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  gap: 12px;
+  background: transparent;
+}
+
+.hero-slider-track::-webkit-scrollbar {
+  display: none;
+}
+
+/* Base Card Style */
+.calorie-hero-card {
+  position: relative;
+  flex: 0 0 100%;
+  width: 100%;
+  border-radius: var(--radius-xl);
+  padding: var(--space-4) var(--space-4);
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+  min-height: 116px;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+/* Card Themes */
+.hero-theme-calories {
+  background: linear-gradient(135deg, #243e0f 0%, #152608 100%);
+}
+
+.hero-theme-water {
+  background: linear-gradient(135deg, #0d2a3a 0%, #061622 100%);
+}
+
+.hero-theme-water .calorie-hero-label,
+.hero-theme-water .calorie-hero-target,
+.hero-theme-water .calorie-hero-remaining-unit {
+  color: #b0d8eb;
+}
+
+.hero-theme-burn {
+  background: linear-gradient(135deg, #361712 0%, #1f0b07 100%);
+}
+
+.hero-theme-burn .calorie-hero-label,
+.hero-theme-burn .calorie-hero-target,
+.hero-theme-burn .calorie-hero-remaining-unit {
+  color: #ebc0b0;
+}
+
+/* Left Stat Group */
+.calorie-hero-stat-group {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.calorie-hero-label {
+  font-family: var(--font-family-base);
+  font-size: 0.8125rem; /* 13px */
+  font-weight: var(--font-weight-medium); /* 500 */
+  color: #c9deb0;
+  line-height: 1;
+}
+
+.calorie-hero-numbers {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  margin: 1px 0 4px;
+}
+
+.calorie-hero-consumed {
+  font-family: var(--font-family-base);
+  font-size: 1.625rem; /* 26px */
+  font-weight: var(--font-weight-semibold); /* Strict <= 600 */
+  color: #FFFFFF;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.calorie-hero-target {
+  font-family: var(--font-family-base);
+  font-size: 0.875rem; /* 14px */
+  font-weight: var(--font-weight-regular);
+  color: #c9deb0;
+}
+
+.calorie-hero-badge {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.14);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  position: relative;
+  bottom: -10px;
+  left: -10px;
+}
+
+.calorie-hero-remaining {
+  font-family: var(--font-family-base);
+  font-size: 0.8125rem; /* 13px */
+  font-weight: var(--font-weight-semibold); /* Strict <= 600 */
+  color: #FFFFFF;
+  line-height: 1;
+}
+
+.calorie-hero-remaining-unit {
+  font-family: var(--font-family-base);
+  font-size: 0.6875rem; /* 11px */
+  font-weight: var(--font-weight-medium);
+  color: #c9deb0;
+  line-height: 1;
+}
+
+/* Right Side: Calorie Card Image (Seamless Integration Flush Right) */
+.calorie-card-img-wrapper {
+  position: absolute;
+  right: -6px;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  width: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.calorie-card-img {
+  height: 100%;
+  width: auto;
+  max-height: 100%;
+  object-fit: cover;
+  object-position: right center;
+  display: block;
+}
+
+/* Card 1: Calories Image Placement (Custom shift) */
+.card-img-calories {
+  height: 112%;
+  max-height: 112%;
+  transform: translate(8px, 18px);
+}
+
+/* Card 2: Hydration / Water Image Placement (Customizable) */
+.card-img-water {
+  height: 100%;
+  max-height: 100%;
+  transform: translate(14px, 28px);
+}
+
+/* Card 3: Burn / Activity Image Placement (Customizable) */
+.card-img-burn {
+  height: 100%;
+  max-height: 100%;
+  transform: none;
+}
+
+/* Blank reserved image placeholder */
+.card-img-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Pagination Dots - Top Right Glassy Pill */
+.hero-slider-dots {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 4px 8px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.hero-slider-dot {
+  width: 4.5px;
+  height: 4.5px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.4);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.hero-slider-dot.active {
+  width: 14px;
+  border-radius: var(--radius-pill);
+  background-color: #FFFFFF;
+}
+
+/* ==========================================================================
+   2. 3 SEPARATE MACRO CARDS IN A GRID
+   ========================================================================== */
+
+.macros-grid-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.macro-card-tile {
+  width: 100%;
+  background: var(--bg-surface-1);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  padding: 14px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  box-sizing: border-box;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.macro-card-tile:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.macro-tile-val {
+  font-family: var(--font-family-base);
+  font-size: 1.25rem; /* 20px */
+  font-weight: var(--font-weight-semibold); /* Strict <= 600 */
+  color: var(--text-primary);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-align: left;
+}
+
+.macro-tile-label {
+  font-family: var(--font-family-base);
+  font-size: 0.75rem; /* 12px */
+  font-weight: var(--font-weight-medium); /* 500 */
+  color: var(--text-muted);
+  line-height: 1.1;
+  text-align: left;
+}
+
+/* Skeleton Sizing for MacroCard Dynamic Values */
+.skeleton-hero-consumed {
+  width: 68px;
+  height: 28px;
+  border-radius: 4px;
+}
+
+.skeleton-hero-badge {
+  width: 28px;
+  height: 13px;
+  border-radius: 3px;
+}
+
+.skeleton-macro-val {
+  width: 46px;
+  height: 22px;
+  border-radius: 4px;
+}
+

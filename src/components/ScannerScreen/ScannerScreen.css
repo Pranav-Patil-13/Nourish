@@ -1,0 +1,732 @@
+/* ==========================================================================
+   FOOD SCANNER SCREEN
+   Strict Rules:
+   - Font weight: strictly <= 600
+   - Low border radius: max 14px for cards, 50% for circular controls
+   - Palette: Ghostwhite (#F8F8FF) background, crisp white cards, vibrant #88D61E accents
+   ========================================================================== */
+
+@keyframes scannerSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes laserSweep {
+  0% {
+    top: 5%;
+    opacity: 0.85;
+  }
+  50% {
+    top: 95%;
+    opacity: 1;
+  }
+  100% {
+    top: 5%;
+    opacity: 0.85;
+  }
+}
+
+.scanner-screen {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-ghostwhite, #F8F8FF);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  animation: scannerSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.scanner-screen::-webkit-scrollbar {
+  display: none;
+}
+
+/* ==========================================================================
+   1. TOP HEADER
+   ========================================================================== */
+
+.scanner-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 52px 18px 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.scanner-header-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #18181B;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.scanner-header-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.scanner-header-btn:active {
+  transform: scale(0.95);
+}
+
+.scanner-header-title {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 1.1875rem; /* 19px */
+  font-weight: 600;
+  color: #18181B;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+/* ==========================================================================
+   2. VIEWFINDER AREA WITH LASER SWEEP
+   ========================================================================== */
+
+.scanner-viewfinder-container {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  height: 290px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* Adaptive Viewfinder Frame */
+.scanner-viewfinder-frame {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1), height 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scanner-viewfinder-frame.mode-food {
+  width: 270px;
+  height: 270px;
+}
+
+.scanner-viewfinder-frame.mode-barcode {
+  width: 280px;
+  height: 140px;
+}
+
+.scanner-viewfinder-frame.mode-label {
+  width: 240px;
+  height: 270px;
+}
+
+/* Green Viewfinder Corners */
+.viewfinder-corner {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border-color: #74B816;
+  border-style: solid;
+  border-width: 0;
+  pointer-events: none;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.corner-top-left {
+  top: 0;
+  left: 0;
+  border-top-width: 3.5px;
+  border-left-width: 3.5px;
+  border-top-left-radius: 18px;
+}
+
+.corner-top-right {
+  top: 0;
+  right: 0;
+  border-top-width: 3.5px;
+  border-right-width: 3.5px;
+  border-top-right-radius: 18px;
+}
+
+.corner-bottom-left {
+  bottom: 0;
+  left: 0;
+  border-bottom-width: 3.5px;
+  border-left-width: 3.5px;
+  border-bottom-left-radius: 18px;
+}
+
+.corner-bottom-right {
+  bottom: 0;
+  right: 0;
+  border-bottom-width: 3.5px;
+  border-right-width: 3.5px;
+  border-bottom-right-radius: 18px;
+}
+
+/* Media Frame */
+.scanner-target-media {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mode-food .scanner-target-media {
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+}
+
+.mode-barcode .scanner-target-media {
+  width: 254px;
+  height: 114px;
+  border-radius: 12px;
+}
+
+.mode-label .scanner-target-media {
+  width: 216px;
+  height: 244px;
+  border-radius: 12px;
+}
+
+.scanner-food-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.scanner-food-img.img-barcode {
+  object-position: center center;
+  object-fit: cover;
+}
+
+.scanner-food-img.img-label {
+  object-position: center 25%;
+}
+
+/* Glowing Laser Scan Line */
+.scanner-laser-line {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #84CC16;
+  box-shadow: 0 0 10px #84CC16, 0 0 20px #84CC16, 0 0 2px #FFFFFF;
+  animation: laserSweep 2.8s ease-in-out infinite;
+  z-index: 8;
+  transition: background 0.25s ease, box-shadow 0.25s ease;
+}
+
+.scanner-laser-line.is-scanning {
+  height: 4px;
+  background: linear-gradient(to bottom, transparent 0%, #caffaa 20%, #ffffff 50%, #9bea70 80%, transparent 100%);
+  box-shadow: 0 0 6px #baff9a, 0 0 18px rgba(100, 220, 70, 0.9), 0 0 40px rgba(60, 190, 70, 0.55), 0 0 80px rgba(60, 190, 70, 0.25);
+}
+
+/* ==========================================================================
+   3. SCAN MODES (4 TILES) OR MACRO SHIMMER PREVIEW CARD
+   ========================================================================== */
+
+@keyframes pulseLiveDot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.85);
+  }
+}
+
+.scanner-macro-preview-card {
+  background-color: #FFFFFF;
+  border-radius: var(--radius-lg, 14px);
+  margin: 12px 16px 0;
+  padding: 14px 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: scannerSlideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  box-sizing: border-box;
+}
+
+.macro-preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.macro-preview-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.macro-preview-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #74B816;
+  box-shadow: 0 0 6px rgba(116, 184, 22, 0.6);
+  animation: pulseLiveDot 1.5s ease-in-out infinite;
+}
+
+.macro-preview-pulse-dot.resolved-dot {
+  background-color: #65A30D;
+  animation: none;
+  box-shadow: 0 0 0 2px rgba(101, 163, 13, 0.2);
+}
+
+.macro-preview-title {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 0.75rem; /* 12px */
+  font-weight: 600;
+  color: #27272A;
+  letter-spacing: -0.01em;
+}
+
+.macro-preview-details-btn {
+  background: #F4F4F6;
+  border: none;
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #27272A;
+  padding: 3px 8px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.macro-preview-details-btn:hover {
+  background: #E4E4E7;
+  color: #18181B;
+}
+
+.macro-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.macro-preview-col {
+  background-color: #F8F8FA;
+  border-radius: 8px;
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.macro-preview-label {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 0.625rem; /* 10px */
+  font-weight: 500;
+  color: #71717A;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.macro-preview-shimmer-bar {
+  width: 44px;
+  height: 12px;
+  border-radius: 4px;
+}
+
+.macro-preview-resolved-val {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #18181B;
+  line-height: 1.1;
+}
+
+.scanner-modes-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 0 16px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 12px;
+}
+
+.scanner-mode-card {
+  background-color: #FFFFFF;
+  border-radius: var(--radius-lg, 14px);
+  padding: 16px 4px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1.5px solid transparent;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scanner-mode-card:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.scanner-mode-card.active {
+  border-color: #74B816;
+  background-color: #FCFCFD;
+  box-shadow: 0 4px 14px rgba(116, 184, 22, 0.15);
+}
+
+.scanner-mode-card:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.scanner-mode-icon-wrap {
+  color: #18181B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scanner-mode-card.active .scanner-mode-icon-wrap {
+  color: #4D7C0F;
+}
+
+.scanner-mode-label {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 0.6875rem; /* 11px */
+  font-weight: 500;
+  color: #27272A;
+  text-align: center;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   4. BOTTOM CAMERA CONTROLS
+   ========================================================================== */
+
+.scanner-bottom-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 12px 28px 38px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.scanner-side-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #52525B;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.scanner-side-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  color: #18181B;
+}
+
+.scanner-side-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.scanner-side-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.scanner-side-btn.torch-active {
+  background-color: #FEF9C3;
+  border-color: #FDE047;
+  color: #CA8A04;
+}
+
+/* Shutter Ring & Button */
+.scanner-shutter-ring {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 2px solid #000000;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.scanner-shutter-btn {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #84CC16 0%, #65A30D 100%);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 18px rgba(101, 163, 13, 0.4);
+}
+
+/* Cancel 'X' Button during scanning (completely static) */
+.scanner-cancel-btn {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #18181B;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+
+/* ==========================================================================
+   5. SCAN RESULT RECOGNITION POPUP
+   ========================================================================== */
+
+.scan-result-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 16px;
+  box-sizing: border-box;
+  animation: fadeInOverlay 0.25s ease-out;
+}
+
+.scan-result-card {
+  width: 100%;
+  background-color: #FFFFFF;
+  border-radius: 20px;
+  padding: 18px;
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.15);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: scannerSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.scan-result-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.scan-result-badge {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #4D7C0F;
+  background-color: #FFFFFF;
+  padding: 6px 8px 10px 8px;
+  border-radius: 8px 8px 0px 0px;
+  display: inline-block;
+  margin-bottom: 4px;
+  position: absolute;
+  top: -12px;
+  left: 0px;
+}
+
+.scan-result-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+}
+
+.scan-result-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.scan-result-name {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 1.0625rem; /* 17px */
+  font-weight: 600;
+  color: #18181B;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.scan-result-subtext-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.scan-subtext-serving {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: #3F3F46;
+  background-color: #F4F4F6;
+  padding: 2.5px 7.5px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.scan-subtext-tag {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: #71717A;
+  background-color: #FAFAFB;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  padding: 2px 6.5px;
+  border-radius: 6px;
+}
+
+.scan-result-cal-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.scan-cal-val {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #243e0f;
+  line-height: 1.1;
+}
+
+.scan-cal-unit {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: #71717A;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.scan-result-macros {
+  display: flex;
+  gap: 8px;
+}
+
+.result-macro-pill {
+  flex: 1;
+  background-color: #F8F8FA;
+  border-radius: 8px;
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.macro-tag {
+  font-size: 0.625rem;
+  color: #71717A;
+  font-weight: 500;
+}
+
+.macro-val {
+  font-size: 0.75rem;
+  color: #18181B;
+  font-weight: 600;
+}
+
+.scan-result-btn-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.scan-result-cancel {
+  flex: 1;
+  background-color: #F4F4F5;
+  border: none;
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #52525B;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.scan-result-cancel:hover {
+  background-color: #E4E4E7;
+  color: #18181B;
+}
+
+.scan-result-confirm {
+  flex: 1.5;
+  background: #18181B;
+  border: none;
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.scan-result-confirm:hover {
+  background: #27272A;
+}

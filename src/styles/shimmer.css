@@ -1,0 +1,46 @@
+/* ==========================================================================
+   SHIMMER / SKELETON LOADING ANIMATIONS
+   ========================================================================== */
+
+@keyframes shimmer-sweep {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  background-size: 200% 100%;
+  animation: shimmer-sweep 1.2s infinite linear;
+  border-radius: 6px;
+  vertical-align: middle;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Shimmer on dark card backgrounds (e.g. Hero Calories, Water, Burn) */
+.skeleton-shimmer-dark {
+  background-color: rgba(255, 255, 255, 0.12);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+}
+
+/* Shimmer on light cards (e.g. Macro tiles, Activity log) */
+.skeleton-shimmer-light {
+  background-color: #E2E2E8;
+  background-image: linear-gradient(
+    90deg,
+    #E2E2E8 0%,
+    #F4F4F7 50%,
+    #E2E2E8 100%
+  );
+}

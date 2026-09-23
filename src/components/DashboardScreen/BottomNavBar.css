@@ -1,0 +1,115 @@
+/* ==========================================================================
+   FLOATING SCOOPED BOTTOM NAVIGATION BAR (WHITE THEME)
+   Strict Rules:
+   - Font weight <= 600
+   - Modern subtle radii
+   - Pure CSS / SVG smooth transitions
+   ========================================================================== */
+
+.bottom-nav-container {
+  position: absolute;
+  bottom: 20px;
+  left: 14px;
+  right: 14px;
+  height: 68px;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  background: transparent;
+}
+
+/* Background dynamic SVG layer with clean drop shadow */
+.bottom-nav-bg-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.08));
+}
+
+.bottom-nav-path {
+  transition: d 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Floating Active Indicator Dot */
+.nav-active-dot {
+  position: absolute;
+  top: 7px;
+  width: 6.5px;
+  height: 6.5px;
+  border-radius: 50%;
+  background-color: #000000;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  transform: translate(-50%, -50%);
+  transition: left 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  z-index: 99;
+}
+
+/* 5 Tab Navigation Items Row */
+.bottom-nav-items {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 14px;
+  box-sizing: border-box;
+}
+
+/* Individual Tab Button */
+.nav-tab-btn {
+  flex: 1;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  color: #8E8E93; /* Subtle inactive icon color */
+  transition: color 0.25s ease, transform 0.2s ease;
+  position: relative;
+}
+
+.nav-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.nav-tab-btn:hover {
+  color: #48484A;
+}
+
+.nav-tab-btn:hover .nav-icon-container {
+  transform: translateY(-2px);
+}
+
+/* Active State */
+.nav-tab-btn.active {
+  color: #243e0f; /* Deep Nourish green / charcoal */
+}
+
+.nav-tab-btn.active .nav-icon-container {
+  transform: translateY(1px);
+  color: #243e0f;
+}
+
+/* Active icon stroke emphasis */
+.nav-tab-btn.active svg {
+  stroke-width: 2.2;
+}
