@@ -647,13 +647,52 @@
   line-height: 1.1;
 }
 
-.scan-cal-unit {
+.scan-portion-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 2px 0;
+}
+
+.scan-portion-label {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #52525B;
+  letter-spacing: -0.01em;
+}
+
+.scan-portion-pills {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.scan-portion-pill {
   font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, sans-serif);
   font-size: 0.6875rem;
   font-weight: 500;
-  color: #71717A;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
+  color: #52525B;
+  background-color: #F4F4F6;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  padding: 5px 9px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.scan-portion-pill:hover {
+  background-color: #E4E4E7;
+  color: #18181B;
+}
+
+.scan-portion-pill.active {
+  background-color: #18181B;
+  color: #FFFFFF;
+  border-color: #18181B;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .scan-result-macros {

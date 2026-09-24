@@ -12,52 +12,161 @@
   position: relative;
 }
 
-/* Floating Screen Switcher Bar (Fixed Bottom Right) */
-.screen-switcher-bar {
+/* ==========================================================================
+   COMPACT SCREEN SWITCHER DROPDOWN (Fixed Bottom Right)
+   ========================================================================== */
+
+.screen-switcher-dropdown-container {
   position: fixed;
   bottom: 24px;
   right: 24px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(24, 24, 27, 0.88);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  padding: 6px 8px;
-  border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.35);
   z-index: 9999;
   user-select: none;
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, sans-serif);
 }
 
-.switcher-pill {
+/* Trigger Button */
+.switcher-dropdown-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(24, 24, 27, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 6px 14px 6px 8px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  color: #FFFFFF;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+}
+
+.switcher-dropdown-trigger:hover {
+  background: rgba(39, 39, 42, 0.95);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+}
+
+.switcher-dropdown-trigger:active,
+.switcher-dropdown-trigger.expanded {
+  transform: scale(0.98);
+}
+
+.switcher-trigger-pill-badge {
+  background: rgba(255, 255, 255, 0.15);
+  color: #A1A1AA;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  border-radius: 9999px;
+  letter-spacing: 0.04em;
+}
+
+.switcher-current-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #FAFAFA;
+}
+
+.switcher-chevron-icon {
+  color: #A1A1AA;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.switcher-chevron-icon.open {
+  transform: rotate(180deg);
+}
+
+/* Upward Dropdown Menu */
+.switcher-dropdown-menu {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  right: 0;
+  width: 210px;
+  background: rgba(24, 24, 27, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 18px;
+  padding: 6px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  animation: switcherMenuPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: bottom right;
+}
+
+@keyframes switcherMenuPop {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.switcher-menu-header {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #71717A;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 8px 10px 4px;
+}
+
+.switcher-menu-item {
+  width: 100%;
   background: transparent;
   border: none;
-  color: #A1A1AA;
-  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, sans-serif);
-  font-size: 0.75rem;
-  font-weight: 500;
-  padding: 6px 14px;
-  border-radius: 9999px;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  line-height: 1;
-  display: inline-flex;
+  border-radius: 12px;
+  padding: 8px 10px;
+  display: flex;
   align-items: center;
-  gap: 4px;
+  justify-content: space-between;
+  cursor: pointer;
+  color: #D4D4D8;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  text-align: left;
 }
 
-.switcher-pill:hover {
-  color: #FFFFFF;
+.switcher-menu-item:hover {
   background: rgba(255, 255, 255, 0.08);
+  color: #FFFFFF;
 }
 
-.switcher-pill.active {
+.switcher-menu-item.active {
   background: #FFFFFF;
   color: #18181B;
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.switcher-item-label {
+  flex: 1;
+}
+
+.switcher-key-hint {
+  font-size: 0.68rem;
+  font-family: monospace;
+  background: rgba(255, 255, 255, 0.12);
+  color: #A1A1AA;
+  padding: 2px 6px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.switcher-menu-item.active .switcher-key-hint {
+  background: rgba(0, 0, 0, 0.1);
+  color: #52525B;
+  border-color: rgba(0, 0, 0, 0.1);
 }
 
 /* ==========================================================================

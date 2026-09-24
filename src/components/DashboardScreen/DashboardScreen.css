@@ -148,11 +148,18 @@
   width: fit-content;
 }
 
+/* Header Action Buttons (Notification + Community) */
+.dashboard-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 /* Circular Notification Button */
 .notification-btn {
   position: relative;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background-color: #FFFFFF;
   border: 1px solid rgba(0, 0, 0, 0.04);
@@ -162,6 +169,7 @@
   justify-content: center;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
+  -webkit-tap-highlight-color: transparent !important;
 }
 
 .notification-btn:hover {
@@ -177,11 +185,42 @@
   color: #18181B;
 }
 
+/* Circular Analytics Header Button */
+.analytics-header-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #18181B;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.analytics-header-btn:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  color: #0F172A;
+}
+
+.analytics-header-btn:active {
+  transform: scale(0.95);
+}
+
+.analytics-header-icon {
+  color: #18181B;
+}
+
 /* Red Notification Indicator Dot */
 .notification-badge-dot {
   position: absolute;
-  top: 11px;
-  right: 11px;
+  top: 9px;
+  right: 9px;
   width: 6.5px;
   height: 6.5px;
   border-radius: 50%;

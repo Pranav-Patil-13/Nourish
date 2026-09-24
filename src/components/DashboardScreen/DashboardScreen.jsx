@@ -1,20 +1,30 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Bell, Loader2 } from 'lucide-react';
+import { Bell, Loader2, TrendingUp } from 'lucide-react';
 import userAvatar from '../../assets/user_avatar.jpg';
 import { DateSlider } from './DateSlider';
 import { MacroCard } from './MacroCard';
 import { TodayActivity } from './TodayActivity';
 import { BottomNavBar } from './BottomNavBar';
 import { NotificationDrawer } from '../NotificationDrawer/NotificationDrawer';
+import { useBackHandler } from '../../context/BackNavigationContext';
 import './DashboardScreen.css';
 
 const PULL_TRIGGER_THRESHOLD = 52;
 const MAX_PULL = 72;
 
-export function DashboardScreen({ onOpenScanner, animatePushIn = false }) {
+export function DashboardScreen({ onOpenScanner, onSelectTab, animatePushIn = false }) {
   // 1s (1000ms) initial loading state for dynamic metrics
   const [isLoading, setIsLoading] = useState(true);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+
+  // Register Native Back Handler for Notification Drawer
+  useBackHandler(() => {
+    if (isNotificationOpen) {
+      setIsNotificationOpen(false);
+      return true;
+    }
+    return false;
+  }, true, 10);
 
   // Pull down to refresh state
   const [pullDistance, setPullDistance] = useState(0);
@@ -195,15 +205,29 @@ export function DashboardScreen({ onOpenScanner, animatePushIn = false }) {
             </div>
           </div>
 
-          {/* Notification Bell Button with Badge */}
-          <button
-            className="notification-btn"
-            aria-label="Open notifications"
-            onClick={() => setIsNotificationOpen(true)}
-          >
-            <Bell size={20} className="bell-icon" strokeWidth={1.8} />
-            <span className="notification-badge-dot" />
-          </button>
+          <div className="dashboard-header-actions">
+            {/* Notification Bell Button with Badge */}
+            <button
+              className="notification-btn"
+              aria-label="Open notifications"
+              onClick={() => setIsNotificationOpen(true)}
+            >
+              <Bell size={20} className="bell-icon" strokeWidth={1.8} />
+              <span className="notification-badge-dot" />
+            </button>
+
+            {/* Analytics Header Button */}
+            <button
+              className="analytics-header-btn"
+              aria-label="Analytics & Trends"
+              onClick={() => {
+                if (onSelectTab) onSelectTab('analytics');
+              }}
+              title="Analytics & Trends"
+            >
+              <TrendingUp size={19} className="analytics-header-icon" strokeWidth={1.8} />
+            </button>
+          </div>
         </header>
 
         {/* Date Slider Row */}
@@ -217,7 +241,11 @@ export function DashboardScreen({ onOpenScanner, animatePushIn = false }) {
       </div>
 
       {/* Floating Scooped Bottom Navigation Bar */}
-      <BottomNavBar onOpenScanner={onOpenScanner} />
+      <BottomNavBar
+        activeTabId="home"
+        onSelectTab={onSelectTab}
+        onOpenScanner={onOpenScanner}
+      />
 
       {/* 65% Slide-Up Notification Drawer */}
       <NotificationDrawer

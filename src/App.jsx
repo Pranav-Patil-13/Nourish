@@ -1,15 +1,34 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Capacitor } from '@capacitor/core';
 import { App as CapApp } from '@capacitor/app';
+import { MealsProvider } from './context/useMealsStore';
+import { useMeals } from './context/useMeals';
 import { MobileFrame } from './components/MobileFrame/MobileFrame';
 import { WelcomeScreen } from './components/WelcomeScreen/WelcomeScreen';
 import { MainScreen } from './components/MainScreen/MainScreen';
 import { DashboardScreen } from './components/DashboardScreen/DashboardScreen';
 import { ScannerScreen } from './components/ScannerScreen/ScannerScreen';
+import { ChevronUp } from 'lucide-react';
+import { DiaryScreen } from './components/DiaryScreen/DiaryScreen';
+import { SubscriptionsScreen } from './components/SubscriptionsScreen/SubscriptionsScreen';
+import CommunityScreen from './components/CommunityScreen/CommunityScreen';
 import { AndroidLauncherBtn } from './components/AndroidLauncherBtn/AndroidLauncherBtn';
+import { BackNavigationProvider } from './context/BackNavigationContext';
 import './App.css';
 
-export function App() {
+const SCREEN_OPTIONS = [
+  { id: 'welcome', label: '1. Launch Screen', shortLabel: '1. Launch', key: '1' },
+  { id: 'intro', label: '2. Onboarding', shortLabel: '2. Onboarding', key: '2' },
+  { id: 'dashboard', label: '3. Dashboard', shortLabel: '3. Dashboard', key: '3' },
+  { id: 'scanner', label: '4. Food Scanner', shortLabel: '4. Scanner', key: '4' },
+  { id: 'diary', label: '5. Planner / Diary', shortLabel: '5. Planner', key: '5' },
+  { id: 'subscriptions', label: '6. Subscriptions', shortLabel: '6. Subscriptions', key: '6' },
+  { id: 'community', label: '7. Community', shortLabel: '7. Community', key: '7' }
+];
+
+function AppContent() {
+  const { logFromScanner } = useMeals();
+
   // Check if running on native Android, or explicit ?platform=android param
   const isCapacitorAndroid = Capacitor.getPlatform() === 'android' || Capacitor.isNativePlatform();
   const urlParams = new URLSearchParams(window.location.search);
@@ -30,6 +49,8 @@ export function App() {
   });
 
   const [isPushingDashboard, setIsPushingDashboard] = useState(false);
+  const [isSwitcherOpen, setIsSwitcherOpen] = useState(false);
+  const switcherRef = useRef(null);
 
   const changeScreen = (screen) => {
     setCurrentScreen(screen);
@@ -53,11 +74,16 @@ export function App() {
     }, 650);
   };
 
-  // Handle hardware / gesture back button navigation
-  const handleGoBack = useCallback(() => {
-    if (currentScreen === 'scanner') {
+  // Root back handler when no nested component handles back
+  const handleRootBack = useCallback(() => {
+    if (
+      currentScreen === 'scanner' ||
+      currentScreen === 'diary' ||
+      currentScreen === 'subscriptions' ||
+      currentScreen === 'community'
+    ) {
       changeScreen('dashboard');
-      return;
+      return true;
     }
     if (currentScreen === 'dashboard') {
       if (!isAndroidMode) {
@@ -65,7 +91,7 @@ export function App() {
       } else {
         CapApp.exitApp();
       }
-      return;
+      return true;
     }
     if (currentScreen === 'intro') {
       if (!isAndroidMode) {
@@ -73,39 +99,33 @@ export function App() {
       } else {
         CapApp.exitApp();
       }
-      return;
+      return true;
     }
     if (currentScreen === 'welcome') {
       CapApp.exitApp();
+      return true;
     }
+    return false;
   }, [currentScreen, isAndroidMode]);
 
-  // Listen to native Android back button & popstate
+  // Click outside to close screen switcher dropdown
   useEffect(() => {
-    let backListener = null;
-
-    if (Capacitor.isNativePlatform() || Capacitor.getPlatform() === 'android') {
-      CapApp.addListener('backButton', () => {
-        handleGoBack();
-      }).then((handle) => {
-        backListener = handle;
-      });
-    }
-
-    const handlePopState = () => {
-      handleGoBack();
-    };
-    window.addEventListener('popstate', handlePopState);
-
-    return () => {
-      if (backListener && typeof backListener.remove === 'function') {
-        backListener.remove();
+    const handleClickOutside = (e) => {
+      if (switcherRef.current && !switcherRef.current.contains(e.target)) {
+        setIsSwitcherOpen(false);
       }
-      window.removeEventListener('popstate', handlePopState);
     };
-  }, [handleGoBack]);
+    if (isSwitcherOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [isSwitcherOpen]);
 
-  // Keyboard shortcuts (1: Welcome, 2: Onboarding, 3: Dashboard, 4: Scanner)
+  // Keyboard shortcuts (1: Welcome, 2: Onboarding, 3: Dashboard, 4: Scanner, 5: Diary, 6: Subscriptions, 7: Community)
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
@@ -113,11 +133,30 @@ export function App() {
       if (e.key === '2') changeScreen('intro');
       if (e.key === '3') changeScreen('dashboard');
       if (e.key === '4') changeScreen('scanner');
-      if (e.key === 'Escape') handleGoBack();
+      if (e.key === '5') changeScreen('diary');
+      if (e.key === '6') changeScreen('subscriptions');
+      if (e.key === '7') changeScreen('community');
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleGoBack]);
+  }, []);
+
+  // Handle Bottom Navigation Tab Switching
+  const handleSelectTab = (tabId) => {
+    if (tabId === 'home') {
+      changeScreen('dashboard');
+    } else if (tabId === 'diary') {
+      changeScreen('diary');
+    } else if (tabId === 'camera') {
+      changeScreen('scanner');
+    } else if (tabId === 'subscriptions') {
+      changeScreen('subscriptions');
+    } else if (tabId === 'community') {
+      changeScreen('community');
+    }
+  };
+
+  const currentOption = SCREEN_OPTIONS.find((opt) => opt.id === currentScreen) || SCREEN_OPTIONS[2];
 
   // Screen content elements
   const renderScreenContent = () => (
@@ -137,6 +176,7 @@ export function App() {
         <DashboardScreen
           key="dashboard-view"
           animatePushIn={isPushingDashboard}
+          onSelectTab={handleSelectTab}
           onOpenScanner={() => changeScreen('scanner')}
         />
       )}
@@ -144,68 +184,115 @@ export function App() {
       {currentScreen === 'scanner' && (
         <ScannerScreen
           onBack={() => changeScreen('dashboard')}
+          onLogMeal={logFromScanner}
+        />
+      )}
+
+      {currentScreen === 'diary' && (
+        <DiaryScreen
+          onBack={() => changeScreen('dashboard')}
+          onOpenScanner={() => changeScreen('scanner')}
+          onSelectTab={handleSelectTab}
+        />
+      )}
+
+      {currentScreen === 'subscriptions' && (
+        <SubscriptionsScreen
+          onSelectTab={handleSelectTab}
+          onOpenScanner={() => changeScreen('scanner')}
+        />
+      )}
+
+      {currentScreen === 'community' && (
+        <CommunityScreen
+          onNavigateTab={handleSelectTab}
         />
       )}
     </>
   );
 
   return (
-    <div className={`app-container ${isAndroidMode ? 'android-mode-active' : ''}`}>
-      {/* Quick Screen Switcher Toolbar (Desktop only) */}
-      {!isAndroidMode && (
-        <nav className="screen-switcher-bar" aria-label="Screen switcher">
-          <button
-            className={`switcher-pill ${currentScreen === 'welcome' ? 'active' : ''}`}
-            onClick={() => changeScreen('welcome')}
-            title="Press '1' to jump to Launch Screen"
-          >
-            1. Launch
-          </button>
-          <button
-            className={`switcher-pill ${currentScreen === 'intro' ? 'active' : ''}`}
-            onClick={() => changeScreen('intro')}
-            title="Press '2' to jump to Onboarding"
-          >
-            2. Onboarding
-          </button>
-          <button
-            className={`switcher-pill ${currentScreen === 'dashboard' ? 'active' : ''}`}
-            onClick={() => changeScreen('dashboard')}
-            title="Press '3' to jump to Dashboard"
-          >
-            3. Dashboard
-          </button>
-          <button
-            className={`switcher-pill ${currentScreen === 'scanner' ? 'active' : ''}`}
-            onClick={() => changeScreen('scanner')}
-            title="Press '4' to jump to Food Scanner"
-          >
-            4. Scanner
-          </button>
-        </nav>
-      )}
+    <BackNavigationProvider onRootBack={handleRootBack}>
+      <div className={`app-container ${isAndroidMode ? 'android-mode-active' : ''}`}>
+        {/* Compact Dropdown Screen Switcher (Desktop only) */}
+        {!isAndroidMode && (
+          <div className="screen-switcher-dropdown-container" ref={switcherRef}>
+            {/* Dropdown Menu Popup (Opens Upwards) */}
+            {isSwitcherOpen && (
+              <div className="switcher-dropdown-menu" role="listbox" aria-label="Available screens">
+                <div className="switcher-menu-header">Jump to Screen</div>
+                {SCREEN_OPTIONS.map((opt) => {
+                  const isSelected = currentScreen === opt.id;
+                  return (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      className={`switcher-menu-item ${isSelected ? 'active' : ''}`}
+                      onClick={() => {
+                        changeScreen(opt.id);
+                        setIsSwitcherOpen(false);
+                      }}
+                      role="option"
+                      aria-selected={isSelected}
+                    >
+                      <span className="switcher-item-label">{opt.label}</span>
+                      <kbd className="switcher-key-hint">{opt.key}</kbd>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
 
-      {/* Floating Bottom-Left Android App Button (Web/Desktop only) */}
-      {!isCapacitorAndroid && (
-        <AndroidLauncherBtn
-          isAndroidMode={isAndroidMode}
-          onToggleAndroidMode={toggleAndroidMode}
-        />
-      )}
+            {/* Trigger Button */}
+            <button
+              type="button"
+              className={`switcher-dropdown-trigger ${isSwitcherOpen ? 'expanded' : ''}`}
+              onClick={() => setIsSwitcherOpen(!isSwitcherOpen)}
+              aria-haspopup="listbox"
+              aria-expanded={isSwitcherOpen}
+              title="Click to switch screens or use keys 1-6"
+            >
+              <span className="switcher-trigger-pill-badge">View</span>
+              <span className="switcher-current-label">{currentOption.shortLabel}</span>
+              <ChevronUp
+                size={15}
+                className={`switcher-chevron-icon ${isSwitcherOpen ? 'open' : ''}`}
+              />
+            </button>
+          </div>
+        )}
 
-      {/* When in Android mode: Render directly with NO mobile frame and NO launch stage */}
-      {isAndroidMode ? (
-        <main className="android-native-viewport">
-          {renderScreenContent()}
-        </main>
-      ) : (
-        /* Desktop Mode: Render with realistic MobileFrame */
-        <MobileFrame>
-          {renderScreenContent()}
-        </MobileFrame>
-      )}
-    </div>
+        {/* Floating Bottom-Left Android App Button (Web/Desktop only) */}
+        {!isCapacitorAndroid && (
+          <AndroidLauncherBtn
+            isAndroidMode={isAndroidMode}
+            onToggleAndroidMode={toggleAndroidMode}
+          />
+        )}
+
+        {/* When in Android mode: Render directly with NO mobile frame and NO launch stage */}
+        {isAndroidMode ? (
+          <main className="android-native-viewport">
+            {renderScreenContent()}
+          </main>
+        ) : (
+          /* Desktop Mode: Render with realistic MobileFrame */
+          <MobileFrame>
+            {renderScreenContent()}
+          </MobileFrame>
+        )}
+      </div>
+    </BackNavigationProvider>
+  );
+}
+
+export function App() {
+  return (
+    <MealsProvider>
+      <AppContent />
+    </MealsProvider>
   );
 }
 
 export default App;
+

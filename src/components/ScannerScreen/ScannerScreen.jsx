@@ -15,6 +15,7 @@ import {
 import foodPlateImg from '../../assets/scanner_food_plate.jpg';
 import barcodeImg from '../../assets/scanner_barcode_only.jpg';
 import foodLabelImg from '../../assets/scanner_food_label.jpg';
+import { useBackHandler } from '../../context/BackNavigationContext';
 import './ScannerScreen.css';
 
 const SCAN_MODES = [
@@ -104,10 +105,29 @@ export function ScannerScreen({ onBack, onLogMeal }) {
   const [scanResult, setScanResult] = useState(null);
   const [isResultModalOpen, setIsResultModalOpen] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
+  const [scanMultiplier, setScanMultiplier] = useState(1.0);
 
   const scanTimerRef = useRef(null);
 
   const currentModeInfo = MODE_DATA[activeMode] || MODE_DATA.food;
+
+  const handleCancelScan = () => {
+    if (scanTimerRef.current) clearTimeout(scanTimerRef.current);
+    setIsScanning(false);
+  };
+
+  // Register Native Back Handler for Scanner modal and active scanning
+  useBackHandler(() => {
+    if (isResultModalOpen) {
+      setIsResultModalOpen(false);
+      return true;
+    }
+    if (isScanning) {
+      handleCancelScan();
+      return true;
+    }
+    return false;
+  }, true, 10);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -121,19 +141,16 @@ export function ScannerScreen({ onBack, onLogMeal }) {
     
     setScanResult(null);
     setIsResultModalOpen(false);
+    setScanMultiplier(1.0);
     setIsScanning(true);
 
     // 3.5s scan duration
     scanTimerRef.current = setTimeout(() => {
       setIsScanning(false);
       setScanResult(currentModeInfo.result);
+      setScanMultiplier(1.0);
       setIsResultModalOpen(true);
     }, 3500);
-  };
-
-  const handleCancelScan = () => {
-    if (scanTimerRef.current) clearTimeout(scanTimerRef.current);
-    setIsScanning(false);
   };
 
   const handleResetScan = () => {
@@ -141,21 +158,27 @@ export function ScannerScreen({ onBack, onLogMeal }) {
     setScanResult(null);
     setIsResultModalOpen(false);
     setIsScanning(false);
+    setScanMultiplier(1.0);
   };
 
   const handleModeChange = (modeId) => {
     if (isScanning) return;
     setScanResult(null);
     setIsResultModalOpen(false);
+    setScanMultiplier(1.0);
     setActiveMode(modeId);
   };
 
   const handleConfirmLog = () => {
     if (onLogMeal && scanResult) {
-      onLogMeal(scanResult);
+      onLogMeal({
+        ...scanResult,
+        multiplier: scanMultiplier
+      });
     }
     setScanResult(null);
     setIsResultModalOpen(false);
+    setScanMultiplier(1.0);
     if (onBack) onBack();
   };
 
@@ -350,7 +373,9 @@ export function ScannerScreen({ onBack, onLogMeal }) {
                   <h3 className="scan-result-name">{scanResult.name}</h3>
                   <div className="scan-result-subtext-row">
                     {scanResult.serving && (
-                      <span className="scan-subtext-serving">{scanResult.serving}</span>
+                      <span className="scan-subtext-serving">
+                        {scanMultiplier === 1.0 ? scanResult.serving : `${scanMultiplier}x (${scanResult.serving})`}
+                      </span>
                     )}
                     {scanResult.tags && scanResult.tags.map((t, idx) => (
                       <span key={idx} className="scan-subtext-tag">{t}</span>
@@ -359,24 +384,46 @@ export function ScannerScreen({ onBack, onLogMeal }) {
                 </div>
                 
                 <div className="scan-result-cal-box">
-                  <span className="scan-cal-val">+{scanResult.calories}</span>
+                  <span className="scan-cal-val">+{Math.round((Number(scanResult.calories) || 0) * scanMultiplier)}</span>
                   <span className="scan-cal-unit">kcal</span>
                 </div>
+              </div>
+            </div>
+
+            {/* Quick Portion Selector */}
+            <div className="scan-portion-row">
+              <span className="scan-portion-label">Portion Size</span>
+              <div className="scan-portion-pills">
+                {[
+                  { label: '½x', val: 0.5 },
+                  { label: '1x', val: 1.0 },
+                  { label: '1½x', val: 1.5 },
+                  { label: '2x', val: 2.0 }
+                ].map((p) => (
+                  <button
+                    key={p.val}
+                    type="button"
+                    className={`scan-portion-pill ${scanMultiplier === p.val ? 'active' : ''}`}
+                    onClick={() => setScanMultiplier(p.val)}
+                  >
+                    {p.label}
+                  </button>
+                ))}
               </div>
             </div>
 
             <div className="scan-result-macros">
               <div className="result-macro-pill">
                 <span className="macro-tag">Proteins</span>
-                <span className="macro-val">{scanResult.protein}</span>
+                <span className="macro-val">{Math.round((parseInt(scanResult.protein, 10) || 0) * scanMultiplier)}g</span>
               </div>
               <div className="result-macro-pill">
                 <span className="macro-tag">Carbs</span>
-                <span className="macro-val">{scanResult.carbs}</span>
+                <span className="macro-val">{Math.round((parseInt(scanResult.carbs, 10) || 0) * scanMultiplier)}g</span>
               </div>
               <div className="result-macro-pill">
                 <span className="macro-tag">Fats</span>
-                <span className="macro-val">{scanResult.fats}</span>
+                <span className="macro-val">{Math.round((parseInt(scanResult.fats, 10) || 0) * scanMultiplier)}g</span>
               </div>
             </div>
 

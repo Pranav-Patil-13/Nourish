@@ -1,0 +1,1071 @@
+/* ==========================================================================
+   DIARY & MEAL LOGGER SCREEN
+   Strict Rules:
+   - Font weight: strictly <= 600
+   - Palette: Ghostwhite (#F8F8FF) background, crisp white cards (#FFFFFF)
+   - Accent: Brand Green (#88D61E / #243e0f)
+   - Border radius: low & modern (14px - 18px)
+   ========================================================================== */
+
+.diary-screen {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-ghostwhite, #F8F8FF);
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   1. PLANNER HEADER
+   ========================================================================== */
+
+.planner-header-container {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 50px 16px 10px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: var(--bg-ghostwhite, #F8F8FF);
+  z-index: 10;
+}
+
+/* Frosted Leaf Background Layer (Top Right Only) */
+.planner-header-leaf-wrap {
+  position: absolute;
+  bottom: 0px;
+  right: -15px;
+  width: 180px;
+  height: 115px;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+.planner-header-leaf-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: right top;
+  opacity: 0.65;
+  filter: blur(2px);
+  transform: scale(1.08) rotate(-3deg);
+  transform-origin: top right;
+}
+
+.planner-header-leaf-frost {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to left,
+    rgba(248, 248, 255, 0.05) 0%,
+    rgba(248, 248, 255, 0.65) 65%,
+    var(--bg-ghostwhite, #F8F8FF) 100%
+  );
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+.planner-title-row {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.planner-title-text {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 1.375rem; /* ~22px, balanced with dashboard greeting */
+  font-weight: 600;
+  color: #18181B;
+  margin: 0;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+}
+
+/* Circular Calendar button on the right */
+.planner-calendar-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1E293B;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.planner-calendar-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  color: #0F172A;
+}
+
+.planner-calendar-btn:active {
+  transform: scale(0.95);
+}
+
+/* Segmented Pill Switcher (Day | Week | Month) */
+.planner-segmented-switcher {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 58px;
+  background-color: #FFFFFF;
+  border-radius: 9999px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+.planner-segment-pill {
+  flex: 1;
+  height: 100%;
+  border-radius: 9999px;
+  border: none;
+  background: transparent;
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.8125rem; /* 13px */
+  font-weight: 500;
+  color: #64748B;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.planner-segment-pill:hover {
+  color: #18181B;
+}
+
+.planner-segment-pill.active {
+  background-color: #EAF8D9;
+  color: #1E4D1A;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(30, 77, 26, 0.06);
+}
+
+.planner-segment-divider {
+  width: 1px;
+  height: 14px;
+  background-color: rgba(0, 0, 0, 0.06);
+  margin: 0 2px;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   2. SCROLLABLE CONTENT
+   ========================================================================== */
+
+.diary-scrollable-content {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 6px 14px 104px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.diary-scrollable-content::-webkit-scrollbar {
+  display: none;
+  width: 0;
+}
+
+/* ==========================================================================
+   3. WATER TRACKER CARD (REDESIGNED)
+   ========================================================================== */
+
+.diary-water-card {
+  background-color: #FFFFFF;
+  border-radius: 16px;
+  padding: 12px 14px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+}
+
+.water-card-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+
+.water-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.water-droplet-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #E1F4FF 0%, #CEEEFF 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 145, 255, 0.12);
+  flex-shrink: 0;
+}
+
+.water-title-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.water-card-title {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.9375rem; /* 15px */
+  font-weight: 600;
+  color: #0F172A;
+  margin: 0;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.water-stat-display {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.water-stat-curr {
+  font-size: 0.8125rem; /* 13px */
+  font-weight: 600;
+  color: #0088FF;
+  line-height: 1;
+}
+
+.water-stat-divider {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #94A3B8;
+  margin: 0 1px;
+  line-height: 1;
+}
+
+.water-stat-goal {
+  font-size: 0.75rem; /* 12px */
+  font-weight: 500;
+  color: #64748B;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.water-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.water-settings-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #F8FAFC;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748B;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.water-settings-btn:hover {
+  background-color: #F1F5F9;
+  color: #0F172A;
+  transform: rotate(20deg);
+}
+
+.water-settings-btn:active {
+  transform: scale(0.94);
+}
+
+/* Liquid Progress Bar */
+.water-progress-track {
+  width: 100%;
+  height: 6px;
+  border-radius: 9999px;
+  background-color: #EBF5FA;
+  overflow: hidden;
+  position: relative;
+  margin-top: 1px;
+}
+
+.water-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #60A5FA 0%, #38BDF8 50%, #0091FF 100%);
+  border-radius: 9999px;
+  box-shadow: 0 1px 4px rgba(0, 145, 255, 0.3);
+  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.water-progress-labels {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.6875rem; /* 11px */
+  margin-top: -3px;
+  white-space: nowrap;
+}
+
+.water-label-complete {
+  color: #94A3B8;
+  font-weight: 500;
+}
+
+.water-label-remaining {
+  color: #64748B;
+  font-weight: 500;
+}
+
+/* Minimal Presets Grid (- 0.5L | + 0.5L | + 1L) */
+.water-presets-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.water-preset-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 7px 4px;
+  border-radius: 10px;
+  background-color: #F8FAFC;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  color: #334155;
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.75rem; /* 12px */
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.water-preset-btn span {
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.water-preset-btn:hover {
+  background-color: #F1F5F9;
+  color: #0F172A;
+}
+
+.water-preset-btn:active {
+  transform: scale(0.97);
+}
+
+.water-preset-btn.minimal-minus {
+  color: #64748B;
+}
+
+.water-preset-btn.minimal-minus:hover {
+  color: #EF4444;
+  background-color: #FEF2F2;
+  border-color: rgba(239, 68, 68, 0.18);
+}
+
+.water-preset-btn.minimal-plus {
+  color: #0284C7;
+}
+
+.water-preset-btn.minimal-plus:hover {
+  background-color: #F0F9FF;
+  border-color: rgba(2, 132, 199, 0.18);
+}
+
+/* Custom Water Dialog */
+.water-custom-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 120;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 16px;
+  box-sizing: border-box;
+  animation: fadeInOverlay 0.25s ease-out;
+}
+
+.water-custom-card {
+  width: 100%;
+  background-color: #FFFFFF;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.15);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: scannerSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.water-custom-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.water-custom-title {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #0F172A;
+  margin: 0;
+}
+
+.water-custom-close-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: #F1F5F9;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748B;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.water-custom-close-btn:hover {
+  background-color: #E2E8F0;
+  color: #0F172A;
+}
+
+.water-custom-stepper-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #F8FAFC;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.water-stepper-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0F172A;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.15s ease;
+}
+
+.water-stepper-btn:active {
+  transform: scale(0.95);
+}
+
+.water-stepper-val-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.water-stepper-num {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #0091FF;
+  line-height: 1;
+}
+
+.water-stepper-unit {
+  font-size: 0.75rem;
+  color: #64748B;
+  margin-top: 3px;
+  font-weight: 500;
+}
+
+.water-quick-chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.water-quick-chip {
+  flex: 1 1 calc(33.333% - 8px);
+  padding: 8px;
+  border-radius: 10px;
+  background-color: #F1F5F9;
+  border: 1px solid transparent;
+  color: #334155;
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.water-quick-chip.active {
+  background-color: #E0F2FE;
+  border-color: #38BDF8;
+  color: #0091FF;
+  font-weight: 600;
+}
+
+.water-custom-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.water-custom-undo-btn {
+  flex: 1;
+  background-color: #F1F5F9;
+  border: none;
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #64748B;
+  padding: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.water-custom-confirm-btn {
+  flex: 1.5;
+  background: #0091FF;
+  border: none;
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  padding: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 4px 12px rgba(0, 145, 255, 0.3);
+  transition: all 0.15s ease;
+}
+
+.water-custom-confirm-btn:hover {
+  background: #007EE6;
+}
+
+/* ==========================================================================
+   4. MEAL CATEGORY CARDS
+   ========================================================================== */
+
+.diary-meals-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.diary-meal-card {
+  background-color: #FFFFFF;
+  border-radius: 16px;
+  padding: 12px 14px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Meal Card Top Row: Dish Preview + Title/Time + Options */
+.meal-card-top-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.meal-dish-preview-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background-color: #F1F5F9;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.meal-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.meal-title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.meal-card-title {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.9375rem; /* 15px */
+  font-weight: 600;
+  color: #0F172A;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.meal-card-time {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.6875rem; /* 11px */
+  font-weight: 500;
+  color: #94A3B8;
+}
+
+.meal-more-options-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94A3B8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.meal-more-options-btn:hover {
+  background-color: #F1F5F9;
+  color: #0F172A;
+}
+
+.meal-more-options-btn:active {
+  transform: scale(0.92);
+}
+
+/* Food Items List */
+.meal-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 1px;
+}
+
+.meal-food-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 3px 2px;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background-color 0.15s ease;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.meal-food-row:hover {
+  background-color: #F8FAFC;
+}
+
+.meal-food-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #F8FAFC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.meal-food-details {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.meal-food-name {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.8125rem; /* 13px */
+  font-weight: 600;
+  color: #1E293B;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.meal-food-subline {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.meal-food-serving {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.6875rem; /* 11px */
+  font-weight: 500;
+  color: #94A3B8;
+}
+
+.meal-food-dot {
+  font-size: 0.625rem;
+  color: #CBD5E1;
+  line-height: 1;
+}
+
+.meal-food-cal-text {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.6875rem; /* 11px */
+  font-weight: 600;
+  color: #64748B;
+}
+
+.meal-food-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.meal-food-remove-btn {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94A3B8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.meal-food-remove-btn:hover {
+  background-color: #FEE2E2;
+  color: #EF4444;
+}
+
+.meal-food-remove-btn:active {
+  transform: scale(0.9);
+}
+
+.meal-empty-state {
+  padding: 6px 0;
+  text-align: center;
+  color: #94A3B8;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Bottom "+ Add food" Capsule */
+.meal-add-food-capsule {
+  width: 100%;
+  height: 36px;
+  border-radius: 9999px;
+  background-color: #F8FAFC;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: #1E293B;
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.78125rem; /* 12.5px */
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-tap-highlight-color: transparent !important;
+  margin-top: 2px;
+}
+
+.meal-add-food-capsule:hover {
+  background-color: #F1F5F9;
+  border-color: rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.meal-add-food-capsule:active {
+  transform: scale(0.98);
+}
+
+.meal-add-capsule-plus {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+}
+
+/* ==========================================================================
+   5. QUICK-ADD FOOD MODAL SHEET
+   ========================================================================== */
+
+.diary-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 90;
+  animation: modalFadeIn 0.25s ease forwards;
+}
+
+.diary-add-modal {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 88%;
+  background-color: #FFFFFF;
+  border-radius: 20px 20px 0 0;
+  padding: 20px 18px 32px;
+  box-sizing: border-box;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.25);
+  animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.add-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.add-modal-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.add-modal-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #18181B;
+  margin: 0;
+}
+
+.add-modal-close-btn {
+  background: transparent;
+  border: none;
+  color: #71717A;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-modal-search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #F4F4F5;
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+
+.search-icon {
+  color: #A1A1AA;
+}
+
+.search-input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: var(--font-family-base);
+  font-size: 0.8125rem;
+  color: #18181B;
+  width: 100%;
+}
+
+.preset-chips-row {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+
+.preset-chips-row::-webkit-scrollbar {
+  display: none;
+}
+
+.preset-chip {
+  background-color: #F4F4F5;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  border-radius: 9999px;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: var(--font-family-base);
+  transition: all 0.15s ease;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.preset-chip:hover {
+  background-color: #E4E4E7;
+}
+
+.preset-name {
+  font-size: 0.75rem;
+  color: #18181B;
+  font-weight: 500;
+}
+
+.preset-cal {
+  font-size: 0.7rem;
+  color: #71717A;
+  font-weight: 600;
+}
+
+.add-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.form-field label {
+  font-size: 0.72rem;
+  color: #71717A;
+  font-weight: 500;
+}
+
+.form-field input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #E4E4E7;
+  font-family: var(--font-family-base);
+  font-size: 0.8125rem;
+  color: #18181B;
+  outline: none;
+  background-color: #FFFFFF;
+  transition: border-color 0.15s ease;
+}
+
+.form-field input:focus {
+  border-color: #88D61E;
+}
+
+.form-row-2 {
+  display: flex;
+  gap: 10px;
+}
+
+.form-row-3 {
+  display: flex;
+  gap: 8px;
+}
+
+.add-modal-submit-btn {
+  margin-top: 8px;
+  padding: 13px 0;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #88D61E 0%, #68AB14 100%);
+  color: #FFFFFF;
+  font-family: var(--font-family-base);
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(136, 214, 30, 0.35);
+  transition: all 0.15s ease;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.add-modal-submit-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(136, 214, 30, 0.45);
+}
+
+.add-modal-submit-btn:active {
+  transform: scale(0.98);
+}

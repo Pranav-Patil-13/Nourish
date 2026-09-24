@@ -13,14 +13,14 @@ const NAV_ITEMS = [
     )
   },
   {
-    id: 'community',
-    label: 'Community',
+    id: 'diary',
+    label: 'Planner',
     icon: (
-      <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="9" r="3.2" />
-        <path d="M7 19C7 16.2 9.2 14.5 12 14.5C14.8 14.5 17 16.2 17 19" />
-        <path d="M3.5 10C3.5 10 2.5 11.5 2.5 13.5C2.5 15.5 3.5 17 3.5 17" />
-        <path d="M20.5 10C20.5 10 21.5 11.5 21.5 13.5C21.5 15.5 20.5 17 20.5 17" />
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="4.5" y="2.5" width="15" height="19" rx="6" />
+        <line x1="8.5" y1="8" x2="15.5" y2="8" strokeWidth="2.2" />
+        <line x1="8.5" y1="12" x2="15.5" y2="12" strokeWidth="2.2" />
+        <line x1="8.5" y1="16" x2="12.5" y2="16" strokeWidth="2.2" />
       </svg>
     )
   },
@@ -35,40 +35,41 @@ const NAV_ITEMS = [
     )
   },
   {
-    id: 'diary',
-    label: 'Diary',
+    id: 'subscriptions',
+    label: 'Subscriptions',
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="4.5" y="2.5" width="15" height="19" rx="6" />
-        <line x1="8.5" y1="8" x2="15.5" y2="8" strokeWidth="2.2" />
-        <line x1="8.5" y1="12" x2="15.5" y2="12" strokeWidth="2.2" />
-        <line x1="8.5" y1="16" x2="12.5" y2="16" strokeWidth="2.2" />
+        <path d="M3 8l3.5 9h11L21 8l-5 4-4-7-4 7-5-4z" />
+        <path d="M4 21h16" />
       </svg>
     )
   },
   {
-    id: 'analytics',
-    label: 'Analytics',
+    id: 'community',
+    label: 'Community',
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
-        <path d="M22 12A10 10 0 0 0 12 2V12Z" />
+      <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="9" r="3.2" />
+        <path d="M7 19C7 16.2 9.2 14.5 12 14.5C14.8 14.5 17 16.2 17 19" />
+        <path d="M3.5 10C3.5 10 2.5 11.5 2.5 13.5C2.5 15.5 3.5 17 3.5 17" />
+        <path d="M20.5 10C20.5 10 21.5 11.5 21.5 13.5C21.5 15.5 20.5 17 20.5 17" />
       </svg>
     )
   }
 ];
 
-export function BottomNavBar({ onOpenScanner }) {
-  const [activeTab, setActiveTab] = useState(0);
+export function BottomNavBar({ activeTabId = 'home', onSelectTab, onOpenScanner }) {
+  const activeTab = Math.max(0, NAV_ITEMS.findIndex(item => item.id === activeTabId));
   const containerRef = useRef(null);
   const tabButtonRefs = useRef([]);
   const [indicatorOffset, setIndicatorOffset] = useState(48);
   const [navWidth, setNavWidth] = useState(365);
 
   const handleTabClick = (index, item) => {
-    setActiveTab(index);
     if (item.id === 'camera' && onOpenScanner) {
       onOpenScanner();
+    } else if (onSelectTab) {
+      onSelectTab(item.id);
     }
   };
 

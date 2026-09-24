@@ -1,0 +1,1107 @@
+/* ==========================================================================
+   ADD FOOD MODAL SHEET - COMPACT REFINED MOBILE SCALE
+   ========================================================================== */
+
+.add-food-backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 95;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  animation: modalBackdropFadeIn 0.22s ease-out;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@keyframes modalBackdropFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.add-food-sheet {
+  width: 100%;
+  background-color: #FFFFFF;
+  border-radius: 24px 24px 0 0;
+  max-height: 80%;
+  box-shadow: 0 -10px 36px rgba(0, 0, 0, 0.18);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  animation: modalSheetSlideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+@keyframes modalSheetSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.add-food-drag-handle {
+  width: 32px;
+  height: 4px;
+  border-radius: 9999px;
+  background-color: #CBD5E1;
+  margin: 8px auto 2px auto;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   1. MAIN ADD FOOD HUB
+   ========================================================================== */
+
+.add-food-main-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  padding: 6px 14px 16px 14px;
+  box-sizing: border-box;
+}
+
+.add-food-header-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.add-food-search-capsule {
+  flex: 1;
+  height: 38px;
+  border-radius: 9999px;
+  background-color: #F1F5F9;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  gap: 6px;
+  cursor: text;
+  transition: all 0.15s ease;
+}
+
+.add-food-search-capsule:focus-within,
+.add-food-search-capsule:hover {
+  background-color: #E2E8F0;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.search-icon-left {
+  color: #64748B;
+  flex-shrink: 0;
+}
+
+.add-food-search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.8125rem;
+  color: #0F172A;
+  padding: 0;
+}
+
+.add-food-search-input::placeholder {
+  color: #94A3B8;
+  font-weight: 400;
+}
+
+.add-food-close-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #F1F5F9;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748B;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.add-food-close-circle:hover {
+  background-color: #E2E8F0;
+  color: #0F172A;
+}
+
+/* 3 Quick Action Tiles */
+.add-food-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.action-tile {
+  background-color: #F8FAFC;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  padding: 8px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.action-tile:hover {
+  background-color: #F1F5F9;
+  border-color: rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.action-tile:active {
+  transform: scale(0.96);
+}
+
+.action-tile-icon-wrap {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1E293B;
+  margin-bottom: 4px;
+}
+
+.action-tile-title {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: #0F172A;
+  line-height: 1.15;
+}
+
+/* Scrollable Container */
+.add-food-scroll-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 1px;
+  scrollbar-width: none;
+}
+
+.add-food-scroll-body::-webkit-scrollbar {
+  display: none;
+}
+
+.add-food-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.section-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.section-heading {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #0F172A;
+  margin: 0;
+}
+
+.section-link-btn {
+  background: transparent;
+  border: none;
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #16A34A;
+  cursor: pointer;
+  padding: 0;
+}
+
+.section-link-btn:hover {
+  text-decoration: underline;
+}
+
+/* 1. Popular Picks Horizontal Carousel */
+.popular-picks-carousel {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 2px 2px 6px 2px;
+  scrollbar-width: none;
+}
+
+.popular-picks-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.popular-food-card {
+  flex: 0 0 78px;
+  width: 78px;
+  height: 86px;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 14px;
+  padding: 6px 4px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: all 0.15s ease;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.popular-food-card:hover {
+  background-color: #F8FAFC;
+  border-color: rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.04);
+}
+
+.popular-food-avatar {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 4px;
+  flex-shrink: 0;
+}
+
+.popular-food-name {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #0F172A;
+  margin: 0;
+  line-height: 1.2;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.popular-food-kcal {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.625rem;
+  font-weight: 500;
+  color: #64748B;
+  margin-top: 1px;
+  line-height: 1.2;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* 2. Categories 4x2 Grid */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.category-tile {
+  background-color: #F8FAFC;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  border-radius: 10px;
+  padding: 10px 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.category-tile:hover {
+  background-color: #F1F5F9;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.category-tile-emoji {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.category-tile-label {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: #475569;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* 3. Recent Items List */
+.recent-foods-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.recent-food-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.recent-food-item:hover {
+  background-color: #F8FAFC;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.recent-food-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #F8FAFC;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.recent-food-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.recent-food-name {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #0F172A;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.recent-food-subline {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 1px;
+}
+
+.recent-food-serving {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: #94A3B8;
+}
+
+.recent-food-dot {
+  font-size: 0.625rem;
+  color: #CBD5E1;
+  line-height: 1;
+}
+
+.recent-food-cal-text {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #64748B;
+}
+
+.recent-food-add-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #F1F5F9;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0F172A;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.recent-food-add-btn:hover {
+  background-color: #E2E8F0;
+  transform: scale(1.05);
+}
+
+/* ==========================================================================
+   2. DEDICATED VARIETY SELECTION VIEW
+   ========================================================================== */
+
+.add-food-variety-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  padding: 6px 14px 16px 14px;
+  box-sizing: border-box;
+}
+
+.variety-view-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 2px 0;
+}
+
+.variety-header-title {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0;
+  text-align: center;
+  flex: 1;
+}
+
+.variety-results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  flex: 1;
+  padding-right: 2px;
+  padding-bottom: 8px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ==========================================================================
+   3. SEARCH & FILTERED LIST VIEW
+   ========================================================================== */
+
+.add-food-search-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  padding: 6px 14px 16px 14px;
+  box-sizing: border-box;
+}
+
+.search-view-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.search-back-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #F1F5F9;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0F172A;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.search-back-btn:hover {
+  background-color: #E2E8F0;
+}
+
+.search-view-input-capsule {
+  flex: 1;
+  height: 38px;
+  border-radius: 9999px;
+  background-color: #F1F5F9;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  gap: 6px;
+}
+
+.search-view-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.8125rem;
+  color: #0F172A;
+  padding: 0;
+}
+
+.search-clear-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: #CBD5E1;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+  cursor: pointer;
+}
+
+/* Filter Chips (All | My Foods | Branded | Recipes) */
+.filter-chips-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 0 10px 0;
+  flex-shrink: 0;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.filter-chips-row::-webkit-scrollbar {
+  display: none;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 9999px;
+  background-color: #F1F5F9;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1;
+  color: #64748B;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.filter-chip:hover {
+  background-color: #E2E8F0;
+  color: #0F172A;
+}
+
+.filter-chip.active {
+  background-color: #DCFCE7;
+  color: #15803D;
+  font-weight: 600;
+  border-color: rgba(34, 197, 94, 0.35);
+  box-shadow: 0 1px 2px rgba(22, 163, 74, 0.08);
+}
+
+.active-category-pill-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+  flex-shrink: 0;
+}
+
+.active-category-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background-color: #E2E8F0;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.pill-remove-icon {
+  cursor: pointer;
+}
+
+.pill-remove-icon:hover {
+  color: #EF4444;
+}
+
+/* Search Results List */
+.search-results-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 12px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.search-result-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 12px;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.search-result-row:hover {
+  background-color: #F8FAFC;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.search-result-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #F8FAFC;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.search-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.search-result-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+}
+
+.search-result-name {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #0F172A;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.search-result-subline {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 1px;
+}
+
+.search-result-serving {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: #94A3B8;
+}
+
+.search-result-dot {
+  font-size: 0.625rem;
+  color: #CBD5E1;
+  line-height: 1;
+}
+
+.search-result-cal-text {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #64748B;
+}
+
+.search-result-add-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #F1F5F9;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0F172A;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.search-result-add-btn:hover {
+  background-color: #E2E8F0;
+  transform: scale(1.05);
+}
+
+.search-no-results {
+  text-align: center;
+  padding: 30px 16px;
+  color: #94A3B8;
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.8125rem;
+}
+
+.add-as-custom-btn {
+  margin-top: 10px;
+  padding: 8px 14px;
+  border-radius: 9999px;
+  background-color: #F1F5F9;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: #0F172A;
+  font-weight: 600;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.add-as-custom-btn:hover {
+  background-color: #E2E8F0;
+}
+
+/* ==========================================================================
+   3. FOOD DETAIL & PORTION ADJUSTMENT SHEET
+   ========================================================================= */
+
+.add-food-detail-view {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 14px 18px 14px;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+.detail-view-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.detail-close-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #F1F5F9;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0F172A;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.detail-close-btn:hover {
+  background-color: #E2E8F0;
+}
+
+.detail-header-title {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #0F172A;
+  margin: 0;
+}
+
+/* Food Preview Card */
+.detail-food-preview-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #F8FAFC;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  border-radius: 14px;
+  padding: 10px 12px;
+}
+
+.detail-food-image-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+}
+
+.detail-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.detail-preview-emoji {
+  line-height: 1;
+}
+
+.detail-food-title-box {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.detail-food-title {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #0F172A;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.detail-food-density-text {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #94A3B8;
+}
+
+/* Serving Adjuster */
+.detail-section-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.detail-section-label {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #0F172A;
+}
+
+.serving-adjuster-row {
+  display: flex;
+  gap: 8px;
+}
+
+.serving-stepper-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #F1F5F9;
+  border-radius: 12px;
+  padding: 4px 6px;
+  flex: 1;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.serving-step-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0F172A;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.15s ease;
+}
+
+.serving-step-btn:active {
+  transform: scale(0.92);
+}
+
+.serving-step-val {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #0F172A;
+  min-width: 20px;
+  text-align: center;
+}
+
+.serving-unit-select-wrap {
+  position: relative;
+  flex: 1.5;
+  display: flex;
+  align-items: center;
+}
+
+.serving-unit-select {
+  width: 100%;
+  height: 40px;
+  background-color: #F1F5F9;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  border-radius: 12px;
+  padding: 0 30px 0 12px;
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #0F172A;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.select-chevron-icon {
+  position: absolute;
+  right: 10px;
+  pointer-events: none;
+  color: #64748B;
+}
+
+/* Nutrition Table */
+.detail-nutrition-table {
+  background-color: #F8FAFC;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  padding: 6px 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.nutrition-table-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.78rem;
+}
+
+.nutrition-table-row:last-child {
+  border-bottom: none;
+}
+
+.nutrition-key {
+  color: #64748B;
+  font-weight: 500;
+}
+
+.nutrition-val {
+  color: #0F172A;
+  font-weight: 600;
+}
+
+.nutrition-cal-highlight {
+  color: #0F172A;
+  font-weight: 700;
+}
+
+/* Dark Confirm Button */
+.detail-confirm-btn {
+  width: 100%;
+  height: 46px;
+  border-radius: 14px;
+  background-color: #111827;
+  border: none;
+  color: #FFFFFF;
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 12px rgba(17, 24, 39, 0.18);
+  transition: all 0.2s ease;
+  margin-top: 2px;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.detail-confirm-btn:hover {
+  background-color: #000000;
+}
+
+.detail-confirm-btn:active {
+  transform: scale(0.98);
+}
+
+/* ==========================================================================
+   4. CUSTOM FOOD FORM
+   ========================================================================= */
+
+.add-food-custom-view {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 14px 18px 14px;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+.custom-food-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
+
+.form-label {
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.form-input {
+  height: 38px;
+  background-color: #F8FAFC;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  padding: 0 10px;
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, 'Outfit', sans-serif);
+  font-size: 0.8125rem;
+  color: #0F172A;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.form-input:focus {
+  border-color: #16A34A;
+  background-color: #FFFFFF;
+}
+
+.form-row-2 {
+  display: flex;
+  gap: 8px;
+}
+
+.form-row-3 {
+  display: flex;
+  gap: 6px;
+}
