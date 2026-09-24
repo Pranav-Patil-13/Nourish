@@ -49,12 +49,35 @@ function AppContent() {
   });
 
   const [isPushingDashboard, setIsPushingDashboard] = useState(false);
+  const [transitionDirection, setTransitionDirection] = useState('fade');
   const [isSwitcherOpen, setIsSwitcherOpen] = useState(false);
   const switcherRef = useRef(null);
 
-  const changeScreen = (screen) => {
-    setCurrentScreen(screen);
-    localStorage.setItem('nourish_active_screen', screen);
+  const SCREEN_ORDER = {
+    welcome: 0,
+    intro: 1,
+    dashboard: 2,
+    diary: 3,
+    scanner: 4,
+    subscriptions: 5,
+    community: 6
+  };
+
+  const changeScreen = (nextScreen) => {
+    if (nextScreen === currentScreen) return;
+
+    if (nextScreen === 'scanner') {
+      setTransitionDirection('sheet-up');
+    } else if (currentScreen === 'scanner') {
+      setTransitionDirection('sheet-down');
+    } else {
+      const prevOrder = SCREEN_ORDER[currentScreen] ?? 2;
+      const nextOrder = SCREEN_ORDER[nextScreen] ?? 2;
+      setTransitionDirection(nextOrder > prevOrder ? 'slide-left' : 'slide-right');
+    }
+
+    setCurrentScreen(nextScreen);
+    localStorage.setItem('nourish_active_screen', nextScreen);
   };
 
   const toggleAndroidMode = (enabled) => {
@@ -160,7 +183,10 @@ function AppContent() {
 
   // Screen content elements
   const renderScreenContent = () => (
-    <>
+    <div
+      key={currentScreen}
+      className={`app-screen-view screen-anim-${transitionDirection}`}
+    >
       {currentScreen === 'welcome' && !isAndroidMode && (
         <WelcomeScreen onOpen={() => changeScreen('intro')} />
       )}
@@ -208,7 +234,7 @@ function AppContent() {
           onNavigateTab={handleSelectTab}
         />
       )}
-    </>
+    </div>
   );
 
   return (

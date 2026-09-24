@@ -211,3 +211,99 @@
   -webkit-overflow-scrolling: touch;
 }
 
+/* ==========================================================================
+   SMOOTH SCREEN PAGE TRANSITIONS
+   ========================================================================== */
+
+.app-screen-view {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  will-change: transform, opacity;
+}
+
+/* Slide in from right (forward navigation) */
+.screen-anim-slide-left {
+  animation: pageSlideLeft 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes pageSlideLeft {
+  0% {
+    opacity: 0.15;
+    transform: translate3d(24px, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Slide in from left (backward navigation) */
+.screen-anim-slide-right {
+  animation: pageSlideRight 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes pageSlideRight {
+  0% {
+    opacity: 0.15;
+    transform: translate3d(-24px, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Sheet Up (Opening Scanner / Modal view) */
+.screen-anim-sheet-up {
+  animation: pageSheetUp 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes pageSheetUp {
+  0% {
+    opacity: 0.2;
+    transform: translate3d(0, 36px, 0) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* Sheet Down (Closing Scanner / Returning to Dashboard) */
+.screen-anim-sheet-down {
+  animation: pageSheetDown 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes pageSheetDown {
+  0% {
+    opacity: 0.2;
+    transform: translate3d(0, -20px, 0) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* Default Soft Fade */
+.screen-anim-fade {
+  animation: pageFadeIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes pageFadeIn {
+  0% {
+    opacity: 0.2;
+    transform: scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+

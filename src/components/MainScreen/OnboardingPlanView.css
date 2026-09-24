@@ -1,0 +1,291 @@
+/* ==========================================================================
+   ONBOARDING STEP 4: "YOUR DAILY PLAN" (STEP 04 / 07)
+   ========================================================================== */
+
+.onboarding-plan-screen {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #79A33E;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, sans-serif);
+}
+
+/* Background Graphic with Vignette */
+.onboarding-plan-bg-wrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.onboarding-plan-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  animation: bgSubtleScale 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.onboarding-plan-bg-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(98, 142, 45, 0.2) 0%,
+    rgba(98, 142, 45, 0) 35%,
+    rgba(50, 78, 20, 0.45) 100%
+  );
+}
+
+/* Scrollable Content */
+.onboarding-plan-content {
+  position: relative;
+  z-index: 5;
+  flex: 1;
+  overflow-y: auto;
+  padding: calc(48px + env(safe-area-inset-top, 0px)) 16px 104px 16px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+
+.onboarding-plan-content::-webkit-scrollbar {
+  display: none;
+}
+
+/* Top Progress Row */
+.onboarding-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  animation: fadeInDown 0.38s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
+}
+
+.onboarding-progress-segments {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.progress-seg {
+  width: 32px;
+  height: 4px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.35);
+  transition: all 0.3s ease;
+}
+
+.progress-seg.active {
+  background: #FFFFFF;
+}
+
+.progress-seg.current-seg {
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.onboarding-step-counter {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  letter-spacing: 0.02em;
+  opacity: 0.9;
+}
+
+/* Headline & Subtitle */
+.onboarding-plan-header {
+  margin-bottom: 18px;
+  animation: fadeInUp 0.42s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+
+.onboarding-plan-title {
+  margin: 0 0 10px 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.08;
+  font-size: 2.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.title-dark {
+  color: #1A2411;
+}
+
+.title-light {
+  color: #FFFFFF;
+}
+
+.onboarding-plan-subtitle {
+  font-size: 1.025rem;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0 0 8px 0;
+  font-weight: 450;
+  max-width: 290px;
+}
+
+.onboarding-plan-note {
+  font-size: 0.925rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  font-weight: 450;
+}
+
+/* 5 Daily Target Metric Cards */
+.plan-metrics-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.plan-metric-card {
+  height: 66px;
+  background: rgba(238, 244, 227, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 20px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.22s ease, background 0.2s ease;
+  animation: planCardPopIn 0.44s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.plan-metric-card:hover {
+  transform: translateY(-2px) scale(1.01);
+  background: rgba(245, 250, 238, 0.98);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.plan-metric-card:active {
+  transform: scale(0.98);
+}
+
+.metric-icon-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.metric-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+}
+
+.metric-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #728362;
+  letter-spacing: -0.005em;
+}
+
+.metric-value {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1A2411;
+  letter-spacing: -0.015em;
+}
+
+.metric-chevron {
+  color: #92A380;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.plan-metric-card:hover .metric-chevron {
+  transform: translateX(2px);
+  color: #5C704C;
+}
+
+/* Bottom Floating Action Bar */
+.onboarding-plan-bottom-bar-wrap {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0 16px calc(24px + env(safe-area-inset-bottom, 0px)) 16px;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.onboarding-plan-bottom-bar {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  background: rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  box-sizing: border-box;
+  animation: barSlideInUp 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) 0.32s both;
+}
+
+.onboarding-continue-btn {
+  width: 100%;
+  height: 52px;
+  border-radius: 9999px;
+  border: none;
+  background: linear-gradient(135deg, #6BB726 0%, #497F17 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(73, 127, 23, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.onboarding-continue-btn:hover {
+  background: linear-gradient(135deg, #74C62A 0%, #4F8919 100%);
+  box-shadow: 0 8px 22px rgba(73, 127, 23, 0.48), inset 0 1px 1px rgba(255, 255, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+.onboarding-continue-btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 4px 12px rgba(73, 127, 23, 0.35);
+}
+
+/* ==========================================================================
+   KEYFRAME ANIMATIONS
+   ========================================================================== */
+
+@keyframes planCardPopIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}

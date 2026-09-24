@@ -1,0 +1,330 @@
+/* ==========================================================================
+   ONBOARDING STEP 3: "A LITTLE ABOUT YOU"
+   ========================================================================== */
+
+.onboarding-about-screen {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #79A33E;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  font-family: var(--font-family-base, -apple-system, BlinkMacSystemFont, sans-serif);
+}
+
+/* Background Graphic with Vignette */
+.onboarding-about-bg-wrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.onboarding-about-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  animation: bgSubtleScale 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.onboarding-about-bg-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(98, 142, 45, 0.22) 0%,
+    rgba(98, 142, 45, 0) 38%,
+    rgba(64, 98, 26, 0.42) 100%
+  );
+}
+
+/* Scrollable Content */
+.onboarding-about-content {
+  position: relative;
+  z-index: 5;
+  flex: 1;
+  overflow-y: auto;
+  padding: calc(48px + env(safe-area-inset-top, 0px)) 16px 96px 16px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+
+.onboarding-about-content::-webkit-scrollbar {
+  display: none;
+}
+
+/* Header Group Animations */
+.onboarding-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  animation: fadeInDown 0.38s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
+}
+
+.onboarding-progress-segments {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.progress-segment {
+  width: 32px;
+  height: 4px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.35);
+  transition: all 0.3s ease;
+}
+
+.progress-segment.active {
+  background: #FFFFFF;
+}
+
+.onboarding-step-counter {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  letter-spacing: 0.02em;
+  opacity: 0.9;
+}
+
+.onboarding-header-group {
+  margin-bottom: 18px;
+  animation: fadeInUp 0.42s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+
+.onboarding-main-title {
+  margin: 0 0 8px 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.08;
+  font-size: 2.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.title-dark {
+  color: #1A2411;
+}
+
+.title-light {
+  color: #FFFFFF;
+}
+
+.onboarding-subtitle {
+  font-size: 1.025rem;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0;
+  font-weight: 450;
+  max-width: 290px;
+}
+
+/* Frosted Sage Form Card */
+.about-form-card {
+  background: #EEF4E3; /* Soft light cream-sage card matching screenshot */
+  border-radius: 24px;
+  padding: 18px 16px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+  animation: formCardEntrance 0.46s cubic-bezier(0.16, 1, 0.3, 1) 0.16s both;
+}
+
+/* Field Group */
+.about-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: fieldRowFadeIn 0.35s ease both;
+}
+
+.about-field-group:nth-child(1) { animation-delay: 0.22s; }
+.about-field-group:nth-child(2) { animation-delay: 0.28s; }
+.about-field-group:nth-child(3) { animation-delay: 0.34s; }
+.about-field-group:nth-child(4) { animation-delay: 0.40s; }
+
+.about-field-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1A2411;
+  margin-left: 2px;
+}
+
+/* Field Row (Input Pill on left + Steppers on right) */
+.about-field-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Large Left Input Pill */
+.about-input-pill {
+  flex: 1;
+  height: 48px;
+  background: #FFFFFF;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  gap: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.about-input-icon {
+  color: #8E9C7E;
+  flex-shrink: 0;
+}
+
+.about-input-value {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1A2411;
+  letter-spacing: -0.01em;
+}
+
+.about-input-unit {
+  margin-left: auto;
+  font-size: 0.8125rem;
+  color: #8E9C7E;
+  font-weight: 500;
+}
+
+/* Stepper Buttons (Minus and Plus) */
+.about-stepper-btns {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stepper-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.stepper-btn.minus {
+  background: #FFFFFF;
+  color: #2D3B1E;
+}
+
+.stepper-btn.plus {
+  background: #D8EFB5; /* Soft light green plus button from screenshot */
+  color: #2D3B1E;
+}
+
+.stepper-btn:hover {
+  transform: scale(1.06);
+}
+
+.stepper-btn:active {
+  transform: scale(0.92);
+}
+
+/* Gender 3-Option Segmented Row */
+.gender-selector-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gender-option-btn {
+  flex: 1;
+  height: 40px;
+  border-radius: 9999px;
+  border: none;
+  background: #FFFFFF;
+  color: #556645;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.gender-option-btn.active {
+  background: #D5EEA8; /* Vibrant light olive-lime active pill from screenshot */
+  color: #1A2411;
+  font-weight: 700;
+  box-shadow: 0 3px 10px rgba(162, 206, 92, 0.35);
+}
+
+.gender-option-btn:hover {
+  transform: translateY(-1px);
+}
+
+.gender-option-btn:active {
+  transform: scale(0.96);
+}
+
+/* Bottom Floating Action Bar */
+.onboarding-bottom-bar-wrap {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0 16px calc(24px + env(safe-area-inset-bottom, 0px)) 16px;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.onboarding-bottom-bar {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 5px;
+  background: rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  box-sizing: border-box;
+  animation: barSlideInUp 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) 0.32s both;
+}
+
+/* Keyframe Animations */
+@keyframes formCardEntrance {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes fieldRowFadeIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}

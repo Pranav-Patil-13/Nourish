@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import './BottomNavBar.css';
 
 const NAV_ITEMS = [
@@ -59,13 +59,7 @@ const NAV_ITEMS = [
 ];
 
 export function BottomNavBar({ activeTabId = 'home', onSelectTab, onOpenScanner }) {
-  const activeTab = Math.max(0, NAV_ITEMS.findIndex(item => item.id === activeTabId));
-  const containerRef = useRef(null);
-  const tabButtonRefs = useRef([]);
-  const [indicatorOffset, setIndicatorOffset] = useState(48);
-  const [navWidth, setNavWidth] = useState(365);
-
-  const handleTabClick = (index, item) => {
+  const handleTabClick = (item) => {
     if (item.id === 'camera' && onOpenScanner) {
       onOpenScanner();
     } else if (onSelectTab) {
@@ -73,104 +67,100 @@ export function BottomNavBar({ activeTabId = 'home', onSelectTab, onOpenScanner 
     }
   };
 
-  useEffect(() => {
-    const updatePosition = () => {
-      if (!containerRef.current) return;
-      const containerRect = containerRef.current.getBoundingClientRect();
-      setNavWidth(containerRect.width);
-
-      const activeBtn = tabButtonRefs.current[activeTab];
-      if (activeBtn) {
-        const btnRect = activeBtn.getBoundingClientRect();
-        const center = btnRect.left - containerRect.left + btnRect.width / 2;
-        setIndicatorOffset(center);
-      } else {
-        const tabWidth = containerRect.width / NAV_ITEMS.length;
-        setIndicatorOffset(tabWidth * activeTab + tabWidth / 2);
-      }
-    };
-
-    updatePosition();
-    window.addEventListener('resize', updatePosition);
-    return () => window.removeEventListener('resize', updatePosition);
-  }, [activeTab]);
-
-  // Geometry dimensions - reduced scoop height / depth
-  const W = navWidth || 365;
-  const H = 68;
-  const R = 14; // Subtle corner radius <= 14px
-  const dipHalfWidth = 32; // 56px wide scoop
-  const dipDepth = 18; // Reduced scoop height (shallower, sleek curve)
-
-  // Directly track the exact icon center
-  const cx = indicatorOffset || W / 10;
-  const x0 = Math.max(R, cx - dipHalfWidth);
-  const x1 = Math.min(W - R, cx + dipHalfWidth);
-
-  const c1x = cx - dipHalfWidth * 0.52;
-  const c2x = cx - dipHalfWidth * 0.48;
-  const c3x = cx + dipHalfWidth * 0.48;
-  const c4x = cx + dipHalfWidth * 0.52;
-
-  // Mathematically tangent-continuous path perfectly centered on active tab
-  const svgPath = `
-    M 0,${R}
-    A ${R},${R} 0 0,1 ${R},0
-    L ${x0},0
-    C ${c1x},0 ${c2x},${dipDepth} ${cx},${dipDepth}
-    C ${c3x},${dipDepth} ${c4x},0 ${x1},0
-    L ${W - R},0
-    A ${R},${R} 0 0,1 ${W},${R}
-    L ${W},${H - R}
-    A ${R},${R} 0 0,1 ${W - R},${H}
-    L ${R},${H}
-    A ${R},${R} 0 0,1 0,${H - R}
+  // Organic Peanut / Scooped-Waist Pod SVG Path
+  // 108px wide x 54px high with concave top & bottom waist
+  const peanutPodSvgPath = `
+    M 27,0
+    C 38,0  43,5.5  54,5.5
+    C 65,5.5  70,0  81,0
+    A 27,27 0 0 1 81,54
+    C 70,54  65,48.5  54,48.5
+    C 43,48.5  38,54  27,54
+    A 27,27 0 0 1 27,0
     Z
   `.replace(/\s+/g, ' ').trim();
 
   return (
-    <nav className="bottom-nav-container" ref={containerRef} aria-label="Bottom Navigation">
-      {/* Dynamic SVG scooped background layer */}
-      <svg
-        className="bottom-nav-bg-svg"
-        viewBox={`0 0 ${W} ${H}`}
-        width="100%"
-        height={H}
-        preserveAspectRatio="none"
+    <nav className="bottom-nav-container" aria-label="Bottom Navigation">
+      {/* Left Scooped Peanut Pod: Home & Planner */}
+      <div className="bottom-nav-pod left-pod">
+        {/* SVG Peanut Background Shape */}
+        <svg className="pod-bg-svg" viewBox="0 0 108 54" aria-hidden="true">
+          <path d={peanutPodSvgPath} fill="#FFFFFF" />
+        </svg>
+
+        <div className="pod-buttons-row">
+          <button
+            type="button"
+            className={`pod-tab-btn ${activeTabId === 'home' ? 'active' : ''}`}
+            onClick={() => handleTabClick(NAV_ITEMS[0])}
+            aria-label={NAV_ITEMS[0].label}
+            aria-selected={activeTabId === 'home'}
+          >
+            <div className="pod-icon-wrap">
+              {NAV_ITEMS[0].icon}
+            </div>
+          </button>
+
+          <button
+            type="button"
+            className={`pod-tab-btn ${activeTabId === 'diary' ? 'active' : ''}`}
+            onClick={() => handleTabClick(NAV_ITEMS[1])}
+            aria-label={NAV_ITEMS[1].label}
+            aria-selected={activeTabId === 'diary'}
+          >
+            <div className="pod-icon-wrap">
+              {NAV_ITEMS[1].icon}
+            </div>
+          </button>
+        </div>
+      </div>
+
+      {/* Center Black Action Button: Food Scanner */}
+      <button
+        type="button"
+        className={`center-scan-btn ${activeTabId === 'camera' ? 'active' : ''}`}
+        onClick={() => handleTabClick(NAV_ITEMS[2])}
+        aria-label={NAV_ITEMS[2].label}
+        aria-selected={activeTabId === 'camera'}
       >
-        <path
-          d={svgPath}
-          fill="#FFFFFF"
-          className="bottom-nav-path"
-        />
-      </svg>
+        <div className="center-scan-icon-wrap">
+          {NAV_ITEMS[2].icon}
+        </div>
+      </button>
 
-      {/* Floating Active Indicator Dot */}
-      <div
-        className="nav-active-dot"
-        style={{ left: `${cx}px` }}
-        aria-hidden="true"
-      />
+      {/* Right Scooped Peanut Pod: Subscriptions & Community */}
+      <div className="bottom-nav-pod right-pod">
+        {/* SVG Peanut Background Shape */}
+        <svg className="pod-bg-svg" viewBox="0 0 108 54" aria-hidden="true">
+          <path d={peanutPodSvgPath} fill="#FFFFFF" />
+        </svg>
 
-      {/* 5 Tab Navigation Items */}
-      <div className="bottom-nav-items">
-        {NAV_ITEMS.map((item, index) => {
-          const isActive = activeTab === index;
-          return (
-            <button
-              key={item.id}
-              ref={el => (tabButtonRefs.current[index] = el)}
-              className={`nav-tab-btn ${isActive ? 'active' : ''}`}
-              onClick={() => handleTabClick(index, item)}
-              aria-label={item.label}
-              aria-selected={isActive}
-            >
-              <div className="nav-icon-container">
-                {item.icon}
-              </div>
-            </button>
-          );
-        })}
+        <div className="pod-buttons-row">
+          <button
+            type="button"
+            className={`pod-tab-btn ${activeTabId === 'subscriptions' ? 'active' : ''}`}
+            onClick={() => handleTabClick(NAV_ITEMS[3])}
+            aria-label={NAV_ITEMS[3].label}
+            aria-selected={activeTabId === 'subscriptions'}
+          >
+            <div className="pod-icon-wrap">
+              {NAV_ITEMS[3].icon}
+            </div>
+          </button>
+
+          <button
+            type="button"
+            className={`pod-tab-btn ${activeTabId === 'community' ? 'active' : ''}`}
+            onClick={() => handleTabClick(NAV_ITEMS[4])}
+            aria-label={NAV_ITEMS[4].label}
+            aria-selected={activeTabId === 'community'}
+          >
+            <div className="pod-icon-wrap">
+              {NAV_ITEMS[4].icon}
+            </div>
+          </button>
+        </div>
       </div>
     </nav>
   );

@@ -251,3 +251,57 @@
     opacity: 1;
   }
 }
+
+/* ==========================================================================
+   ONBOARDING STEP-TO-STEP FLUID TRANSITION WRAPPER
+   ========================================================================== */
+
+.onboarding-root-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.onboarding-step-wrapper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  will-change: transform, opacity;
+}
+
+/* Forward transition (Next Step: slide in from right) */
+.onboarding-step-wrapper.step-anim-forward {
+  animation: onboardingStepSlideRight 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes onboardingStepSlideRight {
+  0% {
+    opacity: 0;
+    transform: translate3d(48px, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Backward transition (Previous Step: slide in from left) */
+.onboarding-step-wrapper.step-anim-backward {
+  animation: onboardingStepSlideLeft 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes onboardingStepSlideLeft {
+  0% {
+    opacity: 0;
+    transform: translate3d(-48px, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
