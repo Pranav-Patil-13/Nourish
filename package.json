@@ -1,12 +1,12 @@
 {
   "name": "health-calorie-tracker",
   "private": true,
-  "version": "1.0.4",
+  "version": "1.0.5",
   "type": "module",
   "scripts": {
     "dev": "./node_modules/.bin/vite",
     "build": "./node_modules/.bin/vite build",
-    "android:build": "./node_modules/.bin/vite build && ./node_modules/.bin/cap sync android",
+    "android:build": "./node_modules/.bin/vite build && ./node_modules/.bin/cap sync android && rm -rf android/app/src/main/assets/public/downloads",
     "android:open": "./node_modules/.bin/cap open android",
     "lint": "./node_modules/.bin/oxlint",
     "preview": "./node_modules/.bin/vite preview"

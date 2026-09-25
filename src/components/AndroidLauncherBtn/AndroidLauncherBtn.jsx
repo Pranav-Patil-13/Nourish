@@ -12,8 +12,8 @@ export function AndroidLauncherBtn({ isAndroidMode, onToggleAndroidMode }) {
 
   const handleDownloadApk = () => {
     const link = document.createElement('a');
-    link.href = '/downloads/Nourish-v1.0.4.apk';
-    link.download = 'Nourish-v1.0.4.apk';
+    link.href = '/downloads/Nourish-v1.0.5.apk';
+    link.download = 'Nourish-v1.0.5.apk';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -29,7 +29,7 @@ export function AndroidLauncherBtn({ isAndroidMode, onToggleAndroidMode }) {
         aria-label="Download App Controls"
       >
         <span className="android-btn-label">Download App</span>
-        <span className="android-btn-ver">v1.0.4</span>
+        <span className="android-btn-ver">v1.0.5</span>
       </button>
 
       {/* Very Simple Popover: Only Two Buttons (App View, Download App) */}

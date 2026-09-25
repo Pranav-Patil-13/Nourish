@@ -9,13 +9,16 @@
 .bottom-nav-container {
   position: absolute;
   bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-  left: 12px;
-  right: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100% - 24px);
   height: 66px;
   z-index: 80;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 12px;
   padding: 6px 8px;
   user-select: none;
   -webkit-tap-highlight-color: transparent !important;
