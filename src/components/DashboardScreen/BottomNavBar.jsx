@@ -67,29 +67,11 @@ export function BottomNavBar({ activeTabId = 'home', onSelectTab, onOpenScanner 
     }
   };
 
-  // Organic Peanut / Scooped-Waist Pod SVG Path
-  // 108px wide x 54px high with concave top & bottom waist
-  const peanutPodSvgPath = `
-    M 27,0
-    C 38,0  43,5.5  54,5.5
-    C 65,5.5  70,0  81,0
-    A 27,27 0 0 1 81,54
-    C 70,54  65,48.5  54,48.5
-    C 43,48.5  38,54  27,54
-    A 27,27 0 0 1 27,0
-    Z
-  `.replace(/\s+/g, ' ').trim();
-
   return (
     <nav className="bottom-nav-container" aria-label="Bottom Navigation">
-      {/* Left Scooped Peanut Pod: Home & Planner */}
-      <div className="bottom-nav-pod left-pod">
-        {/* SVG Peanut Background Shape */}
-        <svg className="pod-bg-svg" viewBox="0 0 108 54" preserveAspectRatio="none" aria-hidden="true">
-          <path d={peanutPodSvgPath} fill="#FFFFFF" />
-        </svg>
-
-        <div className="pod-buttons-row">
+      <div className="bottom-nav-inner">
+        {/* Left Pill: Home & Planner */}
+        <div className="bottom-nav-pod left-pod">
           <button
             type="button"
             className={`pod-tab-btn ${activeTabId === 'home' ? 'active' : ''}`}
@@ -114,29 +96,22 @@ export function BottomNavBar({ activeTabId = 'home', onSelectTab, onOpenScanner 
             </div>
           </button>
         </div>
-      </div>
 
-      {/* Center Black Action Button: Food Scanner */}
-      <button
-        type="button"
-        className={`center-scan-btn ${activeTabId === 'camera' ? 'active' : ''}`}
-        onClick={() => handleTabClick(NAV_ITEMS[2])}
-        aria-label={NAV_ITEMS[2].label}
-        aria-selected={activeTabId === 'camera'}
-      >
-        <div className="center-scan-icon-wrap">
-          {NAV_ITEMS[2].icon}
-        </div>
-      </button>
+        {/* Center Black Action Button: Food Scanner */}
+        <button
+          type="button"
+          className={`center-scan-btn ${activeTabId === 'camera' ? 'active' : ''}`}
+          onClick={() => handleTabClick(NAV_ITEMS[2])}
+          aria-label={NAV_ITEMS[2].label}
+          aria-selected={activeTabId === 'camera'}
+        >
+          <div className="center-scan-icon-wrap">
+            {NAV_ITEMS[2].icon}
+          </div>
+        </button>
 
-      {/* Right Scooped Peanut Pod: Subscriptions & Community */}
-      <div className="bottom-nav-pod right-pod">
-        {/* SVG Peanut Background Shape */}
-        <svg className="pod-bg-svg" viewBox="0 0 108 54" preserveAspectRatio="none" aria-hidden="true">
-          <path d={peanutPodSvgPath} fill="#FFFFFF" />
-        </svg>
-
-        <div className="pod-buttons-row">
+        {/* Right Pill: Subscriptions & Community */}
+        <div className="bottom-nav-pod right-pod">
           <button
             type="button"
             className={`pod-tab-btn ${activeTabId === 'subscriptions' ? 'active' : ''}`}
