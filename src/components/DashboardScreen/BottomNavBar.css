@@ -2,15 +2,16 @@
    SEPARATE 2-POD FLOATING BOTTOM NAVIGATION BAR
    - Pod 1 (Left): Independent White Card with 4 Navigation Tabs
    - Pod 2 (Right): Independent Solid Black Camera Scanner Button
+   - Perfectly scaled height (60px) and 16px side screen margins
    ========================================================================== */
 
 .bottom-nav-container {
   position: absolute;
-  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
   left: 50%;
   transform: translateX(-50%);
-  width: calc(100% - 24px);
-  max-width: 390px;
+  width: calc(100% - 32px);
+  max-width: 410px;
   z-index: 80;
   display: flex;
   align-items: center;
@@ -27,7 +28,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  gap: 8px;
+  gap: 10px;
   pointer-events: auto;
 }
 
@@ -40,12 +41,12 @@
   align-items: center;
   justify-content: space-around;
   flex: 1;
-  height: 52px;
+  height: 60px;
   background: #FFFFFF;
-  border-radius: 14px;
+  border-radius: 18px;
   border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.09);
-  padding: 0 4px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.09);
+  padding: 0 8px;
   box-sizing: border-box;
 }
 
@@ -55,15 +56,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 44px;
+  height: 48px;
+  max-width: 64px;
   flex: 1;
-  border-radius: 10px;
+  border-radius: 12px;
   border: none;
   background: transparent;
   color: #8E8E93; /* Subtle neutral gray */
   cursor: pointer;
   padding: 0;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -77,17 +78,16 @@
   justify-content: center;
   width: 100%;
   height: 100%;
-  transition: transform 0.2s ease, color 0.2s ease;
 }
 
 /* Active Tab State */
 .nav-tab-item.active {
+  background: var(--highlight-pink, #eeddfa);
   color: #111111;
 }
 
 .nav-tab-item.active .nav-tab-icon-wrap {
   color: #111111;
-  transform: translateY(-2px);
 }
 
 .nav-tab-item.active svg {
@@ -97,18 +97,12 @@
 /* Minimal Active Dot Below Icon */
 .nav-active-dot {
   position: absolute;
-  bottom: 3px;
+  bottom: 4px;
   width: 4.5px;
   height: 4.5px;
   border-radius: 50%;
   background: var(--accent-green, #8EE02C);
   box-shadow: 0 1px 4px rgba(142, 224, 44, 0.6);
-  animation: navDotPop 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-@keyframes navDotPop {
-  0% { transform: scale(0); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
 }
 
 /* ==========================================================================
@@ -123,9 +117,9 @@
 }
 
 .nav-camera-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
   background: #111111;
   color: #FFFFFF;
   border: 1px solid rgba(0, 0, 0, 0.12);
@@ -133,15 +127,14 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.24);
-  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
   -webkit-tap-highlight-color: transparent;
   padding: 0;
 }
 
 .nav-camera-btn:hover {
   transform: scale(1.04);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .nav-camera-btn:active {
@@ -149,5 +142,5 @@
 }
 
 .nav-camera-btn.active {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35), 0 0 0 2px #8EE02C;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35), 0 0 0 2px #8EE02C;
 }
