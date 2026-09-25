@@ -6,7 +6,7 @@ const NAV_ITEMS = [
     id: 'home',
     label: 'Home',
     icon: (
-      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round">
         <path d="M3 10.5L12 3L21 10.5V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V10.5Z" />
         <line x1="9" y1="16" x2="15" y2="16" strokeWidth="2.2" />
       </svg>
@@ -16,7 +16,7 @@ const NAV_ITEMS = [
     id: 'diary',
     label: 'Planner',
     icon: (
-      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round">
         <rect x="4.5" y="2.5" width="15" height="19" rx="5" />
         <line x1="8.5" y1="8" x2="15.5" y2="8" strokeWidth="2.2" />
         <line x1="8.5" y1="12" x2="15.5" y2="12" strokeWidth="2.2" />
@@ -28,7 +28,7 @@ const NAV_ITEMS = [
     id: 'camera',
     label: 'Camera',
     icon: (
-      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round">
         <path d="M14.5 4H9.5L7.5 7H4C2.89543 7 2 7.89543 2 9V18C2 19.1046 2.89543 20 4 20H20C21.1046 20 22 19.1046 22 18V9C22 7.89543 21.1046 7 20 7H16.5L14.5 4Z" />
         <circle cx="12" cy="13.5" r="3.2" />
       </svg>
@@ -38,7 +38,7 @@ const NAV_ITEMS = [
     id: 'subscriptions',
     label: 'Plans',
     icon: (
-      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round">
         <path d="M3 8l3.5 9h11L21 8l-5 4-4-7-4 7-5-4z" />
         <path d="M4 21h16" />
       </svg>
@@ -48,7 +48,7 @@ const NAV_ITEMS = [
     id: 'community',
     label: 'Friends',
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="8.5" r="3.5" />
         <path d="M6 19C6 15.8 8.7 13.8 12 13.8C15.3 13.8 18 15.8 18 19" />
       </svg>
@@ -103,9 +103,9 @@ export function BottomNavBar({ activeTabId = 'home', onSelectTab, onOpenScanner 
   const R = 14;
 
   const cx = indicatorOffset || 62;
-  const r = 24;  // True semicircle radius (concentric to 40px blob with 6px gap)
+  const r = 24;  // True semicircle radius
   const rs = 10; // Shoulder fillet width
-  const w = r + rs; // 36px
+  const w = r + rs; // 34px
 
   const x0 = Math.max(R, cx - w);
   const x1 = Math.min(W - R, cx + w);
