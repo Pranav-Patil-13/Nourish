@@ -10,7 +10,6 @@ import {
 } from 'lucide-react';
 import { useMeals } from '../../context/useMeals';
 import { useBackHandler } from '../../context/BackNavigationContext';
-import { BottomNavBar } from '../DashboardScreen/BottomNavBar';
 import { PortionModal } from './PortionModal';
 import { AddFoodModal } from './AddFoodModal';
 import leavesImg from '../../assets/leaves.png';
@@ -456,13 +455,6 @@ export function DiaryScreen({ _onBack, onOpenScanner, onSelectTab }) {
         onClose={closePortionModal}
         onUpdatePortion={updateMealPortion}
         onDeleteMeal={deleteMeal}
-      />
-
-      {/* 6. Scooped Bottom Navigation Bar */}
-      <BottomNavBar
-        activeTabId="diary"
-        onSelectTab={onSelectTab}
-        onOpenScanner={onOpenScanner}
       />
     </div>
   );

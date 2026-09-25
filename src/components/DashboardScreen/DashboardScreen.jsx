@@ -4,7 +4,6 @@ import userAvatar from '../../assets/user_avatar.jpg';
 import { DateSlider } from './DateSlider';
 import { MacroCard } from './MacroCard';
 import { TodayActivity } from './TodayActivity';
-import { BottomNavBar } from './BottomNavBar';
 import { NotificationDrawer } from '../NotificationDrawer/NotificationDrawer';
 import { useBackHandler } from '../../context/BackNavigationContext';
 import './DashboardScreen.css';
@@ -239,13 +238,6 @@ export function DashboardScreen({ onOpenScanner, onSelectTab, animatePushIn = fa
         {/* Today's Activity Food Log List */}
         <TodayActivity isLoading={isLoading} />
       </div>
-
-      {/* Floating Scooped Bottom Navigation Bar */}
-      <BottomNavBar
-        activeTabId="home"
-        onSelectTab={onSelectTab}
-        onOpenScanner={onOpenScanner}
-      />
 
       {/* 65% Slide-Up Notification Drawer */}
       <NotificationDrawer

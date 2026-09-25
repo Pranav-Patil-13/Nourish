@@ -11,7 +11,6 @@ import { ManageSubscriptionsView } from './views/ManageSubscriptionsView';
 import { DeliveryTrackingView } from './views/DeliveryTrackingView';
 import { NotificationsView } from './views/NotificationsView';
 import { SubscriptionSettingsView } from './views/SubscriptionSettingsView';
-import { BottomNavBar } from '../DashboardScreen/BottomNavBar';
 import { useBackHandler } from '../../context/BackNavigationContext';
 import { FOOD_PLANS, GYM_LISTINGS, TRAINER_PROFILES } from './data/subscriptionsData';
 import './SubscriptionsScreen.css';
@@ -194,15 +193,6 @@ export function SubscriptionsScreen({ onSelectTab, onOpenScanner }) {
           type={checkoutModal.type}
           onClose={() => setCheckoutModal(null)}
           onConfirmSuccess={handleCheckoutSuccess}
-        />
-      )}
-
-      {/* Floating Bottom Navigation Bar (Active Tab: Subscriptions) */}
-      {!isFullScreenView && (
-        <BottomNavBar
-          activeTabId="subscriptions"
-          onSelectTab={onSelectTab}
-          onOpenScanner={onOpenScanner}
         />
       )}
     </div>

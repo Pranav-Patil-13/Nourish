@@ -12,6 +12,7 @@ import { ChevronUp } from 'lucide-react';
 import { DiaryScreen } from './components/DiaryScreen/DiaryScreen';
 import { SubscriptionsScreen } from './components/SubscriptionsScreen/SubscriptionsScreen';
 import CommunityScreen from './components/CommunityScreen/CommunityScreen';
+import { BottomNavBar } from './components/DashboardScreen/BottomNavBar';
 import { AndroidLauncherBtn } from './components/AndroidLauncherBtn/AndroidLauncherBtn';
 import { BackNavigationProvider } from './context/BackNavigationContext';
 import './App.css';
@@ -297,16 +298,37 @@ function AppContent() {
         )}
 
         {/* When in Android mode: Render directly with NO mobile frame and NO launch stage */}
-        {isAndroidMode ? (
-          <main className="android-native-viewport">
-            {renderScreenContent()}
-          </main>
-        ) : (
-          /* Desktop Mode: Render with realistic MobileFrame */
-          <MobileFrame>
-            {renderScreenContent()}
-          </MobileFrame>
-        )}
+        {(() => {
+          const isTabScreen = ['dashboard', 'diary', 'subscriptions', 'community'].includes(currentScreen);
+          const tabIdMap = {
+            dashboard: 'home',
+            diary: 'diary',
+            subscriptions: 'subscriptions',
+            community: 'community'
+          };
+          const currentTabId = tabIdMap[currentScreen] || 'home';
+
+          const persistentNavBar = isTabScreen ? (
+            <BottomNavBar
+              activeTabId={currentTabId}
+              onSelectTab={handleSelectTab}
+              onOpenScanner={() => changeScreen('scanner')}
+            />
+          ) : null;
+
+          return isAndroidMode ? (
+            <main className="android-native-viewport">
+              {renderScreenContent()}
+              {persistentNavBar}
+            </main>
+          ) : (
+            /* Desktop Mode: Render with realistic MobileFrame */
+            <MobileFrame>
+              {renderScreenContent()}
+              {persistentNavBar}
+            </MobileFrame>
+          );
+        })()}
       </div>
     </BackNavigationProvider>
   );

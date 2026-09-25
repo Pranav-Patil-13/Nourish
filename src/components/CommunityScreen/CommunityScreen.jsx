@@ -12,7 +12,6 @@ import MyPostsView from './views/MyPostsView';
 import CreatePollModal from './views/CreatePollModal';
 import CommunityNotificationsView from './views/CommunityNotificationsView';
 import CommunitySettingsView from './views/CommunitySettingsView';
-import BottomNavBar from '../DashboardScreen/BottomNavBar';
 import { useBackHandler } from '../../context/BackNavigationContext';
 import {
   INITIAL_POSTS,
@@ -407,21 +406,6 @@ export function CommunityScreen({ onNavigateTab }) {
           onSubmitPoll={handlePublishPoll}
         />
       )}
-
-      {/* Fixed Floating Scooped Bottom Navigation Bar */}
-      <BottomNavBar
-        activeTabId="community"
-        onSelectTab={(tabId) => {
-          if (onNavigateTab) {
-            onNavigateTab(tabId);
-          }
-        }}
-        onOpenScanner={() => {
-          if (onNavigateTab) {
-            onNavigateTab('camera');
-          }
-        }}
-      />
 
       {/* Global Action Sheet Menu (Renders strictly on top of BottomNavBar) */}
       {activeActionSheet && (
