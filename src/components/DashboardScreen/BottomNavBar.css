@@ -16,8 +16,8 @@
   user-select: none;
   -webkit-tap-highlight-color: transparent !important;
   box-sizing: border-box;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(16px);
   border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
