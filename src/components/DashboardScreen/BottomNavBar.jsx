@@ -85,7 +85,7 @@ export function BottomNavBar({ activeTabId = 'home', onSelectTab, onOpenScanner 
       {/* Left Scooped Peanut Pod: Home & Planner */}
       <div className="bottom-nav-pod left-pod">
         {/* SVG Peanut Background Shape */}
-        <svg className="pod-bg-svg" viewBox="0 0 108 54" aria-hidden="true">
+        <svg className="pod-bg-svg" viewBox="0 0 108 54" preserveAspectRatio="none" aria-hidden="true">
           <path d={peanutPodSvgPath} fill="#FFFFFF" />
         </svg>
 
@@ -132,7 +132,7 @@ export function BottomNavBar({ activeTabId = 'home', onSelectTab, onOpenScanner 
       {/* Right Scooped Peanut Pod: Subscriptions & Community */}
       <div className="bottom-nav-pod right-pod">
         {/* SVG Peanut Background Shape */}
-        <svg className="pod-bg-svg" viewBox="0 0 108 54" aria-hidden="true">
+        <svg className="pod-bg-svg" viewBox="0 0 108 54" preserveAspectRatio="none" aria-hidden="true">
           <path d={peanutPodSvgPath} fill="#FFFFFF" />
         </svg>
 
