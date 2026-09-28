@@ -38,6 +38,9 @@ function ShortCardItem({ short, index, onSelectShort }) {
           webkit-playsinline="true"
           muted
           loop
+          controls={false}
+          disablePictureInPicture
+          disableRemotePlayback
           onLoadedMetadata={(e) => {
             try {
               e.target.currentTime = 0.5;

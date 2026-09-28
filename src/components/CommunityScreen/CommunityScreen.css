@@ -2939,6 +2939,25 @@ body.shorts-view-active .community-screen {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  background-color: #000000;
+  -webkit-appearance: none;
+}
+
+/* Completely suppress native browser/Android WebView media control overlays & placeholder buttons */
+video::-webkit-media-controls,
+video::-webkit-media-controls-enclosure,
+video::-webkit-media-controls-panel,
+video::-webkit-media-controls-play-button,
+video::-webkit-media-controls-start-playback-button,
+video::-webkit-media-controls-overlay-play-button,
+video::-webkit-media-controls-overlay-enclosure {
+  display: none !important;
+  -webkit-appearance: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 /* Bottom-to-Up Dark Gradient Overlay for Maximum Text Contrast */

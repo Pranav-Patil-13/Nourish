@@ -99,7 +99,14 @@ export function ShortsPlayerModal({
           const startPlayback = () => {
             const p = video.play();
             if (p !== undefined) {
-              p.catch(() => {});
+              p.catch(() => {
+                // If unmuted autoplay is blocked by Android WebView policy, fallback to muted autoplay
+                if (!video.muted) {
+                  video.muted = true;
+                  setIsMuted(true);
+                  video.play().catch(() => {});
+                }
+              });
             }
           };
 
@@ -107,7 +114,6 @@ export function ShortsPlayerModal({
             startPlayback();
           } else {
             video.addEventListener('canplay', startPlayback, { once: true });
-            video.load();
           }
         }
       } else {
@@ -298,6 +304,9 @@ export function ShortsPlayerModal({
                     loop
                     muted={isMuted}
                     preload="auto"
+                    controls={false}
+                    disablePictureInPicture
+                    disableRemotePlayback
                     className="shorts-video-element"
                   />
 
