@@ -20,7 +20,7 @@
   max-height: 90%;
   background-color: #FFFFFF;
   border-radius: 22px 22px 0 0;
-  padding: 20px 20px 32px;
+  padding: 20px 20px calc(var(--page-padding-bottom-nav) + 24px);
   box-sizing: border-box;
   z-index: 100;
   display: flex;

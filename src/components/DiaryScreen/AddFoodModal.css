@@ -59,7 +59,7 @@
   flex-direction: column;
   height: 100%;
   overflow: hidden;
-  padding: 6px 14px 16px 14px;
+  padding: 6px 14px calc(var(--page-padding-bottom-nav) + 12px) 14px;
   box-sizing: border-box;
 }
 
@@ -192,6 +192,7 @@
   flex-direction: column;
   gap: 12px;
   padding-right: 1px;
+  padding-bottom: 24px;
   scrollbar-width: none;
 }
 
@@ -462,7 +463,7 @@
   flex-direction: column;
   height: 100%;
   overflow: hidden;
-  padding: 6px 14px 16px 14px;
+  padding: 6px 14px calc(var(--page-padding-bottom-nav) + 12px) 14px;
   box-sizing: border-box;
 }
 
@@ -492,7 +493,7 @@
   overflow-y: auto;
   flex: 1;
   padding-right: 2px;
-  padding-bottom: 8px;
+  padding-bottom: 24px;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -505,7 +506,7 @@
   flex-direction: column;
   height: 100%;
   overflow: hidden;
-  padding: 6px 14px 16px 14px;
+  padding: 6px 14px calc(var(--page-padding-bottom-nav) + 12px) 14px;
   box-sizing: border-box;
 }
 
@@ -658,7 +659,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding-bottom: 12px;
+  padding-bottom: 24px;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -793,7 +794,7 @@
 .add-food-detail-view {
   display: flex;
   flex-direction: column;
-  padding: 6px 14px 18px 14px;
+  padding: 6px 14px calc(var(--page-padding-bottom-nav) + 16px) 14px;
   gap: 12px;
   box-sizing: border-box;
 }
@@ -1053,7 +1054,7 @@
 .add-food-custom-view {
   display: flex;
   flex-direction: column;
-  padding: 6px 14px 18px 14px;
+  padding: 6px 14px calc(var(--page-padding-bottom-nav) + 16px) 14px;
   gap: 12px;
   box-sizing: border-box;
 }

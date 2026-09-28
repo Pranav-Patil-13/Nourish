@@ -1835,7 +1835,7 @@
 .comm-modal-post-cta:disabled { background: #E2E8F0; color: #94A3B8; cursor: not-allowed; }
 
 .comm-modal-scrollable {
-  padding: 16px 18px;
+  padding: 16px 18px calc(var(--page-padding-bottom-nav) + 16px) 18px;
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
