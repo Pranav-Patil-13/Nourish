@@ -39,8 +39,21 @@ export function ShortsPlayerModal({
   // Set global body class for dark status bar and bottom nav transitions
   useEffect(() => {
     document.body.classList.add('shorts-view-active');
+
+    let metaTheme = document.querySelector('meta[name="theme-color"]');
+    const prevTheme = metaTheme ? metaTheme.getAttribute('content') : '#FFFFFF';
+    if (!metaTheme) {
+      metaTheme = document.createElement('meta');
+      metaTheme.name = 'theme-color';
+      document.head.appendChild(metaTheme);
+    }
+    metaTheme.setAttribute('content', '#000000');
+
     return () => {
       document.body.classList.remove('shorts-view-active');
+      if (metaTheme) {
+        metaTheme.setAttribute('content', prevTheme || '#FFFFFF');
+      }
     };
   }, []);
 
@@ -58,7 +71,7 @@ export function ShortsPlayerModal({
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio >= 0.55) {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
             const index = Number(entry.target.dataset.index);
             setActiveIndex(index);
           }
@@ -66,7 +79,7 @@ export function ShortsPlayerModal({
       },
       {
         root: container,
-        threshold: [0.55]
+        threshold: [0.5]
       }
     );
 
@@ -83,12 +96,22 @@ export function ShortsPlayerModal({
       if (!video) return;
       if (idx === activeIndex) {
         if (!pausedSlides[idx]) {
-          video.currentTime = 0;
-          video.play().catch(() => {});
+          const startPlayback = () => {
+            const p = video.play();
+            if (p !== undefined) {
+              p.catch(() => {});
+            }
+          };
+
+          if (video.readyState >= 2) {
+            startPlayback();
+          } else {
+            video.addEventListener('canplay', startPlayback, { once: true });
+            video.load();
+          }
         }
       } else {
         video.pause();
-        video.currentTime = 0;
       }
     });
   }, [activeIndex, pausedSlides]);
@@ -271,10 +294,10 @@ export function ShortsPlayerModal({
                     ref={(el) => (videoRefs.current[index] = el)}
                     src={short.videoUrl}
                     playsInline
+                    webkit-playsinline="true"
                     loop
                     muted={isMuted}
                     preload="auto"
-                    crossOrigin="anonymous"
                     className="shorts-video-element"
                   />
 

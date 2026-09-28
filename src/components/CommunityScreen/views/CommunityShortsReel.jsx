@@ -32,11 +32,17 @@ function ShortCardItem({ short, index, onSelectShort }) {
       <div className="comm-short-poster-wrap">
         <video
           ref={videoRef}
-          src={`${short.videoUrl}#t=0.5`}
-          preload="auto"
+          src={short.videoUrl}
+          preload="metadata"
           playsInline
+          webkit-playsinline="true"
           muted
           loop
+          onLoadedMetadata={(e) => {
+            try {
+              e.target.currentTime = 0.5;
+            } catch (_) {}
+          }}
           className="comm-short-poster-video"
         />
         <div className="comm-short-overlay-gradient" />

@@ -2873,6 +2873,20 @@
   overflow: hidden;
 }
 
+/* On real phone / Android native viewport: fill top completely with no white gap */
+.android-mode-active .shorts-player-overlay {
+  top: 0 !important;
+  bottom: calc(52px + env(safe-area-inset-bottom, 0px));
+}
+
+body.shorts-view-active,
+body.shorts-view-active .app-container,
+body.shorts-view-active .android-native-viewport,
+body.shorts-view-active .app-screen-view,
+body.shorts-view-active .community-screen {
+  background-color: #000000 !important;
+}
+
 .shorts-player-viewport {
   width: 100%;
   max-width: 480px;
