@@ -30,7 +30,7 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: 50px 16px 10px;
+  padding: var(--page-padding-top) var(--page-padding-x) 10px;
   width: 100%;
   box-sizing: border-box;
   background-color: var(--bg-ghostwhite, #F8F8FF);
@@ -185,7 +185,7 @@
   overflow-y: auto;
   overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: touch;
-  padding: 6px 14px 104px;
+  padding: 6px var(--page-padding-x) var(--page-padding-bottom-nav);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

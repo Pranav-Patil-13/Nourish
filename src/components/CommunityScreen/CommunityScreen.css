@@ -27,7 +27,7 @@
   -webkit-overflow-scrolling: touch;
   display: flex;
   flex-direction: column;
-  padding-bottom: 95px;
+  padding-bottom: var(--page-padding-bottom-nav);
   box-sizing: border-box;
 }
 
@@ -61,7 +61,7 @@
    SCREEN 01: MAIN COMMUNITY VIEW
    ========================================================================== */
 .community-main-view {
-  padding: 52px 14px 24px 14px;
+  padding: var(--page-padding-top) var(--page-padding-x) var(--space-6);
   position: relative;
   z-index: 2;
   display: flex;
@@ -462,7 +462,7 @@
 .comm-notifs-view,
 .comm-settings-view,
 .my-posts-view {
-  padding: 52px 14px 30px 14px;
+  padding: var(--page-padding-top) var(--page-padding-x) 30px;
   position: relative;
   z-index: 2;
   animation: fadeIn 0.2s ease-out;
@@ -766,7 +766,7 @@
   -webkit-overflow-scrolling: touch;
   display: flex;
   flex-direction: column;
-  padding-bottom: 95px;
+  padding-bottom: var(--page-padding-bottom-nav);
   background: #F8FAFC;
 }
 
@@ -797,7 +797,7 @@
 }
 
 .group-detail-body {
-  padding: 14px 14px 28px 14px;
+  padding: 14px var(--page-padding-x) 28px;
   background: #F8FAFC;
   display: flex;
   flex-direction: column;

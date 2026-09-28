@@ -51,7 +51,7 @@
   z-index: 5;
   flex: 1;
   overflow-y: auto;
-  padding: calc(48px + env(safe-area-inset-top, 0px)) 16px 96px 16px;
+  padding: var(--page-padding-top) var(--page-padding-x) var(--page-padding-bottom-nav);
   display: flex;
   flex-direction: column;
   box-sizing: border-box;

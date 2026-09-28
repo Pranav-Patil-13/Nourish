@@ -102,7 +102,7 @@
 .sub-main-view {
   min-height: 100%;
   flex: 1;
-  padding: calc(48px + env(safe-area-inset-top, 0px)) 18px calc(96px + env(safe-area-inset-bottom, 0px));
+  padding: var(--page-padding-top) var(--page-padding-x) var(--page-padding-bottom-nav);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -356,7 +356,7 @@
 .sub-manage-view,
 .sub-notifications-view,
 .sub-settings-view {
-  padding: 52px 16px 104px;
+  padding: var(--page-padding-top) var(--page-padding-x) var(--page-padding-bottom-nav);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -533,9 +533,9 @@
 
 .sub-detail-floating-nav {
   position: absolute;
-  top: 48px;
-  left: 16px;
-  right: 16px;
+  top: var(--page-padding-top);
+  left: var(--page-padding-x);
+  right: var(--page-padding-x);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -993,7 +993,7 @@
    ========================================================================== */
 
 .sub-gym-listing-view {
-  padding: 52px 16px 104px;
+  padding: var(--page-padding-top) var(--page-padding-x) var(--page-padding-bottom-nav);
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -2283,9 +2283,9 @@
 
 .sub-delivery-top-bar {
   position: absolute;
-  top: 48px;
-  left: 16px;
-  right: 16px;
+  top: var(--page-padding-top);
+  left: var(--page-padding-x);
+  right: var(--page-padding-x);
   display: flex;
   align-items: center;
   justify-content: space-between;

@@ -60,7 +60,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 52px 18px 12px;
+  padding: var(--page-padding-top) var(--page-padding-x) 12px;
   width: 100%;
   box-sizing: border-box;
 }

@@ -69,7 +69,7 @@
   overflow-y: auto;
   overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: touch;
-  padding: 52px 14px 104px;
+  padding: var(--page-padding-top) var(--page-padding-x) var(--page-padding-bottom-nav);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

@@ -79,6 +79,12 @@
   --space-5: 20px;
   --space-6: 24px;
 
+  /* --- Master Page Layout Paddings --- */
+  --page-padding-top: calc(52px + env(safe-area-inset-top, 0px));
+  --page-padding-x: 16px;
+  --page-padding-bottom-nav: calc(104px + env(safe-area-inset-bottom, 0px));
+  --page-padding-bottom-standalone: calc(24px + env(safe-area-inset-bottom, 0px));
+
   /* --- Mobile Frame Dimensions --- */
   --phone-width: 393px;
   --phone-height: 852px;
