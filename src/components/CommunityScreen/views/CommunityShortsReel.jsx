@@ -38,6 +38,7 @@ function ShortCardItem({ short, index, onSelectShort }) {
           webkit-playsinline="true"
           muted
           loop
+          poster="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
           controls={false}
           disablePictureInPicture
           disableRemotePlayback

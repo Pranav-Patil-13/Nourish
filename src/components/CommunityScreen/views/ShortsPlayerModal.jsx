@@ -304,6 +304,7 @@ export function ShortsPlayerModal({
                     loop
                     muted={isMuted}
                     preload="auto"
+                    poster="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
                     controls={false}
                     disablePictureInPicture
                     disableRemotePlayback
