@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Heart,
   MessageCircle,
@@ -28,7 +28,7 @@ export function CommunityMainView({
   posts,
   onOpenCreatePost,
   onOpenCreatePoll,
-  onSelectPost,
+  onOpenComments,
   onSelectAuthor,
   onToggleLike,
   onToggleBookmark,
@@ -41,6 +41,29 @@ export function CommunityMainView({
   onOpenShortsModal,
   showToast
 }) {
+  const [heartPops, setHeartPops] = useState({});
+  const lastTapRef = useRef({});
+
+  const handleMediaTap = (postId) => {
+    const now = Date.now();
+    const lastTap = lastTapRef.current[postId] || 0;
+    if (now - lastTap < 350) {
+      // Double tap detected!
+      setHeartPops((prev) => ({ ...prev, [postId]: true }));
+      setTimeout(() => {
+        setHeartPops((prev) => ({ ...prev, [postId]: false }));
+      }, 800);
+
+      const targetPost = posts.find((p) => p.id === postId);
+      if (targetPost && !targetPost.isLiked) {
+        onToggleLike(postId);
+      }
+      lastTapRef.current[postId] = 0;
+    } else {
+      lastTapRef.current[postId] = now;
+    }
+  };
+
   const handleOpenPostOptions = (post) => {
     if (onOpenActionSheet) {
       onOpenActionSheet({
@@ -233,18 +256,23 @@ export function CommunityMainView({
               </button>
             </div>
 
-            {/* Post Media Preview */}
+            {/* Post Media Preview with Double Tap to Like */}
             {post.image && (
               <div
                 className="comm-post-media-wrap"
-                onClick={() => onSelectPost(post)}
+                onClick={() => handleMediaTap(post.id)}
               >
                 <img src={post.image} alt="Post media" className="comm-post-img" />
+                {heartPops[post.id] && (
+                  <div className="comm-media-heart-pop">
+                    <Heart size={72} fill="#EF4444" color="#FFFFFF" strokeWidth={1.5} />
+                  </div>
+                )}
               </div>
             )}
 
             {/* Post Caption & Content */}
-            <div className="comm-post-content" onClick={() => onSelectPost(post)}>
+            <div className="comm-post-content">
               <p className="comm-post-caption">{post.caption}</p>
 
               {post.macros && (
@@ -277,7 +305,7 @@ export function CommunityMainView({
                 <button
                   type="button"
                   className="comm-action-btn"
-                  onClick={() => onSelectPost(post)}
+                  onClick={() => onOpenComments && onOpenComments(post)}
                   aria-label="Comments"
                 >
                   <MessageCircle size={18} color="#64748B" />

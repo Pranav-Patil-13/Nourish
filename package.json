@@ -1,7 +1,7 @@
 {
   "name": "health-calorie-tracker",
   "private": true,
-  "version": "1.0.13",
+  "version": "1.0.14",
   "type": "module",
   "scripts": {
     "dev": "./node_modules/.bin/vite",

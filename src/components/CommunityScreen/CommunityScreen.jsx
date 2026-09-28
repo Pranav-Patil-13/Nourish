@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import CommunityMainView from './views/CommunityMainView';
 import CreatePostModal from './views/CreatePostModal';
-import PostDetailView from './views/PostDetailView';
+import CommentsBottomSheet from './views/CommentsBottomSheet';
 import ExploreView from './views/ExploreView';
 import ChallengesView from './views/ChallengesView';
 import GroupsView from './views/GroupsView';
@@ -27,7 +27,7 @@ export function CommunityScreen({ onNavigateTab }) {
   // Navigation State
   const [currentView, setCurrentView] = useState('main'); // 'main' | 'explore' | 'challenges' | 'groups' | 'group-detail' | 'user-profile' | 'my-posts' | 'notifications' | 'settings'
   const [activeFeedTab, setActiveFeedTab] = useState('For You');
-  const [activePost, setActivePost] = useState(null);
+  const [activeCommentsPost, setActiveCommentsPost] = useState(null);
   const [activeGroup, setActiveGroup] = useState(null);
   const [activeUserHandle, setActiveUserHandle] = useState('riyasharma');
   const [activeShortIndex, setActiveShortIndex] = useState(null);
@@ -72,8 +72,8 @@ export function CommunityScreen({ onNavigateTab }) {
       setIsCreatePostOpen(false);
       return true;
     }
-    if (activePost) {
-      setActivePost(null);
+    if (activeCommentsPost) {
+      setActiveCommentsPost(null);
       return true;
     }
     if (activeGroup) {
@@ -122,8 +122,8 @@ export function CommunityScreen({ onNavigateTab }) {
         return p;
       })
     );
-    if (activePost && activePost.id === postId) {
-      setActivePost((prev) => ({
+    if (activeCommentsPost && activeCommentsPost.id === postId) {
+      setActiveCommentsPost((prev) => ({
         ...prev,
         isLiked: !prev.isLiked,
         likesCount: !prev.isLiked ? prev.likesCount + 1 : prev.likesCount - 1
@@ -141,8 +141,8 @@ export function CommunityScreen({ onNavigateTab }) {
         return p;
       })
     );
-    if (activePost && activePost.id === postId) {
-      setActivePost((prev) => ({
+    if (activeCommentsPost && activeCommentsPost.id === postId) {
+      setActiveCommentsPost((prev) => ({
         ...prev,
         isBookmarked: !prev.isBookmarked
       }));
@@ -155,7 +155,7 @@ export function CommunityScreen({ onNavigateTab }) {
     const newComment = {
       id: `c-${Date.now()}`,
       author: 'You',
-      avatar: '/src/assets/user_avatar.jpg',
+      avatar: userAvatarImg,
       timeAgo: 'Just now',
       text: commentText.trim(),
       likes: 0,
@@ -175,8 +175,8 @@ export function CommunityScreen({ onNavigateTab }) {
       })
     );
 
-    if (activePost && activePost.id === postId) {
-      setActivePost((prev) => ({
+    if (activeCommentsPost && activeCommentsPost.id === postId) {
+      setActiveCommentsPost((prev) => ({
         ...prev,
         comments: [newComment, ...(prev.comments || [])]
       }));
@@ -268,9 +268,9 @@ export function CommunityScreen({ onNavigateTab }) {
     setCurrentView('user-profile');
   };
 
-  // Open Post Details
-  const handleSelectPost = (post) => {
-    setActivePost(post);
+  // Open Comments Bottom Sheet
+  const handleOpenComments = (post) => {
+    setActiveCommentsPost(post);
   };
 
   // Open Group Detail
@@ -296,7 +296,7 @@ export function CommunityScreen({ onNavigateTab }) {
             onSelectFeedTab={handleSelectFeedTab}
             onOpenCreatePost={handleOpenCreatePost}
             onOpenCreatePoll={() => setIsCreatePollOpen(true)}
-            onSelectPost={handleSelectPost}
+            onOpenComments={handleOpenComments}
             onSelectAuthor={handleSelectAuthor}
             onToggleLike={handleToggleLike}
             onToggleBookmark={handleToggleBookmark}
@@ -316,7 +316,7 @@ export function CommunityScreen({ onNavigateTab }) {
           <ExploreView
             posts={posts}
             onBack={() => setCurrentView('main')}
-            onSelectPost={handleSelectPost}
+            onOpenComments={handleOpenComments}
           />
         )}
 
@@ -364,7 +364,7 @@ export function CommunityScreen({ onNavigateTab }) {
           <MyPostsView
             onBack={() => setCurrentView('user-profile')}
             onOpenCreate={() => handleOpenCreatePost('photo')}
-            onSelectPost={handleSelectPost}
+            onOpenComments={handleOpenComments}
           />
         )}
 
@@ -374,7 +374,7 @@ export function CommunityScreen({ onNavigateTab }) {
             onBack={() => setCurrentView('main')}
             onOpenPost={(postId) => {
               const target = posts.find((p) => p.id === postId) || posts[0];
-              handleSelectPost(target);
+              handleOpenComments(target);
             }}
             onOpenProfile={(handle) => {
               setActiveUserHandle(handle);
@@ -389,16 +389,12 @@ export function CommunityScreen({ onNavigateTab }) {
         )}
       </div>
 
-      {/* Screen 03: Post Details Modal/View */}
-      {activePost && (
-        <PostDetailView
-          post={activePost}
-          onBack={() => setActivePost(null)}
-          onToggleLike={() => handleToggleLike(activePost.id)}
-          onToggleBookmark={() => handleToggleBookmark(activePost.id)}
-          onAddComment={(text) => handleAddComment(activePost.id, text)}
-          onSelectAuthor={handleSelectAuthor}
-          onOpenActionSheet={setActiveActionSheet}
+      {/* Screen 03: Instagram-Style Slide-Up Comments Bottom Sheet */}
+      {activeCommentsPost && (
+        <CommentsBottomSheet
+          post={activeCommentsPost}
+          onClose={() => setActiveCommentsPost(null)}
+          onAddComment={handleAddComment}
           showToast={showToast}
         />
       )}

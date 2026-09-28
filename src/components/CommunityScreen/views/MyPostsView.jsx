@@ -64,7 +64,7 @@ const MY_POSTS_DATA = [
   }
 ];
 
-export default function MyPostsView({ onBack, onOpenCreate, onSelectPost }) {
+export default function MyPostsView({ onBack, onOpenCreate, onOpenComments }) {
   const [activeTab, setActiveTab] = useState('All');
 
   const filterTabs = [
@@ -121,7 +121,7 @@ export default function MyPostsView({ onBack, onOpenCreate, onSelectPost }) {
           <div
             key={post.id}
             className="my-post-card"
-            onClick={() => onSelectPost && onSelectPost(post)}
+            onClick={() => onOpenComments && onOpenComments(post)}
           >
             <div className="my-post-img-wrap">
               <img src={post.image} alt={post.caption} className="my-post-img" />

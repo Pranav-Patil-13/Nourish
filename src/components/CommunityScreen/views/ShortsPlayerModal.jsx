@@ -11,7 +11,9 @@ import {
   Check,
   Plus
 } from 'lucide-react';
+import userAvatarImg from '../../../assets/user_avatar.jpg';
 import { useBackHandler } from '../../../context/BackNavigationContext';
+import CommentsBottomSheet from './CommentsBottomSheet';
 
 export function ShortsPlayerModal({
   shorts,
@@ -24,6 +26,7 @@ export function ShortsPlayerModal({
   const [pausedSlides, setPausedSlides] = useState({});
   const [localShorts, setLocalShorts] = useState(shorts);
   const [heartBursts, setHeartBursts] = useState({});
+  const [activeCommentsShort, setActiveCommentsShort] = useState(null);
 
   const containerRef = useRef(null);
   const slideRefs = useRef([]);
@@ -32,6 +35,10 @@ export function ShortsPlayerModal({
 
   // Register native hardware/swipe back handler
   useBackHandler(() => {
+    if (activeCommentsShort) {
+      setActiveCommentsShort(null);
+      return true;
+    }
     onClose();
     return true;
   }, true, 20);
@@ -354,13 +361,16 @@ export function ShortsPlayerModal({
                   <button
                     type="button"
                     className="shorts-action-btn"
-                    onClick={() => showToast && showToast(`${short.commentsCount} comments`)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveCommentsShort(short);
+                    }}
                     aria-label="View comments"
                   >
                     <div className="shorts-action-icon-circle">
                       <MessageCircle size={22} />
                     </div>
-                    <span className="shorts-action-count">{short.commentsCount}</span>
+                    <span className="shorts-action-count">{short.comments ? short.comments.length : short.commentsCount}</span>
                   </button>
 
                   {/* Bookmark / Save */}
@@ -424,6 +434,53 @@ export function ShortsPlayerModal({
           })}
         </div>
       </div>
+
+      {/* Dark Theme Slide-Up Comments Bottom Sheet for Video Player */}
+      {activeCommentsShort && (
+        <CommentsBottomSheet
+          post={activeCommentsShort}
+          isDarkTheme={true}
+          onClose={() => setActiveCommentsShort(null)}
+          onAddComment={(shortId, commentText) => {
+            if (!commentText.trim()) return;
+            const newComment = {
+              id: `sc-${Date.now()}`,
+              author: 'You',
+              avatar: userAvatarImg,
+              timeAgo: 'Just now',
+              text: commentText.trim(),
+              likes: 0,
+              isLiked: false,
+              repliesCount: 0
+            };
+
+            setLocalShorts((prev) =>
+              prev.map((s) => {
+                if (s.id === shortId) {
+                  const updatedComments = [newComment, ...(s.comments || [])];
+                  return {
+                    ...s,
+                    comments: updatedComments,
+                    commentsCount: updatedComments.length
+                  };
+                }
+                return s;
+              })
+            );
+
+            setActiveCommentsShort((prev) =>
+              prev
+                ? {
+                    ...prev,
+                    comments: [newComment, ...(prev.comments || [])],
+                    commentsCount: ((prev.comments && prev.comments.length) || 0) + 1
+                  }
+                : null
+            );
+          }}
+          showToast={showToast}
+        />
+      )}
     </div>
   );
 }

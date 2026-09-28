@@ -28,7 +28,39 @@ export const COMMUNITY_SHORTS = [
       badge: 'GUT HEALTH EXPERT',
       isFollowing: true
     },
-    tags: ['#GutHealth', '#NutritionTips', '#DigestiveHealth', '#DoctorApproved']
+    tags: ['#GutHealth', '#NutritionTips', '#DigestiveHealth', '#DoctorApproved'],
+    comments: [
+      {
+        id: 'sc1-1',
+        author: 'Riya Sharma',
+        avatar: riyaAvatarImg,
+        timeAgo: '2h ago',
+        text: 'Adding fermented foods daily made such a difference to my bloating! 🥗',
+        likes: 18,
+        isLiked: false,
+        repliesCount: 1
+      },
+      {
+        id: 'sc1-2',
+        author: 'Arjun Mehta',
+        avatar: trainerArjunImg,
+        timeAgo: '4h ago',
+        text: 'Doctor, what are your thoughts on bone broth for gut lining recovery?',
+        likes: 9,
+        isLiked: false,
+        repliesCount: 0
+      },
+      {
+        id: 'sc1-3',
+        author: 'Pooja Hegde',
+        avatar: userAvatarImg,
+        timeAgo: '1d ago',
+        text: 'Saved this! Great actionable advice instead of detox tea fads 🙌',
+        likes: 24,
+        isLiked: true,
+        repliesCount: 0
+      }
+    ]
   },
   {
     id: 'short-2',
@@ -48,7 +80,29 @@ export const COMMUNITY_SHORTS = [
       badge: 'PRO CHEF',
       isFollowing: false
     },
-    tags: ['#ChefSalad', '#HighProtein', '#MealPrep', '#SaladO']
+    tags: ['#ChefSalad', '#HighProtein', '#MealPrep', '#SaladO'],
+    comments: [
+      {
+        id: 'sc2-1',
+        author: 'Dr. Sameer Joshi',
+        avatar: userAvatarImg,
+        timeAgo: '1h ago',
+        text: '34g protein in a salad bowl is super impressive! Recipe saved.',
+        likes: 12,
+        isLiked: false,
+        repliesCount: 1
+      },
+      {
+        id: 'sc2-2',
+        author: 'Karan Deshmukh',
+        avatar: trainerArjunImg,
+        timeAgo: '3h ago',
+        text: 'What dressing do you recommend to keep calories low?',
+        likes: 7,
+        isLiked: false,
+        repliesCount: 0
+      }
+    ]
   },
   {
     id: 'short-3',
@@ -68,7 +122,29 @@ export const COMMUNITY_SHORTS = [
       badge: 'OFFICIAL KITCHEN',
       isFollowing: true
     },
-    tags: ['#SaladOCafe', '#FreshDaily', '#CleanEating', '#HealthyLifestyle']
+    tags: ['#SaladOCafe', '#FreshDaily', '#CleanEating', '#HealthyLifestyle'],
+    comments: [
+      {
+        id: 'sc3-1',
+        author: 'Ananya Roy',
+        avatar: riyaAvatarImg,
+        timeAgo: '30m ago',
+        text: 'When are you opening in Pune? We need SaladO here! 🥑💚',
+        likes: 45,
+        isLiked: true,
+        repliesCount: 2
+      },
+      {
+        id: 'sc3-2',
+        author: 'Vikram Singh',
+        avatar: userAvatarImg,
+        timeAgo: '2h ago',
+        text: 'The avocado dressing is unmatched 🔥',
+        likes: 14,
+        isLiked: false,
+        repliesCount: 0
+      }
+    ]
   },
   {
     id: 'short-4',
@@ -88,7 +164,29 @@ export const COMMUNITY_SHORTS = [
       badge: 'BRAND',
       isFollowing: false
     },
-    tags: ['#HealthyMeal', '#NutritionGoals', '#SaladO', '#FitLifestyle']
+    tags: ['#HealthyMeal', '#NutritionGoals', '#SaladO', '#FitLifestyle'],
+    comments: [
+      {
+        id: 'sc4-1',
+        author: 'Sneha Kapur',
+        avatar: riyaAvatarImg,
+        timeAgo: '1h ago',
+        text: 'Perfect pre-workout fuel. Kept my energy stable for 3 hours!',
+        likes: 19,
+        isLiked: true,
+        repliesCount: 0
+      },
+      {
+        id: 'sc4-2',
+        author: 'Arjun Mehta',
+        avatar: trainerArjunImg,
+        timeAgo: '5h ago',
+        text: 'Good balance of complex carbs and clean fats.',
+        likes: 8,
+        isLiked: false,
+        repliesCount: 0
+      }
+    ]
   },
   {
     id: 'short-5',
@@ -108,6 +206,28 @@ export const COMMUNITY_SHORTS = [
       badge: 'NUTRITION COACH',
       isFollowing: true
     },
-    tags: ['#DietHacks', '#SmartEating', '#CalorieDeficit', '#FitnessTips']
+    tags: ['#DietHacks', '#SmartEating', '#CalorieDeficit', '#FitnessTips'],
+    comments: [
+      {
+        id: 'sc5-1',
+        author: 'Riya Sharma',
+        avatar: riyaAvatarImg,
+        timeAgo: '45m ago',
+        text: 'Granola bars were my biggest trap until I checked the sugar content 😅',
+        likes: 31,
+        isLiked: true,
+        repliesCount: 1
+      },
+      {
+        id: 'sc5-2',
+        author: 'Dr. Sameer Joshi',
+        avatar: userAvatarImg,
+        timeAgo: '3h ago',
+        text: 'Spot on advice coach. Reading ingredient labels is a superpower.',
+        likes: 22,
+        isLiked: false,
+        repliesCount: 0
+      }
+    ]
   }
 ];

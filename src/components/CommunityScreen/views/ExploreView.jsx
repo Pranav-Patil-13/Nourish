@@ -21,7 +21,7 @@ const TRENDING_TOPICS = [
   { id: 't3', title: 'Muscle Gain', postsCount: '9.2K posts', image: fitnessHeroImg }
 ];
 
-export function ExploreView({ onBack, onSelectPost, posts }) {
+export function ExploreView({ onBack, onOpenComments, posts }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeChip, setActiveChip] = useState('All');
 
@@ -110,7 +110,7 @@ export function ExploreView({ onBack, onSelectPost, posts }) {
               <div
                 key={p.id}
                 className="popular-post-card"
-                onClick={() => onSelectPost(p)}
+                onClick={() => onOpenComments && onOpenComments(p)}
               >
                 <div className="popular-post-media-wrap">
                   <img src={p.image} alt="" className="popular-post-img" />
