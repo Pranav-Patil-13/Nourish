@@ -2862,7 +2862,7 @@
 .shorts-player-overlay {
   position: absolute;
   top: var(--page-padding-top, calc(54px + env(safe-area-inset-top, 0px)));
-  bottom: calc(53px + env(safe-area-inset-bottom, 0px));
+  bottom: calc(52px + env(safe-area-inset-bottom, 0px));
   left: 0;
   right: 0;
   background: #000000;
@@ -2873,9 +2873,9 @@
   overflow: hidden;
 }
 
-/* On real phone / Android native viewport: fill top completely with no white gap */
+/* On real phone / Android native viewport: solid black status bar area on top */
 .android-mode-active .shorts-player-overlay {
-  top: 0 !important;
+  top: calc(46px + env(safe-area-inset-top, 0px)) !important;
   bottom: calc(52px + env(safe-area-inset-bottom, 0px));
 }
 

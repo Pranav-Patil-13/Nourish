@@ -20,7 +20,7 @@ export function ShortsPlayerModal({
   showToast
 }) {
   const [activeIndex, setActiveIndex] = useState(initialIndex);
-  const [isMuted, setIsMuted] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
   const [pausedSlides, setPausedSlides] = useState({});
   const [localShorts, setLocalShorts] = useState(shorts);
   const [heartBursts, setHeartBursts] = useState({});
