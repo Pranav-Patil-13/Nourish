@@ -64,8 +64,11 @@ function AppContent() {
     community: 6
   };
 
+  const [hideBottomNav, setHideBottomNav] = useState(false);
+
   const changeScreen = (nextScreen) => {
     if (nextScreen === currentScreen) return;
+    setHideBottomNav(false);
 
     if (nextScreen === 'scanner') {
       setTransitionDirection('sheet-up');
@@ -227,12 +230,14 @@ function AppContent() {
         <SubscriptionsScreen
           onSelectTab={handleSelectTab}
           onOpenScanner={() => changeScreen('scanner')}
+          onToggleFullScreenOverlay={setHideBottomNav}
         />
       )}
 
       {currentScreen === 'community' && (
         <CommunityScreen
           onNavigateTab={handleSelectTab}
+          onToggleFullScreenOverlay={setHideBottomNav}
         />
       )}
     </div>
@@ -308,7 +313,7 @@ function AppContent() {
           };
           const currentTabId = tabIdMap[currentScreen] || 'home';
 
-          const persistentNavBar = isTabScreen ? (
+          const persistentNavBar = isTabScreen && !hideBottomNav ? (
             <BottomNavBar
               activeTabId={currentTabId}
               onSelectTab={handleSelectTab}

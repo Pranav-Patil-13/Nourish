@@ -22,6 +22,12 @@
   -webkit-tap-highlight-color: transparent !important;
   box-sizing: border-box;
   padding-bottom: env(safe-area-inset-bottom, 0px);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+body.shorts-view-active .bottom-nav-container {
+  background-color: #000000;
+  border-top-color: rgba(255, 255, 255, 0.12);
 }
 
 .bottom-nav-inner {
@@ -46,8 +52,12 @@
   color: #71717A; /* Inactive icon color */
   cursor: pointer;
   padding: 0;
-  transition: transform 0.12s ease, color 0.15s ease;
+  transition: transform 0.12s ease, color 0.3s ease;
   -webkit-tap-highlight-color: transparent;
+}
+
+body.shorts-view-active .nav-tab-item {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .nav-tab-item:active {
@@ -68,7 +78,15 @@
   color: #09090B; /* Crisp deep black for active icon */
 }
 
+body.shorts-view-active .nav-tab-item.active {
+  color: #FFFFFF;
+}
+
 .nav-tab-item.active .nav-tab-icon-wrap {
   color: #09090B;
+}
+
+body.shorts-view-active .nav-tab-item.active .nav-tab-icon-wrap {
+  color: #FFFFFF;
 }
 

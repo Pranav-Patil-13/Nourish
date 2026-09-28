@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SubscriptionsMainView } from './views/SubscriptionsMainView';
 import { FoodSubscriptionsView } from './views/FoodSubscriptionsView';
 import { FoodPlanDetailView } from './views/FoodPlanDetailView';
@@ -15,18 +15,38 @@ import { useBackHandler } from '../../context/BackNavigationContext';
 import { FOOD_PLANS, GYM_LISTINGS, TRAINER_PROFILES } from './data/subscriptionsData';
 import './SubscriptionsScreen.css';
 
-export function SubscriptionsScreen({ onSelectTab, onOpenScanner }) {
-  // Navigation stack view state
-  const [currentView, setCurrentView] = useState('main'); // 'main' | 'food-list' | 'food-detail' | 'fitness-list' | 'gym-list' | 'gym-detail' | 'trainer-detail' | 'manage-subs' | 'delivery-tracking' | 'notifications' | 'settings'
+export function SubscriptionsScreen({ onSelectTab, onOpenScanner, onToggleFullScreenOverlay }) {
+  // Navigation stack view state (Defaulting directly to food-list as primary hub)
+  const [currentView, setCurrentView] = useState('food-list'); // 'food-list' | 'food-detail' | 'manage-subs' | 'delivery-tracking' | 'notifications' | 'settings'
   const [selectedFoodPlan, setSelectedFoodPlan] = useState(FOOD_PLANS[0]);
   const [selectedGym, setSelectedGym] = useState(GYM_LISTINGS[0]);
   const [selectedTrainer, setSelectedTrainer] = useState(TRAINER_PROFILES[0]);
   const [checkoutModal, setCheckoutModal] = useState(null); // { item, type: 'food' | 'fitness' }
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+
+  // Determine if full screen elevation is needed (above the bottom tab bar)
+  const isFullScreenView = ['food-detail', 'gym-detail', 'trainer-detail', 'delivery-tracking'].includes(currentView);
+  const isScreenElevated = isFullScreenView || Boolean(checkoutModal) || isLocationModalOpen;
+
+  useEffect(() => {
+    if (onToggleFullScreenOverlay) {
+      onToggleFullScreenOverlay(isScreenElevated);
+    }
+    return () => {
+      if (onToggleFullScreenOverlay) {
+        onToggleFullScreenOverlay(false);
+      }
+    };
+  }, [isScreenElevated, onToggleFullScreenOverlay]);
 
   // Register Native Back Handler for Subscriptions subviews and checkout modal
   useBackHandler(() => {
     if (checkoutModal) {
       setCheckoutModal(null);
+      return true;
+    }
+    if (isLocationModalOpen) {
+      setIsLocationModalOpen(false);
       return true;
     }
     if (currentView === 'food-detail') {
@@ -37,8 +57,8 @@ export function SubscriptionsScreen({ onSelectTab, onOpenScanner }) {
       setCurrentView('gym-list');
       return true;
     }
-    if (currentView !== 'main') {
-      setCurrentView('main');
+    if (currentView !== 'food-list') {
+      setCurrentView('food-list');
       return true;
     }
     return false;
@@ -81,31 +101,19 @@ export function SubscriptionsScreen({ onSelectTab, onOpenScanner }) {
     }
   };
 
-  // Determine if bottom navigation bar should be visible (hidden on deep modal-like views e.g. delivery tracking or plan detail)
-  const isFullScreenView = ['food-detail', 'gym-detail', 'trainer-detail', 'delivery-tracking'].includes(currentView);
-
   return (
-    <div className="subscriptions-screen">
+    <div className={`subscriptions-screen ${isScreenElevated ? 'screen-elevated' : ''}`}>
       <div className="sub-screen-content-wrapper">
-        {/* VIEW 01: Subscriptions Main Hub */}
-        {currentView === 'main' && (
-          <SubscriptionsMainView
-            onNavigate={(view) => setCurrentView(view)}
-            activeCount={2}
-            onOpenNotifications={() => setCurrentView('notifications')}
-            onOpenSettings={() => setCurrentView('settings')}
-          />
-        )}
-
-        {/* VIEW 02: Food Subscriptions Listing */}
+        {/* VIEW 01: Food Subscriptions (Primary Landings Hub) */}
         {currentView === 'food-list' && (
           <FoodSubscriptionsView
-            onBack={() => setCurrentView('main')}
             onSelectPlan={handleOpenFoodDetail}
+            isLocationModalOpen={isLocationModalOpen}
+            setIsLocationModalOpen={setIsLocationModalOpen}
           />
         )}
 
-        {/* VIEW 03 & 04: Food Plan Details & Sample Menu */}
+        {/* VIEW 02: Food Plan Details & Sample Menu */}
         {currentView === 'food-detail' && (
           <FoodPlanDetailView
             plan={selectedFoodPlan}
@@ -114,23 +122,23 @@ export function SubscriptionsScreen({ onSelectTab, onOpenScanner }) {
           />
         )}
 
-        {/* VIEW 05: Fitness Subscriptions Hub */}
+        {/* VIEW 03: Fitness Subscriptions Hub (Hidden from main navigation for now) */}
         {currentView === 'fitness-list' && (
           <FitnessSubscriptionsView
-            onBack={() => setCurrentView('main')}
+            onBack={() => setCurrentView('food-list')}
             onSelectCategory={handleFitnessCategorySelect}
           />
         )}
 
-        {/* VIEW 06: Gym & Studio Directory Listing */}
+        {/* Gym & Studio Directory Listing */}
         {currentView === 'gym-list' && (
           <GymListingView
-            onBack={() => setCurrentView('fitness-list')}
+            onBack={() => setCurrentView('food-list')}
             onSelectGym={handleOpenGymDetail}
           />
         )}
 
-        {/* VIEW 07 & 08: Gym Detail & Choose a Plan */}
+        {/* Gym Detail & Choose a Plan */}
         {currentView === 'gym-detail' && (
           <GymDetailView
             gym={selectedGym}
@@ -139,36 +147,36 @@ export function SubscriptionsScreen({ onSelectTab, onOpenScanner }) {
           />
         )}
 
-        {/* VIEW 09: Personal Trainer Profile */}
+        {/* Personal Trainer Profile */}
         {currentView === 'trainer-detail' && (
           <TrainerProfileView
             trainer={selectedTrainer}
-            onBack={() => setCurrentView('fitness-list')}
+            onBack={() => setCurrentView('food-list')}
             onBookTrainer={(trainer) => handleStartCheckout(trainer, 'fitness')}
           />
         )}
 
-        {/* VIEW 11: Manage My Subscriptions */}
+        {/* Manage My Subscriptions */}
         {currentView === 'manage-subs' && (
           <ManageSubscriptionsView
-            onBack={() => setCurrentView('main')}
+            onBack={() => setCurrentView('food-list')}
             onTrackDelivery={() => setCurrentView('delivery-tracking')}
             onSelectFoodPlan={handleOpenFoodDetail}
             onSelectTrainer={handleOpenTrainerProfile}
           />
         )}
 
-        {/* VIEW 12: Live Food Delivery Tracking */}
+        {/* Live Food Delivery Tracking */}
         {currentView === 'delivery-tracking' && (
           <DeliveryTrackingView
-            onBack={() => setCurrentView('manage-subs')}
+            onBack={() => setCurrentView('food-list')}
           />
         )}
 
-        {/* VIEW 13: Subscriptions Notifications */}
+        {/* Subscriptions Notifications */}
         {currentView === 'notifications' && (
           <NotificationsView
-            onBack={() => setCurrentView('main')}
+            onBack={() => setCurrentView('food-list')}
             onSelectNotification={(n) => {
               if (n.type === 'delivery') setCurrentView('delivery-tracking');
               else if (n.type === 'trainer') setCurrentView('trainer-detail');
@@ -178,10 +186,10 @@ export function SubscriptionsScreen({ onSelectTab, onOpenScanner }) {
           />
         )}
 
-        {/* VIEW 14: Subscription Settings */}
+        {/* Subscription Settings */}
         {currentView === 'settings' && (
           <SubscriptionSettingsView
-            onBack={() => setCurrentView('main')}
+            onBack={() => setCurrentView('food-list')}
           />
         )}
       </div>

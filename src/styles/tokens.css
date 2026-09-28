@@ -80,10 +80,10 @@
   --space-6: 24px;
 
   /* --- Master Page Layout Paddings --- */
-  --page-padding-top: calc(52px + env(safe-area-inset-top, 0px));
+  --page-padding-top: calc(54px + env(safe-area-inset-top, 0px));
   /* Fluid side padding: 14px on compact devices, scaling up to 20px on standard/larger phones */
   --page-padding-x: clamp(14px, 5vw, 20px);
-  --page-padding-bottom-nav: calc(68px + env(safe-area-inset-bottom, 0px));
+  --page-padding-bottom-nav: calc(72px + env(safe-area-inset-bottom, 0px));
   --page-padding-bottom-standalone: calc(24px + env(safe-area-inset-bottom, 0px));
 
   /* --- Mobile Frame Dimensions --- */

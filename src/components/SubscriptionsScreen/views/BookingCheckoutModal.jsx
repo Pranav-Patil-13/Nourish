@@ -10,6 +10,8 @@ import {
   Check
 } from 'lucide-react';
 
+const ALL_WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
 export function BookingCheckoutModal({ item, type, onClose, onConfirmSuccess }) {
   const [startDate] = useState('24 Sep 2026');
   const [billingCycle] = useState('Monthly (Auto-renew)');
@@ -17,9 +19,30 @@ export function BookingCheckoutModal({ item, type, onClose, onConfirmSuccess }) 
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
+  const isThreeDeliveries = item?.deliveries?.includes('3') || item?.id === 'healthy-meal-plan';
+  const requiredDaysCount = isThreeDeliveries ? 3 : 2;
+  const initialDays = isThreeDeliveries ? ['Mon', 'Wed', 'Fri'] : ['Mon', 'Thu'];
+  const [selectedWeekdays, setSelectedWeekdays] = useState(initialDays);
+
   if (!item) return null;
 
   const totalAmount = item.price || 1200;
+
+  const handleToggleDay = (day) => {
+    if (selectedWeekdays.includes(day)) {
+      if (selectedWeekdays.length > 1) {
+        setSelectedWeekdays(selectedWeekdays.filter((d) => d !== day));
+      }
+    } else {
+      if (selectedWeekdays.length >= requiredDaysCount) {
+        // Shift out the oldest selection to keep count at requiredDaysCount
+        const [, ...rest] = selectedWeekdays;
+        setSelectedWeekdays([...rest, day]);
+      } else {
+        setSelectedWeekdays([...selectedWeekdays, day]);
+      }
+    }
+  };
 
   const handlePay = () => {
     setIsProcessing(true);
@@ -27,7 +50,7 @@ export function BookingCheckoutModal({ item, type, onClose, onConfirmSuccess }) 
       setIsProcessing(false);
       setIsSuccess(true);
       setTimeout(() => {
-        onConfirmSuccess(item, type);
+        onConfirmSuccess({ ...item, selectedWeekdays }, type);
       }, 1200);
     }, 1400);
   };
@@ -96,6 +119,34 @@ export function BookingCheckoutModal({ item, type, onClose, onConfirmSuccess }) 
                   <ChevronDown size={15} className="field-icon" />
                 </div>
               </div>
+
+              {/* Weekdays Selector (For Food Subscriptions) */}
+              {type === 'food' && (
+                <div className="checkout-weekdays-block">
+                  <div className="checkout-weekdays-header">
+                    <span className="checkout-field-label">Delivery Days</span>
+                    <span className="checkout-weekdays-counter">
+                      Pick {requiredDaysCount} days ({selectedWeekdays.length}/{requiredDaysCount})
+                    </span>
+                  </div>
+                  <div className="checkout-weekdays-row" role="group" aria-label="Select delivery weekdays">
+                    {ALL_WEEKDAYS.map((day) => {
+                      const isSelected = selectedWeekdays.includes(day);
+                      return (
+                        <button
+                          type="button"
+                          key={day}
+                          className={`checkout-day-chip ${isSelected ? 'selected' : ''}`}
+                          onClick={() => handleToggleDay(day)}
+                          aria-pressed={isSelected}
+                        >
+                          {day}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Payment Methods Section */}
@@ -153,7 +204,7 @@ export function BookingCheckoutModal({ item, type, onClose, onConfirmSuccess }) 
             {/* Security Guarantee badge */}
             <div className="checkout-guarantee-row">
               <ShieldCheck size={16} className="guarantee-icon" />
-              <span>256-bit encrypted secure checkout. Cancel anytime.</span>
+              <span>secure checkout. Cancel anytime.</span>
             </div>
 
             {/* CTA Subscribe & Pay Button */}
@@ -170,7 +221,6 @@ export function BookingCheckoutModal({ item, type, onClose, onConfirmSuccess }) 
                   <span>Subscribe & Pay ₹{totalAmount.toLocaleString()}</span>
                 )}
               </button>
-              <span className="checkout-cancel-note">You can pause or cancel anytime without fees.</span>
             </div>
           </div>
         )}

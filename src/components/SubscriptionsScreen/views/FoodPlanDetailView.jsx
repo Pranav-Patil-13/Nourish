@@ -56,16 +56,13 @@ export function FoodPlanDetailView({ plan, onBack, onSubscribe }) {
 
         {/* Content Card Body */}
         <div className="sub-food-detail-body">
-          {/* Plan Header Title & Price */}
+          {/* Plan Header Title & Deliveries */}
           <div className="sub-detail-title-price-row">
             <div className="sub-detail-title-col">
               <h1 className="sub-detail-title">{plan.title}</h1>
-              <span className="sub-detail-deliveries">{plan.deliveries}</span>
-            </div>
-
-            <div className="sub-detail-price-col">
-              <span className="sub-detail-price-num">₹{plan.price.toLocaleString()}</span>
-              <span className="sub-detail-price-period">/ {plan.period}</span>
+              <div className="sub-detail-badge-row">
+                <span className="sub-detail-deliveries">{plan.deliveries}</span>
+              </div>
             </div>
           </div>
 
@@ -186,6 +183,13 @@ export function FoodPlanDetailView({ plan, onBack, onSubscribe }) {
 
       {/* Sticky Bottom Subscribe Action Bar */}
       <footer className="sub-detail-sticky-bar">
+        <div className="sub-sticky-price-wrap">
+          <div className="sub-sticky-price-row">
+            <span className="sub-sticky-price-num">₹{plan.price.toLocaleString()}</span>
+            <span className="sub-sticky-price-period">/ {plan.period}</span>
+          </div>
+        </div>
+
         <button
           type="button"
           className="sub-primary-action-btn"

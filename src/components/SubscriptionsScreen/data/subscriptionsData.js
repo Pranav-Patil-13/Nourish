@@ -33,102 +33,218 @@ export const TRUST_HIGHLIGHTS = [
   { id: '4', title: 'Pause or cancel anytime', desc: 'No lock-in or hidden fees' }
 ];
 
+export const SALADO_CITIES = [
+  'Nashik',
+  'Pune',
+  'Mumbai',
+  'Bengaluru',
+  'Delhi NCR',
+  'Hyderabad'
+];
+
+export const SALADO_OUTLETS = [
+  {
+    id: 'salado-nsk-1',
+    name: 'SaladO Kitchen, College Road',
+    city: 'Nashik',
+    pincode: '422005',
+    area: 'College Road',
+    distance: '1.2 km',
+    deliveryTime: '20-35 mins',
+    status: 'Open - Fresh Dispatch',
+    rating: 4.9,
+    reviewsCount: 340,
+    hygieneScore: '99% Certified',
+    address: 'Shop 4, Anand Arcade, Near Big Bazaar, College Rd, Nashik',
+    isPrimary: true
+  },
+  {
+    id: 'salado-nsk-2',
+    name: 'SaladO Studio, Gangapur Road',
+    city: 'Nashik',
+    pincode: '422013',
+    area: 'Gangapur Road',
+    distance: '2.8 km',
+    deliveryTime: '30-45 mins',
+    status: 'Open - Fresh Dispatch',
+    rating: 4.8,
+    reviewsCount: 215,
+    hygieneScore: '98% Certified',
+    address: 'Plot 12, Serene Heights, Opp Pramod Mahajan Garden, Gangapur Rd, Nashik',
+    isPrimary: false
+  },
+  {
+    id: 'salado-pun-1',
+    name: 'SaladO Kitchen, Koregaon Park',
+    city: 'Pune',
+    pincode: '411001',
+    area: 'Koregaon Park',
+    distance: '1.5 km',
+    deliveryTime: '25-40 mins',
+    status: 'Open - Fresh Dispatch',
+    rating: 4.9,
+    reviewsCount: 520,
+    hygieneScore: '99% Certified',
+    address: 'Lane 7, Next to Saffron Court, Koregaon Park, Pune',
+    isPrimary: true
+  },
+  {
+    id: 'salado-pun-2',
+    name: 'SaladO Hub, Baner High Street',
+    city: 'Pune',
+    pincode: '411045',
+    area: 'Baner',
+    distance: '2.4 km',
+    deliveryTime: '30-45 mins',
+    status: 'Open - Fresh Dispatch',
+    rating: 4.8,
+    reviewsCount: 410,
+    hygieneScore: '98% Certified',
+    address: 'Baner High Street, Commercial Hub 2, Baner, Pune',
+    isPrimary: false
+  },
+  {
+    id: 'salado-mum-1',
+    name: 'SaladO Kitchen, Bandra West',
+    city: 'Mumbai',
+    pincode: '400050',
+    area: 'Bandra West',
+    distance: '1.1 km',
+    deliveryTime: '25-35 mins',
+    status: 'Open - Fresh Dispatch',
+    rating: 4.9,
+    reviewsCount: 890,
+    hygieneScore: '99% Certified',
+    address: 'Hill Road, Near Mehboob Studio, Bandra West, Mumbai',
+    isPrimary: true
+  },
+  {
+    id: 'salado-mum-2',
+    name: 'SaladO Express, Powai Hiranandani',
+    city: 'Mumbai',
+    pincode: '400076',
+    area: 'Powai',
+    distance: '2.3 km',
+    deliveryTime: '30-45 mins',
+    status: 'Open - Fresh Dispatch',
+    rating: 4.9,
+    reviewsCount: 670,
+    hygieneScore: '99% Certified',
+    address: 'Galleria Mall Level 1, Hiranandani Gardens, Powai, Mumbai',
+    isPrimary: false
+  },
+  {
+    id: 'salado-blr-1',
+    name: 'SaladO Kitchen, Indiranagar 100ft',
+    city: 'Bengaluru',
+    pincode: '560038',
+    area: 'Indiranagar',
+    distance: '1.6 km',
+    deliveryTime: '25-40 mins',
+    status: 'Open - Fresh Dispatch',
+    rating: 4.9,
+    reviewsCount: 1250,
+    hygieneScore: '99% Certified',
+    address: '100 Feet Road, HAL 2nd Stage, Indiranagar, Bengaluru',
+    isPrimary: true
+  },
+  {
+    id: 'salado-blr-2',
+    name: 'SaladO Hub, HSR Layout Sector 4',
+    city: 'Bengaluru',
+    pincode: '560102',
+    area: 'HSR Layout',
+    distance: '2.1 km',
+    deliveryTime: '30-45 mins',
+    status: 'Open - Fresh Dispatch',
+    rating: 4.8,
+    reviewsCount: 840,
+    hygieneScore: '98% Certified',
+    address: '27th Main Rd, Sector 4, HSR Layout, Bengaluru',
+    isPrimary: false
+  },
+  {
+    id: 'salado-del-1',
+    name: 'SaladO Kitchen, DLF Cyber City',
+    city: 'Delhi NCR',
+    pincode: '122002',
+    area: 'Cyber City',
+    distance: '1.8 km',
+    deliveryTime: '25-40 mins',
+    status: 'Open - Fresh Dispatch',
+    rating: 4.9,
+    reviewsCount: 940,
+    hygieneScore: '99% Certified',
+    address: 'Building 10 Tower B, DLF CyberHub, Gurugram, Delhi NCR',
+    isPrimary: true
+  },
+  {
+    id: 'salado-hyd-1',
+    name: 'SaladO Kitchen, Jubilee Hills Rd 36',
+    city: 'Hyderabad',
+    pincode: '500033',
+    area: 'Jubilee Hills',
+    distance: '1.7 km',
+    deliveryTime: '25-40 mins',
+    status: 'Open - Fresh Dispatch',
+    rating: 4.9,
+    reviewsCount: 780,
+    hygieneScore: '99% Certified',
+    address: 'Road No. 36, Near Peddamma Temple, Jubilee Hills, Hyderabad',
+    isPrimary: true
+  }
+];
+
 export const FOOD_PLANS = [
   {
     id: 'salad-plan',
-    title: 'Salad Plan',
-    deliveries: '2 deliveries per week',
-    description: 'Fresh & seasonal salads sourced from top-rated local stores near you.',
+    title: 'SaladO Essential',
+    brand: 'SaladO',
+    deliveries: '2 deliveries/week',
+    description: 'Crisp & seasonal gourmet salads harvested fresh daily from SaladO cloud kitchens.',
     price: 800,
     period: 'month',
     category: 'Salads',
     image: bowlSaladImg,
     rating: 4.9,
     reviewsCount: 182,
-    badge: 'Popular',
+    badge: 'SaladO Special',
     highlights: [
       '2 fresh salads delivered every week',
-      'Rotating menu with seasonal ingredients',
-      'Sourced from trusted local stores',
+      'Harvested & prepped daily at SaladO kitchens',
+      'Rotating seasonal menu crafted by SaladO chefs',
       'Auto-pay, zero hassle',
-      'Track deliveries inside the app'
+      'Track deliveries live inside the app'
     ],
     features: [
-      { label: 'Fresh Ingredients', icon: 'Leaf' },
-      { label: 'Local Partners', icon: 'Store' },
+      { label: 'SaladO Kitchen Fresh', icon: 'Leaf' },
+      { label: 'Verified Outlet', icon: 'Store' },
       { label: 'Flexible Pause Anytime', icon: 'RotateCcw' }
     ]
   },
   {
     id: 'healthy-meal-plan',
     title: 'Healthy Meal Plan',
-    deliveries: '3 deliveries per week',
-    description: 'Balanced meals, locally sourced with balanced macro targets.',
+    brand: 'SaladO',
+    deliveries: '3 deliveries/week',
+    description: 'Chef-prepared, macro-balanced nutritious lunches & dinners powered by SaladO.',
     price: 1500,
     period: 'month',
-    category: 'Meal Plans',
+    category: 'Meals',
     image: plateScanImg,
     rating: 4.8,
     reviewsCount: 240,
-    badge: 'Balanced',
+    badge: 'SaladO Chef Choice',
     highlights: [
-      '3 gourmet balanced lunch/dinners per week',
+      '3 gourmet balanced meals per week',
       'Calorie-counted and macro-tracked automatically',
-      'Clean chef-prepared balanced ingredients',
-      'Change delivery timings easily'
+      'Clean chef-prepared balanced ingredients by SaladO',
+      'Change delivery timings & addresses easily'
     ],
     features: [
       { label: 'Macro Balanced', icon: 'PieChart' },
-      { label: 'Chef Crafted', icon: 'Utensils' },
+      { label: 'SaladO Chef Crafted', icon: 'Utensils' },
       { label: 'Zero Preservatives', icon: 'ShieldCheck' }
-    ]
-  },
-  {
-    id: 'high-protein-plan',
-    title: 'High Protein Plan',
-    deliveries: '5 deliveries per week',
-    description: 'Designed for your fitness goals. Packed with 35g+ clean protein per box.',
-    price: 2800,
-    period: 'month',
-    category: 'Protein',
-    image: foodSalmonImg,
-    rating: 4.95,
-    reviewsCount: 310,
-    badge: 'Best for Muscle',
-    highlights: [
-      '5 high-protein meals weekly',
-      'Average 38g+ lean protein per serving',
-      'Grilled salmon, lean chicken, and high-protein tofu bowls',
-      'Custom macro adjustments available'
-    ],
-    features: [
-      { label: '35g+ Protein', icon: 'Dumbbell' },
-      { label: 'Lean Cuts Only', icon: 'Flame' },
-      { label: 'Fitness Approved', icon: 'CheckCircle' }
-    ]
-  },
-  {
-    id: 'vegan-plan',
-    title: 'Vegan Plan',
-    deliveries: '3 deliveries per week',
-    description: 'Plant-based, clean ingredients packed with essential nutrients & minerals.',
-    price: 1600,
-    period: 'month',
-    category: 'Vegan',
-    image: foodSmoothieImg,
-    rating: 4.7,
-    reviewsCount: 96,
-    badge: '100% Plant-Based',
-    highlights: [
-      '3 nutrient-rich vegan meals weekly',
-      'Organic cold-pressed superfood dressings',
-      'Rich in fiber, vitamins & antioxidants',
-      'Eco-friendly compostable packaging'
-    ],
-    features: [
-      { label: '100% Plant-Based', icon: 'Sprout' },
-      { label: 'Cruelty Free', icon: 'Heart' },
-      { label: 'Organic Greens', icon: 'Sun' }
     ]
   }
 ];
@@ -397,10 +513,10 @@ export const INITIAL_ACTIVE_SUBSCRIPTIONS = {
   food: [
     {
       id: 'sub-food-1',
-      title: 'Salad Plan',
+      title: 'SaladO Essential',
       price: 800,
       priceFormatted: '₹800 / month',
-      schedule: '2 deliveries per week',
+      schedule: '2 deliveries/week',
       nextDelivery: 'Thu, 25 Sep',
       status: 'Active',
       image: bowlSaladImg,
@@ -446,7 +562,7 @@ export const NOTIFICATIONS_DATA = [
     category: 'Orders',
     type: 'billing',
     title: 'Subscription renewed',
-    desc: 'Your Salad Plan has been renewed for ₹800.',
+    desc: 'Your SaladO Essential subscription has been renewed for ₹800.',
     time: '1 day ago',
     icon: 'CreditCard'
   },
@@ -472,7 +588,7 @@ export const NOTIFICATIONS_DATA = [
 
 export const LIVE_DELIVERY_DATA = {
   id: 'del-1092',
-  orderName: 'Salad Plan Delivery',
+  orderName: 'SaladO Essential Delivery',
   expectedWindow: 'Today, 12:30 PM - 1:00 PM',
   statusHeadline: 'Your salad is on the way!',
   arrivingMin: 12,
@@ -484,5 +600,5 @@ export const LIVE_DELIVERY_DATA = {
     avatar: deliveryRaviImg,
     phone: '+91 98234 56789'
   },
-  destination: 'Pranav Patil • College Road, Nashik'
+  destination: 'Pranav Patil, College Road, Nashik'
 };

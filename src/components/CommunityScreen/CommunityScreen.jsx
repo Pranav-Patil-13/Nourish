@@ -12,6 +12,7 @@ import MyPostsView from './views/MyPostsView';
 import CreatePollModal from './views/CreatePollModal';
 import CommunityNotificationsView from './views/CommunityNotificationsView';
 import CommunitySettingsView from './views/CommunitySettingsView';
+import { ShortsPlayerModal } from './views/ShortsPlayerModal';
 import { useBackHandler } from '../../context/BackNavigationContext';
 import {
   INITIAL_POSTS,
@@ -19,6 +20,7 @@ import {
   GROUPS_LIST,
   USER_PROFILES
 } from './data/communityData';
+import { COMMUNITY_SHORTS } from './data/communityShortsData';
 import './CommunityScreen.css';
 
 export function CommunityScreen({ onNavigateTab }) {
@@ -28,6 +30,15 @@ export function CommunityScreen({ onNavigateTab }) {
   const [activePost, setActivePost] = useState(null);
   const [activeGroup, setActiveGroup] = useState(null);
   const [activeUserHandle, setActiveUserHandle] = useState('riyasharma');
+  const [activeShortIndex, setActiveShortIndex] = useState(null);
+
+  const handleOpenShort = (index) => {
+    setActiveShortIndex(index);
+  };
+
+  const handleCloseShort = () => {
+    setActiveShortIndex(null);
+  };
 
   // Global Action Sheet & Toast State
   const [activeActionSheet, setActiveActionSheet] = useState(null);
@@ -45,6 +56,10 @@ export function CommunityScreen({ onNavigateTab }) {
 
   // Register Native Back Handler for nested Community subviews & modals
   useBackHandler(() => {
+    if (activeShortIndex !== null) {
+      handleCloseShort();
+      return true;
+    }
     if (activeActionSheet) {
       setActiveActionSheet(null);
       return true;
@@ -78,6 +93,7 @@ export function CommunityScreen({ onNavigateTab }) {
   const [challenges, setChallenges] = useState(CHALLENGES_LIST);
   const [groups, setGroups] = useState(GROUPS_LIST);
   const [profiles, setProfiles] = useState(USER_PROFILES);
+  const [shorts, setShorts] = useState(COMMUNITY_SHORTS);
 
   // Feed Tab Switcher
   const handleSelectFeedTab = (tab) => {
@@ -290,6 +306,7 @@ export function CommunityScreen({ onNavigateTab }) {
             onOpenNotifications={() => setCurrentView('notifications')}
             onOpenSettings={() => setCurrentView('settings')}
             onOpenActionSheet={setActiveActionSheet}
+            onOpenShortsModal={handleOpenShort}
             showToast={showToast}
           />
         )}
@@ -404,6 +421,16 @@ export function CommunityScreen({ onNavigateTab }) {
         <CreatePollModal
           onClose={() => setIsCreatePollOpen(false)}
           onSubmitPoll={handlePublishPoll}
+        />
+      )}
+
+      {/* Screen: Fullscreen Shorts Player Modal */}
+      {activeShortIndex !== null && (
+        <ShortsPlayerModal
+          shorts={shorts}
+          initialIndex={activeShortIndex}
+          onClose={handleCloseShort}
+          showToast={showToast}
         />
       )}
 

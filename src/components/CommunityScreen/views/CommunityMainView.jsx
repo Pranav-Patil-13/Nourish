@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import userAvatarImg from '../../../assets/user_avatar.jpg';
 import leavesImg from '../../../assets/leaves.png';
+import { CommunityShortsReel } from './CommunityShortsReel';
 
 export function CommunityMainView({
   posts,
@@ -37,6 +38,7 @@ export function CommunityMainView({
   onOpenNotifications,
   onOpenSettings,
   onOpenActionSheet,
+  onOpenShortsModal,
   showToast
 }) {
   const handleOpenPostOptions = (post) => {
@@ -196,26 +198,30 @@ export function CommunityMainView({
         </div>
       </div>
 
+      {/* Community Shorts Horizontal Reel */}
+      <CommunityShortsReel onSelectShort={onOpenShortsModal} />
+
       {/* Feed Posts Stream */}
       <div className="comm-posts-stream">
-        {posts.map((post) => (
-          <article key={post.id} className="comm-post-card">
-            {/* Post Author Row */}
-            <div className="comm-post-author-row">
-              <div
-                className="author-clickable-group"
-                onClick={() => onSelectAuthor(post.author)}
-              >
-                <div className="author-avatar-wrap">
-                  <img src={post.author.avatar} alt={post.author.name} />
-                </div>
-                <div className="author-info-col">
-                  <div className="author-name-row">
-                    <span className="author-name">{post.author.name}</span>
+        {posts.map((post, index) => (
+          <React.Fragment key={post.id}>
+            <article className="comm-post-card">
+              {/* Post Author Row */}
+              <div className="comm-post-author-row">
+                <div
+                  className="author-clickable-group"
+                  onClick={() => onSelectAuthor(post.author)}
+                >
+                  <div className="author-avatar-wrap">
+                    <img src={post.author.avatar} alt={post.author.name} />
                   </div>
-                  <span className="post-timestamp">{post.timeAgo}</span>
+                  <div className="author-info-col">
+                    <div className="author-name-row">
+                      <span className="author-name">{post.author.name}</span>
+                    </div>
+                    <span className="post-timestamp">{post.timeAgo}</span>
+                  </div>
                 </div>
-              </div>
 
               <button
                 type="button"
@@ -293,6 +299,16 @@ export function CommunityMainView({
               </button>
             </div>
           </article>
+
+          {/* Inline Feed Break: Shorts Spotlight after 2nd Post */}
+          {index === 1 && (
+            <CommunityShortsReel
+              isInlineBreak={true}
+              title="Trending Wellness Shorts"
+              onSelectShort={onOpenShortsModal}
+            />
+          )}
+        </React.Fragment>
         ))}
       </div>
     </div>
