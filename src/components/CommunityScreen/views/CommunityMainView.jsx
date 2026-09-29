@@ -4,16 +4,8 @@ import {
   MessageCircle,
   Bookmark,
   MoreHorizontal,
-  Image,
-  Utensils,
-  Dumbbell,
-  BarChart2,
   Bell,
   Settings,
-  Compass,
-  Users2,
-  Flame,
-  Award,
   Share2,
   Copy,
   Flag,
@@ -168,56 +160,19 @@ export function CommunityMainView({
       </div>
 
       {/* Quick Composer Card */}
-      <div className="comm-composer-card">
-        <div className="comm-composer-top-row" onClick={() => onOpenCreatePost('photo')}>
+      <div
+        className="comm-composer-card"
+        onClick={() => onOpenCreatePost('text')}
+        role="button"
+        tabIndex={0}
+      >
+        <div className="comm-composer-top-row">
           <div className="comm-composer-avatar">
             <img src={userAvatarImg} alt="You" />
           </div>
           <div className="comm-composer-input-placeholder">
             <span>What's on your mind?</span>
           </div>
-        </div>
-
-        <div className="comm-composer-chips-row">
-          <button
-            type="button"
-            className="composer-chip-btn"
-            onClick={() => onOpenCreatePost('photo')}
-            aria-label="Add Photo"
-            title="Add Photo"
-          >
-            <Image size={18} className="chip-icon photo" />
-          </button>
-
-          <button
-            type="button"
-            className="composer-chip-btn"
-            onClick={() => onOpenCreatePost('meal')}
-            aria-label="Log Meal"
-            title="Log Meal"
-          >
-            <Utensils size={18} className="chip-icon meal" />
-          </button>
-
-          <button
-            type="button"
-            className="composer-chip-btn"
-            onClick={() => onOpenCreatePost('workout')}
-            aria-label="Log Workout"
-            title="Log Workout"
-          >
-            <Dumbbell size={18} className="chip-icon workout" />
-          </button>
-
-          <button
-            type="button"
-            className="composer-chip-btn"
-            onClick={onOpenCreatePoll}
-            aria-label="Create Poll"
-            title="Create Poll"
-          >
-            <BarChart2 size={18} className="chip-icon poll" />
-          </button>
         </div>
       </div>
 
@@ -274,15 +229,6 @@ export function CommunityMainView({
             {/* Post Caption & Content */}
             <div className="comm-post-content">
               <p className="comm-post-caption">{post.caption}</p>
-
-              {post.macros && (
-                <div className="comm-post-macros-pill">
-                  <Flame size={13} className="macro-fire-icon" />
-                  <span>
-                    <strong>{post.macros.calories} kcal</strong> • {post.macros.protein}g protein
-                  </span>
-                </div>
-              )}
             </div>
 
             {/* Post Actions Bar (Likes, Comments, Bookmark) */}

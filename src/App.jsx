@@ -12,6 +12,7 @@ import { ChevronUp } from 'lucide-react';
 import { DiaryScreen } from './components/DiaryScreen/DiaryScreen';
 import { SubscriptionsScreen } from './components/SubscriptionsScreen/SubscriptionsScreen';
 import CommunityScreen from './components/CommunityScreen/CommunityScreen';
+import { AnalyticsScreen } from './components/AnalyticsScreen/AnalyticsScreen';
 import { BottomNavBar } from './components/DashboardScreen/BottomNavBar';
 import { AndroidLauncherBtn } from './components/AndroidLauncherBtn/AndroidLauncherBtn';
 import { BackNavigationProvider } from './context/BackNavigationContext';
@@ -24,7 +25,8 @@ const SCREEN_OPTIONS = [
   { id: 'scanner', label: '4. Food Scanner', shortLabel: '4. Scanner', key: '4' },
   { id: 'diary', label: '5. Planner / Diary', shortLabel: '5. Planner', key: '5' },
   { id: 'subscriptions', label: '6. Subscriptions', shortLabel: '6. Subscriptions', key: '6' },
-  { id: 'community', label: '7. Community', shortLabel: '7. Community', key: '7' }
+  { id: 'community', label: '7. Community', shortLabel: '7. Community', key: '7' },
+  { id: 'analytics', label: '8. Analytics', shortLabel: '8. Analytics', key: '8' }
 ];
 
 function AppContent() {
@@ -61,7 +63,8 @@ function AppContent() {
     diary: 3,
     scanner: 4,
     subscriptions: 5,
-    community: 6
+    community: 6,
+    analytics: 7
   };
 
   const [hideBottomNav, setHideBottomNav] = useState(false);
@@ -107,7 +110,8 @@ function AppContent() {
       currentScreen === 'scanner' ||
       currentScreen === 'diary' ||
       currentScreen === 'subscriptions' ||
-      currentScreen === 'community'
+      currentScreen === 'community' ||
+      currentScreen === 'analytics'
     ) {
       changeScreen('dashboard');
       return true;
@@ -163,6 +167,7 @@ function AppContent() {
       if (e.key === '5') changeScreen('diary');
       if (e.key === '6') changeScreen('subscriptions');
       if (e.key === '7') changeScreen('community');
+      if (e.key === '8') changeScreen('analytics');
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
@@ -180,6 +185,8 @@ function AppContent() {
       changeScreen('subscriptions');
     } else if (tabId === 'community') {
       changeScreen('community');
+    } else if (tabId === 'analytics') {
+      changeScreen('analytics');
     }
   };
 
@@ -238,6 +245,12 @@ function AppContent() {
         <CommunityScreen
           onNavigateTab={handleSelectTab}
           onToggleFullScreenOverlay={setHideBottomNav}
+        />
+      )}
+
+      {currentScreen === 'analytics' && (
+        <AnalyticsScreen
+          onBack={() => changeScreen('dashboard')}
         />
       )}
     </div>
@@ -313,11 +326,12 @@ function AppContent() {
           };
           const currentTabId = tabIdMap[currentScreen] || 'home';
 
-          const persistentNavBar = isTabScreen && !hideBottomNav ? (
+          const persistentNavBar = isTabScreen ? (
             <BottomNavBar
               activeTabId={currentTabId}
               onSelectTab={handleSelectTab}
               onOpenScanner={() => changeScreen('scanner')}
+              isHidden={hideBottomNav}
             />
           ) : null;
 

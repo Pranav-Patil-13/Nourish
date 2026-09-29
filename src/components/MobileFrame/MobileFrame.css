@@ -153,7 +153,7 @@ body.shorts-view-active .phone-status-bar {
   height: 100%;
   background-color: var(--bg-app);
   color: var(--text-primary);
-  overflow-y: auto;
+  overflow: hidden;
   position: relative;
 }
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import CommunityMainView from './views/CommunityMainView';
 import CreatePostModal from './views/CreatePostModal';
@@ -23,7 +23,7 @@ import {
 import { COMMUNITY_SHORTS } from './data/communityShortsData';
 import './CommunityScreen.css';
 
-export function CommunityScreen({ onNavigateTab }) {
+export function CommunityScreen({ onNavigateTab, onToggleFullScreenOverlay }) {
   // Navigation State
   const [currentView, setCurrentView] = useState('main'); // 'main' | 'explore' | 'challenges' | 'groups' | 'group-detail' | 'user-profile' | 'my-posts' | 'notifications' | 'settings'
   const [activeFeedTab, setActiveFeedTab] = useState('For You');
@@ -53,6 +53,26 @@ export function CommunityScreen({ onNavigateTab }) {
   const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
   const [createPostType, setCreatePostType] = useState('photo');
   const [isCreatePollOpen, setIsCreatePollOpen] = useState(false);
+
+  // Auto-hide bottom navbar when any modal or full-screen overlay is active
+  const isModalOrOverlayActive =
+    isCreatePostOpen ||
+    isCreatePollOpen ||
+    Boolean(activeCommentsPost) ||
+    activeShortIndex !== null ||
+    Boolean(activeActionSheet);
+
+  // Manage body class to seamlessly hide/elevate above bottom navbar without React re-render hitch
+  useEffect(() => {
+    if (isModalOrOverlayActive) {
+      document.body.classList.add('comm-modal-active');
+    } else {
+      document.body.classList.remove('comm-modal-active');
+    }
+    return () => {
+      document.body.classList.remove('comm-modal-active');
+    };
+  }, [isModalOrOverlayActive]);
 
   // Register Native Back Handler for nested Community subviews & modals
   useBackHandler(() => {
@@ -228,7 +248,7 @@ export function CommunityScreen({ onNavigateTab }) {
       timeAgo: 'Just now',
       image: newPostData.image,
       caption: newPostData.caption,
-      macros: newPostData.macros || { calories: 380, protein: 22, fat: 10, carbs: 45 },
+      macros: null,
       likesCount: 0,
       isLiked: false,
       isBookmarked: false,
@@ -287,7 +307,7 @@ export function CommunityScreen({ onNavigateTab }) {
   return (
     <div className="community-screen">
       {/* Scrollable Main Content Area */}
-      <div className={`comm-screen-content-wrapper ${activeActionSheet ? 'comm-scroll-locked' : ''}`}>
+      <div className={`comm-screen-content-wrapper ${(activeActionSheet || isCreatePostOpen || isCreatePollOpen) ? 'comm-scroll-locked' : ''}`}>
         {/* Screen 01: Community Main Feed */}
         {currentView === 'main' && (
           <CommunityMainView

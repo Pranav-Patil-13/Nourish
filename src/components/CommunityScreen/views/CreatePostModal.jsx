@@ -1,21 +1,16 @@
 import React, { useState } from 'react';
 import {
   X,
-  Image,
-  Utensils,
-  Dumbbell,
+  Image as ImageIcon,
   BarChart2,
-  Plus,
-  ChevronRight,
   MapPin,
-  Flame,
   Globe,
-  Award,
+  Users,
   CheckCircle2
 } from 'lucide-react';
+import riyaAvatarImg from '../../../assets/riya_avatar.jpg';
 import riyaOatmealImg from '../../../assets/riya_oatmeal_bowl.jpg';
 import plateScanImg from '../../../assets/scanner_food_plate.jpg';
-import fitnessHeroImg from '../../../assets/fitness_hero_gym.jpg';
 
 export function CreatePostModal({
   initialType = 'photo',
@@ -23,11 +18,10 @@ export function CreatePostModal({
   onSubmitPost,
   onSwitchToPoll
 }) {
-  const [selectedType, setSelectedType] = useState(initialType);
   const [caption, setCaption] = useState('');
-  const [selectedPhotos, setSelectedPhotos] = useState([riyaOatmealImg, plateScanImg]);
-  const [location, setLocation] = useState('Nashik, India');
-  const [visibility, setVisibility] = useState('Public');
+  const [attachedPhoto, setAttachedPhoto] = useState(null); // Clean text-only default
+  const [attachedLocation, setAttachedLocation] = useState(null);
+  const [visibility, setVisibility] = useState('Public'); // 'Public' | 'Followers'
   const [toastMessage, setToastMessage] = useState(null);
 
   const showToast = (msg) => {
@@ -35,26 +29,43 @@ export function CreatePostModal({
     setTimeout(() => setToastMessage(null), 2000);
   };
 
-  const handleSelectMode = (type) => {
-    if (type === 'poll') {
-      onSwitchToPoll();
-      return;
+  const handleTogglePhoto = () => {
+    if (attachedPhoto) {
+      setAttachedPhoto(null);
+      showToast('Photo removed');
+    } else {
+      setAttachedPhoto(riyaOatmealImg);
+      showToast('Photo attached');
     }
-    setSelectedType(type);
+  };
+
+  const handleToggleLocation = () => {
+    if (attachedLocation) {
+      setAttachedLocation(null);
+      showToast('Location removed');
+    } else {
+      setAttachedLocation('Nashik, India');
+      showToast('Location added');
+    }
   };
 
   const handlePost = () => {
-    if (!caption.trim() && selectedPhotos.length === 0) return;
+    if (!caption.trim() && !attachedPhoto) return;
     onSubmitPost({
       caption,
-      type: selectedType,
-      image: selectedPhotos[0] || riyaOatmealImg,
-      location
+      type: attachedPhoto ? 'photo' : 'text',
+      image: attachedPhoto,
+      location: attachedLocation
     });
   };
 
+  const canPost = caption.trim().length > 0 || attachedPhoto !== null;
+
   return (
-    <div className="comm-modal-backdrop" onClick={onClose}>
+    <>
+      {/* Dim backdrop (click to close) */}
+      <div className="comm-modal-backdrop" onClick={onClose} />
+
       {/* Toast Notification */}
       {toastMessage && (
         <div className="comm-action-toast">
@@ -63,171 +74,127 @@ export function CreatePostModal({
         </div>
       )}
 
-      <div className="comm-modal-sheet" onClick={(e) => e.stopPropagation()}>
+      {/* Sheet — anchored at bottom, expands upward from nav bar position */}
+      <div className="comm-composer-sheet" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
-        <header className="comm-modal-header">
+        <header className="comm-composer-header">
           <button
             type="button"
-            className="comm-modal-close-btn"
+            className="comm-composer-cancel-btn"
             onClick={onClose}
-            aria-label="Close"
           >
-            <X size={19} strokeWidth={2.2} />
+            Cancel
           </button>
 
-          <h2 className="comm-modal-title">Create Post</h2>
+          <h2 className="comm-composer-title">New Post</h2>
 
           <button
             type="button"
-            className="comm-modal-post-cta"
+            className="comm-composer-post-btn"
             onClick={handlePost}
-            disabled={!caption.trim() && selectedPhotos.length === 0}
+            disabled={!canPost}
           >
             Post
           </button>
         </header>
 
-        <div className="comm-modal-scrollable">
-          {/* 4 Mode Selector Cards */}
-          <div className="comm-type-selector-grid">
-            <div
-              className={`comm-type-card ${selectedType === 'photo' ? 'active' : ''}`}
-              onClick={() => handleSelectMode('photo')}
-            >
-              <div className="type-icon-box photo"><Image size={18} /></div>
-              <span className="type-card-label">Photo</span>
-            </div>
-
-            <div
-              className={`comm-type-card ${selectedType === 'meal' ? 'active' : ''}`}
-              onClick={() => handleSelectMode('meal')}
-            >
-              <div className="type-icon-box meal"><Utensils size={18} /></div>
-              <span className="type-card-label">Meal</span>
-            </div>
-
-            <div
-              className={`comm-type-card ${selectedType === 'workout' ? 'active' : ''}`}
-              onClick={() => handleSelectMode('workout')}
-            >
-              <div className="type-icon-box workout"><Dumbbell size={18} /></div>
-              <span className="type-card-label">Workout</span>
-            </div>
-
-            <div
-              className="comm-type-card"
-              onClick={() => handleSelectMode('poll')}
-            >
-              <div className="type-icon-box poll"><BarChart2 size={18} /></div>
-              <span className="type-card-label">Poll</span>
-            </div>
-          </div>
-
-          {/* Caption Textarea */}
-          <div className="comm-caption-area-wrap">
-            <textarea
-              className="comm-caption-textarea"
-              placeholder="Share your thoughts, healthy recipe tips, or workout wins..."
-              rows={4}
-              maxLength={500}
-              value={caption}
-              onChange={(e) => setCaption(e.target.value)}
-            />
-            <span className="comm-char-counter">{caption.length}/500</span>
-          </div>
-
-          {/* Add Photos Section */}
-          <section className="comm-form-section">
-            <h3 className="comm-form-section-title">Add Photos</h3>
-            <div className="comm-photo-preview-grid">
-              {selectedPhotos.map((img, idx) => (
-                <div key={idx} className="comm-photo-thumb-wrap">
-                  <img src={img} alt="Upload preview" className="comm-photo-thumb" />
-                  <button
-                    type="button"
-                    className="comm-photo-remove-btn"
-                    onClick={() => setSelectedPhotos(selectedPhotos.filter((_, i) => i !== idx))}
-                  >
-                    <X size={12} strokeWidth={2.4} />
-                  </button>
-                </div>
-              ))}
-
+        {/* Composer Main Content Area */}
+        <div className="comm-composer-body">
+          {/* Author Identity Row */}
+          <div className="comm-composer-author-row">
+            <img src={riyaAvatarImg} alt="Riya Sharma" className="comm-composer-avatar" />
+            <div className="comm-composer-author-info">
+              <span className="comm-composer-name">Riya Sharma</span>
               <button
                 type="button"
-                className="comm-add-photo-btn"
-                onClick={() => setSelectedPhotos([...selectedPhotos, fitnessHeroImg])}
-                title="Add photo"
-              >
-                <Plus size={20} />
-              </button>
-            </div>
-          </section>
-
-          {/* Add Details Options List */}
-          <section className="comm-form-section">
-            <h3 className="comm-form-section-title">Add Details</h3>
-
-            <div className="comm-detail-options-list">
-              <div
-                className="comm-detail-row"
-                onClick={() => showToast('Food details attached')}
-              >
-                <div className="detail-icon-wrap"><Flame size={16} /></div>
-                <span className="detail-row-label">Food details</span>
-                <ChevronRight size={16} className="detail-chevron" />
-              </div>
-
-              <div
-                className="comm-detail-row"
-                onClick={() => showToast('Workout details attached')}
-              >
-                <div className="detail-icon-wrap"><Dumbbell size={16} /></div>
-                <span className="detail-row-label">Workout details</span>
-                <ChevronRight size={16} className="detail-chevron" />
-              </div>
-
-              <div
-                className="comm-detail-row"
-                onClick={() => showToast(`Location set to: ${location}`)}
-              >
-                <div className="detail-icon-wrap"><MapPin size={16} /></div>
-                <div className="detail-text-col">
-                  <span className="detail-row-label">Location (optional)</span>
-                  <span className="detail-sub-val">{location}</span>
-                </div>
-                <ChevronRight size={16} className="detail-chevron" />
-              </div>
-
-              <div
-                className="comm-detail-row"
-                onClick={() => showToast('Linked to 21-Day Challenge!')}
-              >
-                <div className="detail-icon-wrap"><Award size={16} /></div>
-                <span className="detail-row-label">Add to challenge</span>
-                <ChevronRight size={16} className="detail-chevron" />
-              </div>
-
-              <div
-                className="comm-detail-row"
+                className="comm-composer-visibility-pill"
                 onClick={() => {
                   const nextVis = visibility === 'Public' ? 'Followers' : 'Public';
                   setVisibility(nextVis);
-                  showToast(`Visibility set to: ${nextVis}`);
+                  showToast(`Visible to: ${nextVis}`);
                 }}
               >
-                <div className="detail-icon-wrap"><Globe size={16} /></div>
-                <div className="detail-text-col">
-                  <span className="detail-row-label">Visibility</span>
-                  <span className="detail-sub-val">{visibility}</span>
-                </div>
-                <ChevronRight size={16} className="detail-chevron" />
-              </div>
+                {visibility === 'Public' ? <Globe size={11} /> : <Users size={11} />}
+                <span>{visibility}</span>
+                <span className="visibility-caret">▾</span>
+              </button>
             </div>
-          </section>
+          </div>
+
+          {/* Hero Photo Preview — shown FIRST before the text input */}
+          {attachedPhoto && (
+            <div className="comm-composer-photo-preview-wrap">
+              <img src={attachedPhoto} alt="Attachment Preview" className="comm-composer-photo-img" />
+              <button
+                type="button"
+                className="comm-composer-photo-close-btn"
+                onClick={() => setAttachedPhoto(null)}
+                title="Remove photo"
+                aria-label="Remove photo"
+              >
+                <X size={14} strokeWidth={2.4} />
+              </button>
+            </div>
+          )}
+
+          {/* Caption Text Input Area */}
+          <div className="comm-composer-input-wrap">
+            <textarea
+              className="comm-composer-textarea"
+              placeholder={attachedPhoto ? "Add a caption…" : "What's on your mind today, Riya?"}
+              rows={attachedPhoto ? 2 : 4}
+              maxLength={500}
+              autoFocus
+              value={caption}
+              onChange={(e) => setCaption(e.target.value)}
+            />
+          </div>
         </div>
+
+
+        {/* Bottom Attachment Action Toolbar */}
+        <footer className="comm-composer-footer-bar">
+          <div className="comm-composer-tool-icons">
+            {/* 1. Photo Attachment Toggle */}
+            <button
+              type="button"
+              className={`comm-tool-icon-btn ${attachedPhoto ? 'active' : ''}`}
+              onClick={handleTogglePhoto}
+              title="Attach Photo"
+              aria-label="Attach Photo"
+            >
+              <ImageIcon size={19} />
+            </button>
+
+            {/* 2. Poll Option */}
+            <button
+              type="button"
+              className="comm-tool-icon-btn"
+              onClick={onSwitchToPoll}
+              title="Create Poll"
+              aria-label="Create Poll"
+            >
+              <BarChart2 size={19} />
+            </button>
+
+            {/* 3. Location Tag Toggle */}
+            <button
+              type="button"
+              className={`comm-tool-icon-btn ${attachedLocation ? 'active' : ''}`}
+              onClick={handleToggleLocation}
+              title="Attach Location"
+              aria-label="Attach Location"
+            >
+              <MapPin size={19} />
+            </button>
+          </div>
+
+          <div className="comm-composer-footer-right">
+            <span className="comm-composer-char-count">{caption.length}/500</span>
+          </div>
+        </footer>
       </div>
-    </div>
+    </>
   );
 }
 

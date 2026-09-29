@@ -1,0 +1,466 @@
+/* Analytics Slide 2: Hydration & Daily Habits */
+.analytics-slide-hydration {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  padding-bottom: 16px;
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   1. HERO CARD: DAILY HYDRATION
+   ========================================================================== */
+.hydration-hero-card {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 24px;
+  padding: 18px 18px 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.02);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Top Header Row */
+.hydration-hero-card .hero-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.hero-droplet-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #e0f2fe;
+  color: #0284c7;
+  flex-shrink: 0;
+}
+
+.hero-droplet-icon {
+  stroke-width: 2.2;
+}
+
+/* Segmented View Toggle Bar (Full Width Space) */
+.hydration-view-toggle-bar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.toggle-pill-track {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: #f1f5f9;
+  padding: 3px;
+  border-radius: 999px;
+  gap: 2px;
+  box-sizing: border-box;
+}
+
+.toggle-tab-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #64748b;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.toggle-tab-btn.active {
+  background: #ffffff;
+  color: #0284c7;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* ==========================================================================
+   HOURLY DETAILED GRAPH LAYOUT (Matching Reference)
+   ========================================================================== */
+.hero-hourly-graph-wrap {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+/* Y-Axis Label Column (Floating on the Very Right Edge of the Card as Small Pills) */
+.hourly-yaxis-col {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: auto;
+  width: auto;
+  height: calc(100% - 24px);
+  z-index: 6;
+  pointer-events: none;
+}
+
+.yaxis-val {
+  position: absolute;
+  left: -18px;
+  transform: translateY(50%);
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: #000000;
+  padding: 1px 5px;
+  line-height: 1.2;
+}
+
+/* Main Unified Plot Area (Full 100% Width) */
+.hourly-plot-area {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+/* Horizontal Grid Lines inside Plot Area */
+.hourly-grid-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(100% - 24px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hourly-grid-lines .grid-dashed-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+.hourly-grid-lines .grid-solid-baseline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* Hourly Background Bars */
+.hourly-bars-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 100%;
+  height: calc(100% - 24px);
+  position: relative;
+  z-index: 3;
+}
+
+.hourly-bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+  cursor: pointer;
+}
+
+.hourly-bar-track {
+  width: 18px;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  border-radius: 999px;
+  overflow: hidden;
+  background: transparent;
+}
+
+.hourly-bar-fill {
+  width: 100%;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #bae6fd 0%, #e0f2fe 100%);
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.hourly-bar-fill.is-active-bar {
+  background: linear-gradient(180deg, #38bdf8 0%, #bae6fd 100%);
+  opacity: 1;
+}
+
+.hourly-time-label {
+  position: absolute;
+  bottom: -28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.05;
+  pointer-events: none;
+}
+
+.hourly-time-num {
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+.hourly-time-period {
+  font-size: 0.52rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+}
+
+/* SVG Spline Curve */
+.hourly-spline-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: calc(100% - 24px);
+  z-index: 4;
+  overflow: visible;
+  pointer-events: none;
+  transform: translateY(-6px);
+}
+
+/* Perfect Circular CSS Nodes Layer (All Uniform) */
+.hourly-nodes-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: calc(100% - 24px);
+  pointer-events: none;
+  z-index: 5;
+  transform: translateY(-6px);
+}
+
+.hourly-node-pin {
+  position: absolute;
+  transform: translate(-50%, 50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #38bdf8;
+  border: 2px solid #ffffff;
+  padding: 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+  pointer-events: auto;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+
+.hourly-node-pin:hover {
+  transform: translate(-50%, 50%) scale(1.25);
+}
+
+/* ==========================================================================
+   3-PHASE HYDRATION VIEW
+   ========================================================================== */
+.hero-hydration-chart-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+.hydration-bars-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  gap: 12px;
+}
+
+.hydration-bar-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.hydration-bar-track {
+  width: 44px;
+  max-width: 100%;
+  height: 112px;
+  display: flex;
+  align-items: flex-end;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.hydration-bar-fill {
+  width: 100%;
+  border-radius: 999px;
+  transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 14px;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.hydration-bar-inner-value {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #0f172a;
+  transform: rotate(-90deg);
+  white-space: nowrap;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.hydration-bar-fill.fill-ocean {
+  background: linear-gradient(180deg, #bae6fd 0%, #7dd3fc 60%, #38bdf8 100%);
+}
+
+.hydration-bar-fill.fill-sky {
+  background: linear-gradient(180deg, #e0f2fe 0%, #bae6fd 60%, rgba(186, 230, 253, 0.8) 100%);
+}
+
+.hydration-bar-phase {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #334155;
+  margin-top: 8px;
+}
+
+.hydration-bar-time {
+  font-size: 0.62rem;
+  font-weight: 500;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+/* Streak Badge at bottom of Hero Card */
+.hero-streak-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #0284c7;
+  background: #f0f9ff;
+  border: 1px solid #e0f2fe;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+
+.hero-sparkle-icon {
+  color: #0284c7;
+  stroke-width: 2.2;
+}
+
+/* ==========================================================================
+   2. HABIT & ACTIVITY METRIC CARDS
+   ========================================================================== */
+.metric-icon-badge.burn-badge {
+  background: #fff2e8;
+  color: #ea580c;
+}
+
+.metric-icon-badge.steps-badge {
+  background: #eaf3eb;
+  color: #406d4e;
+}
+
+.metric-icon-badge.streak-badge {
+  background: #fef9c3;
+  color: #ca8a04;
+}
+
+.metric-progress-fill.burn-fill {
+  background: linear-gradient(90deg, #fb923c 0%, #ea580c 100%);
+}
+
+.metric-progress-fill.steps-fill {
+  background: linear-gradient(90deg, #a3b899 0%, #739072 100%);
+}
+
+.card-subtext.steps-accent {
+  color: #406d4e;
+}
+
+.streak-overview-tag {
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.streak-overview-tag strong {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* 7-Day Consistency Row */
+.streak-days-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-top: 4px;
+}
+
+.streak-day-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.streak-day-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.streak-day-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.streak-day-pill.completed .streak-day-dot {
+  background: #739072;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(115, 144, 114, 0.3);
+}
+
+.streak-day-pill.pending .streak-day-dot {
+  background: #f1f5f9;
+  border: 1.5px dashed #cbd5e1;
+}

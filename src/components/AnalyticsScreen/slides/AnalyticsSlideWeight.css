@@ -1,0 +1,349 @@
+/* Analytics Slide 3: Weight Trajectory & Body Composition */
+.analytics-slide-weight {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  padding-bottom: 16px;
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   1. HERO CARD: WEIGHT PROGRESS & TRAJECTORY
+   ========================================================================== */
+.weight-hero-card {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 24px;
+  padding: 18px 18px 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.02);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Top Header Row */
+.weight-hero-card .hero-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.hero-scale-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #ede9fe;
+  color: #6366f1;
+  flex-shrink: 0;
+}
+
+.hero-scale-icon {
+  stroke-width: 2.2;
+}
+
+/* Segmented View Toggle Bar */
+.weight-view-toggle-bar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.weight-view-toggle-bar .toggle-pill-track {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: #f1f5f9;
+  padding: 3px;
+  border-radius: 999px;
+  gap: 2px;
+  box-sizing: border-box;
+}
+
+.weight-view-toggle-bar .toggle-tab-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #64748b;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.weight-view-toggle-bar .toggle-tab-btn.active {
+  background: #ffffff;
+  color: #6366f1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* ==========================================================================
+   WEIGHT GRAPH LAYOUT
+   ========================================================================== */
+.hero-weight-graph-wrap {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+/* Y-Axis Label Column */
+.weight-yaxis-col {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: auto;
+  width: auto;
+  height: calc(100% - 24px);
+  z-index: 6;
+  pointer-events: none;
+}
+
+.weight-yaxis-col .yaxis-val {
+  position: absolute;
+  left: -18px;
+  transform: translateY(50%);
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: #000000;
+  padding: 1px 5px;
+  line-height: 1.2;
+}
+
+/* Main Unified Plot Area */
+.weight-plot-area {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+/* Horizontal Grid Lines */
+.weight-grid-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(100% - 24px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.weight-grid-lines .grid-dashed-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+/* Target Line Indicator */
+.weight-target-line-indicator {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-bottom: 1.5px dashed #6366f1;
+  opacity: 0.65;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 2px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.target-pill-tag {
+  font-size: 0.54rem;
+  font-weight: 700;
+  color: #6366f1;
+  background: rgba(237, 233, 254, 0.9);
+  padding: 1px 6px;
+  border-radius: 999px;
+  line-height: 1.2;
+  letter-spacing: 0.2px;
+}
+
+/* Spline SVG Line */
+.weight-spline-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: calc(100% - 24px);
+  z-index: 4;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* Nodes Layer */
+.weight-nodes-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: calc(100% - 24px);
+  pointer-events: none;
+  z-index: 5;
+}
+
+.weight-node-pin {
+  position: absolute;
+  transform: translate(-50%, 50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #6366f1;
+  border: 2px solid #ffffff;
+  padding: 0;
+  box-shadow: 0 1px 4px rgba(99, 102, 241, 0.35);
+  pointer-events: auto;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.weight-node-pin:hover {
+  transform: translate(-50%, 50%) scale(1.25);
+}
+
+/* X-Axis Labels Row */
+.weight-x-labels-row {
+  position: absolute;
+  bottom: -28px;
+  left: 0;
+  right: 0;
+  height: 24px;
+  pointer-events: none;
+}
+
+.weight-x-label-item {
+  position: absolute;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.05;
+}
+
+.weight-x-text {
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+.weight-val-subtext {
+  font-size: 0.52rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+/* ==========================================================================
+   2. BODY COMPOSITION METRIC CARDS
+   ========================================================================== */
+.fat-badge {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.fill-fat {
+  background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);
+}
+
+.muscle-badge {
+  background: #ede9fe;
+  color: #7c3aed;
+}
+
+.fill-muscle {
+  background: linear-gradient(90deg, #6366f1 0%, #818cf8 100%);
+}
+
+.bmi-badge {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.fill-bmi {
+  background: linear-gradient(90deg, #22c55e 0%, #4ade80 100%);
+}
+
+.target-badge {
+  background: #e0e7ff;
+  color: #4f46e5;
+}
+
+.fill-target {
+  background: linear-gradient(90deg, #4f46e5 0%, #6366f1 100%);
+}
+
+/* Segmented Visual BMI Bar */
+.bmi-segmented-bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  height: 10px;
+  position: relative;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.bmi-segment {
+  height: 100%;
+  border-radius: 999px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.bmi-segment.segment-under {
+  flex: 1.2;
+  background: #fef08a; /* Light yellow */
+  opacity: 0.7;
+}
+
+.bmi-segment.segment-normal {
+  flex: 3;
+  background: linear-gradient(90deg, #86efac 0%, #4ade80 100%); /* Green */
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.35);
+}
+
+.bmi-segment.segment-over {
+  flex: 1.5;
+  background: #fed7aa; /* Light Orange */
+  opacity: 0.7;
+}
+
+.bmi-seg-label {
+  display: none;
+}
+
+.bmi-marker-pin {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 3px solid #15803d;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
+  z-index: 2;
+}

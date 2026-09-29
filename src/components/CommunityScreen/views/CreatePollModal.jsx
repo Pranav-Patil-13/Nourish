@@ -52,8 +52,11 @@ export default function CreatePollModal({ onClose, onSubmitPoll }) {
   };
 
   return (
-    <div className="comm-modal-overlay" onClick={onClose}>
-      <div className="comm-modal-sheet" onClick={(e) => e.stopPropagation()}>
+    <>
+      {/* Dim backdrop */}
+      <div className="comm-modal-backdrop" onClick={onClose} />
+      {/* Sheet — anchored at bottom, expands upward */}
+      <div className="comm-composer-sheet" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
         <div className="comm-modal-header">
           <button
@@ -203,6 +206,6 @@ export default function CreatePollModal({ onClose, onSubmitPoll }) {
           </button>
         </div>
       </div>
-    </div>
+    </>
   );
 }

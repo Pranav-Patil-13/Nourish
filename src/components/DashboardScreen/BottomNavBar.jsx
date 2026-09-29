@@ -1,7 +1,7 @@
 import React from 'react';
 import './BottomNavBar.css';
 
-export function BottomNavBar({ activeTabId = 'home', onSelectTab, onOpenScanner }) {
+export function BottomNavBar({ activeTabId = 'home', onSelectTab, onOpenScanner, isHidden = false }) {
   const handleTabClick = (tabId) => {
     if (tabId === 'camera') {
       if (onOpenScanner) {
@@ -106,7 +106,7 @@ export function BottomNavBar({ activeTabId = 'home', onSelectTab, onOpenScanner 
   ];
 
   return (
-    <nav className="bottom-nav-container" aria-label="Main Navigation">
+    <nav className={`bottom-nav-container ${isHidden ? 'hidden-nav' : ''}`} aria-label="Main Navigation">
       <div className="bottom-nav-inner" role="tablist">
         {navItems.map((item) => {
           const isActive = activeTabId === item.id;
